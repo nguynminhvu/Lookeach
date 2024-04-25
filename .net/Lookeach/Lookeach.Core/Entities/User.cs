@@ -15,7 +15,7 @@ namespace Lookeach.Core.Entities
         public bool EmailConfirm { get; set; }
         public string Password { get; set; }
         public bool IsActived { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
-        public ICollection<UserClaim> UserClaims { get; set; }
+        public Guid RoleId { get; set; }
+        public Role Role { get; set; }
     }
 }

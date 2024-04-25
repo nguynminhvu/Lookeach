@@ -6,5 +6,7 @@ namespace Lookeach.Application.Services
     {
         Task<string> Login(LoginDTO loginDTO);
         Task<ClaimDTO> GetClaimDTOByAccessToken(string token);
+        Task<bool> GetTokenValid(string token);
+
     }
 }

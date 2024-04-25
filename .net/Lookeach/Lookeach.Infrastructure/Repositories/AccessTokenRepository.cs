@@ -14,7 +14,20 @@ namespace Lookeach.Infrastructure.Repositories
             _context = appDbContext;
         }
 
+        public async Task<AccessToken> GetAccessTokenByToken(string token)
+             => (await _context.AccessTokens.FirstOrDefaultAsync(x => x.Token == token))!;
+
         public async Task<AccessToken> GetAccessTokenByUserId(Guid userId)
             => (await _context.AccessTokens.FirstOrDefaultAsync(x => x.UserId == userId))!;
+
+        public async Task RemoveTokenByUserId(Guid id)
+        {
+            var token = await GetAccessTokenByUserId(id);
+            if (token != null)
+            {
+                Remove(token);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
