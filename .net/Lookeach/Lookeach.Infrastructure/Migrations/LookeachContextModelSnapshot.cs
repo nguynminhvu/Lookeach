@@ -787,6 +787,9 @@ namespace Lookeach.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Thumbnail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -799,76 +802,9 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.UserClaim", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ClaimName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserClaims");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.UserRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRoles");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Voucher", b =>
@@ -1164,36 +1100,14 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasOne("Lookeach.Core.Entities.Chat", null)
                         .WithMany("Users")
                         .HasForeignKey("ChatId");
-                });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.UserClaim", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.UserRole", b =>
-                {
                     b.HasOne("Lookeach.Core.Entities.Role", "Role")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Lookeach.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Role");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Brand", b =>
@@ -1246,6 +1160,11 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Sizes");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
