@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Lookeach.Core.Entities;
+using Lookeach.Core.ViewModels.Users;
 
 namespace Lookeach.Infrastructure.AutoMappers
 {
@@ -9,12 +11,19 @@ namespace Lookeach.Infrastructure.AutoMappers
             var config = new MapperConfiguration(x =>
             {
                 x.ShouldMapProperty = p => p.GetMethod!.IsPublic || p.GetMethod!.IsAssembly;
-                x
-            })
+                x.AddProfile<MapperHandler>();
+            });
+            return config.CreateMapper();
         });
-    }
-    public class MapperHandler:Profile
-    {
 
+        public static IMapper Mapper => Lazy.Value;
+    }
+
+    public class MapperHandler : Profile
+    {
+        public MapperHandler()
+        {
+            CreateMap<User, UserViewModel>().ReverseMap();
+        }
     }
 }

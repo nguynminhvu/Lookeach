@@ -15,17 +15,62 @@ namespace Lookeach.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _uow;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IAesService _aesService;
 
-        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration)
+        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, ITokenService tokenService)
         {
+            _tokenService = tokenService;
             _uow = unitOfWork;
             _userRepository = _uow.UserRepository;
             _configuration = configuration;
             _aesService = aesService;
+        }
+
+        public async Task<ClaimDTO> GetClaimDTOByAccessToken(string token)
+        {
+            try
+            {
+                var keyExample = _configuration["JwtSecret"] + "";
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(keyExample)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken securityToken);
+                var jwtToken = (JwtSecurityToken)securityToken;
+                var id = jwtToken.Claims.First(x => x.Type == "Id")!.Value;
+                var name = jwtToken.Claims.First(x => x.Type == "Name")!.Value;
+                var roles = jwtToken.Claims.First(x => x.Type == "Roles")!.Value;
+                var claims = jwtToken.Claims.First(x => x.Type == "Claims")!.Value;
+
+                if (Guid.TryParse(id, out Guid newId) is false ||
+                    string.IsNullOrEmpty(name) ||
+                    string.IsNullOrEmpty(roles) ||
+                    string.IsNullOrEmpty(claims)
+                    )
+                {
+                    return null!;
+                }
+                await Task.CompletedTask;
+                return new ClaimDTO
+                {
+                    Id = newId,
+                    Name = name,
+                    Roles = JsonConvert.DeserializeObject<List<UserRole>>(roles)!,
+                    Claims = JsonConvert.DeserializeObject<List<UserClaim>>(claims)!
+                };
+            }
+            catch (Exception ex)
+            {
+                return null!;
+            }
         }
 
         public async Task<string> Login(LoginDTO loginDTO)
@@ -37,24 +82,8 @@ namespace Lookeach.Infrastructure.Services
             }
             if (user == null)
                 throw new Exception("Wrong username or password");
-            return GenerateToken(user);
+            return await _tokenService.GenerateToken(user);
         }
 
-        private string GenerateToken(User user)
-        {
-            var key = Encoding.UTF8.GetBytes(_configuration["JwtSecret"] + "");
-            var tokenDescribe = new SecurityTokenDescriptor
-            {
-                Subject = new System.Security.Claims.ClaimsIdentity(new[] {
-                new Claim("Id",user.Id+""),
-                new Claim("Name",user.Name),
-                new Claim("Roles",JsonConvert.SerializeObject(user.UserRoles)),
-                new Claim("Claims", JsonConvert.SerializeObject(user.UserClaims))
-                })
-            };
-            var tokenHandle = new JwtSecurityTokenHandler();
-            var token = tokenHandle.CreateToken(tokenDescribe);
-            return tokenHandle.WriteToken(token);
-        }
     }
 }

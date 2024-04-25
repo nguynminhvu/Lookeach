@@ -5,5 +5,7 @@ namespace Lookeach.Core.Repositories
 {
     public interface IAccessTokenRepository:IRepository<AccessToken>
     {
+        Task<AccessToken> GetAccessTokenByUserId(Guid userId);
+
     }
 }
