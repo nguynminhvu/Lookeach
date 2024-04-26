@@ -1,4 +1,7 @@
 using Lookeach.Extensions.Jwt;
+using Lookeach.Application.Extensions;
+using Lookeach.Infrastructure.Extensions;
+using Lookeach.Extensions.SwaggerOption;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,8 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerLookeach(builder.Configuration);
+
 builder.Services.AddLookeachJwt(builder.Configuration);
+builder.Services.ApplicationInject(builder.Configuration);
+builder.Services.InfrastructureInject(builder.Configuration);
 
 var app = builder.Build();
 

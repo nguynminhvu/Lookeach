@@ -1,5 +1,6 @@
 ﻿using Lookeach.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Lookeach.Infrastructure.Data
 {
@@ -14,7 +15,14 @@ namespace Lookeach.Infrastructure.Data
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=Lookeach;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer(GetConnectionString());
+
+
+        private string GetConnectionString()
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", true, true).Build();
+            return configuration["ConnectionStrings:LookeachDb"] + "";
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }

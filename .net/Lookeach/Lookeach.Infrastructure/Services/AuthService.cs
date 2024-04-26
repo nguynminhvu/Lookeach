@@ -94,7 +94,7 @@ namespace Lookeach.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -107,8 +107,21 @@ namespace Lookeach.Infrastructure.Services
             }
             if (user == null)
                 throw new Exception("Wrong username or password");
-            return await _tokenService.GenerateToken(user);
+            var tk = await _tokenService.GenerateToken(user);
+            if (tk != null)
+            {
+                await _tokenService.SaveAccessToken(tk, user.Id);
+                return tk;
+            }
+            throw new Exception("Can't create token");
         }
 
+        public async Task<bool> Logout()
+        {
+            var token = await _tokenService.GetAccessTokenFromRequest();
+            await _distributedCache.RemoveAsync(token);
+            await _tokenService.DeleteAccessToken(token);
+            return true;
+        }
     }
 }

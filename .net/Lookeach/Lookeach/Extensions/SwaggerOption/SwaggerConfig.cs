@@ -1,0 +1,48 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+namespace Lookeach.Extensions.SwaggerOption
+{
+    public static class SwaggerConfig
+    {
+        public static void AddSwaggerLookeach(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "Lookeach Application",
+                    Description = "Loockeach API Service Interface",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    {
+                        Email = "nguyenminhvu.august@gmail.com",
+                        Name = "Michael Nguyen",
+                        Url = new Uri("https://github.com/nguyyenminhvu")
+                    },
+                    Version = "v1"
+                });
+                c.DescribeAllParametersInCamelCase();
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Name = "Authorize",
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.",
+                    In = ParameterLocation.Header,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme{
+                        Scheme="oauth2",
+                        Name=JwtBearerDefaults.AuthenticationScheme,
+                        Reference= new OpenApiReference
+                        {
+                        Type=ReferenceType.SecurityScheme,
+                        Id=JwtBearerDefaults.AuthenticationScheme
+                        }
+                    },new List<string>()
+                }
+                });
+            });
+        }
+    }
+}

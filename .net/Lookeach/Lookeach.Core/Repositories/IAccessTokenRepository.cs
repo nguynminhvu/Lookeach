@@ -8,5 +8,7 @@ namespace Lookeach.Core.Repositories
         Task<AccessToken> GetAccessTokenByUserId(Guid userId);
         Task<AccessToken> GetAccessTokenByToken(string token);
         Task RemoveTokenByUserId(Guid id);
+        Task RemoveTokenByToken(string token);
+        Task<AccessToken> AddAccessToken(string token, Guid userId);
     }
 }

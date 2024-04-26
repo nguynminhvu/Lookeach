@@ -9,6 +9,7 @@ namespace Lookeach.Extensions.Jwt
     {
         public static void AddLookeachJwt(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
