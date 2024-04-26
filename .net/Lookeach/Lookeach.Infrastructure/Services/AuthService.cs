@@ -4,6 +4,7 @@ using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
 using Lookeach.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,22 +16,23 @@ using System.Text;
 
 namespace Lookeach.Infrastructure.Services
 {
-    public class AuthService : IAuthService
+    public class AuthService : TokenService, IAuthService
     {
         private readonly IConnectionMultiplexer _connectionMutiple;
         private readonly IDistributedCache _distributedCache;
-        private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _uow;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IAesService _aesService;
+        private readonly IHttpContextAccessor _httpAccessor;
         private JwtDTO _jwtDTO;
         private RedisDTO _redisDTO;
-        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, ITokenService tokenService, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer)
+
+        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IHttpContextAccessor httpContextAccessor)
         {
+            _httpAccessor = httpContextAccessor;
             _connectionMutiple = connectionMultiplexer;
             _distributedCache = distributedCache;
-            _tokenService = tokenService;
             _uow = unitOfWork;
             _userRepository = _uow.UserRepository;
             _configuration = configuration;
@@ -107,10 +109,10 @@ namespace Lookeach.Infrastructure.Services
             }
             if (user == null)
                 throw new Exception("Wrong username or password");
-            var tk = await _tokenService.GenerateToken(user);
+            var tk = await GenerateToken(user);
             if (tk != null)
             {
-                await _tokenService.SaveAccessToken(tk, user.Id);
+                await SaveAccessToken(tk, user.Id);
                 return tk;
             }
             throw new Exception("Can't create token");
@@ -118,9 +120,14 @@ namespace Lookeach.Infrastructure.Services
 
         public async Task<bool> Logout()
         {
-            var token = await _tokenService.GetAccessTokenFromRequest();
+            var tokenCt = _httpAccessor.HttpContext.Request.Headers["Authorize"].First()!.Split(" ").Last();
+            if (tokenCt == null!)
+            {
+                throw new UnauthorizedAccessException("Not found user");
+            }
+            var token = await GetAccessTokenFromRequest(await GetClaimDTOByAccessToken(tokenCt));
             await _distributedCache.RemoveAsync(token);
-            await _tokenService.DeleteAccessToken(token);
+            await DeleteAccessToken(token);
             return true;
         }
     }

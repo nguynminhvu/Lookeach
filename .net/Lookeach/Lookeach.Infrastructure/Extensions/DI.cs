@@ -18,6 +18,7 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IUnitOfWork, Lookeach.Infrastructure.UnitOfWork.UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAesService, AesService>();
 
             var redisDto = new RedisDTO();
             configuration.GetSection(nameof(RedisDTO)).Bind(redisDto);

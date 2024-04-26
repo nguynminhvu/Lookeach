@@ -1,9 +1,7 @@
 ﻿using Lookeach.Application.Commands.Auths;
-using Lookeach.Application.Services;
 using Lookeach.Core.DTOs;
 using Lookeach.ViewModels;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lookeach.Controllers

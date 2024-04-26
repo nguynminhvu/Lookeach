@@ -16,7 +16,6 @@ namespace Lookeach.Infrastructure.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpAccessor;
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _uow;
@@ -25,9 +24,13 @@ namespace Lookeach.Infrastructure.Services
         private readonly IAccessTokenRepository _accessTokenRepository;
         private JwtDTO _jwtDTO = new();
         private RefreshTokenDTO _refreshTokenDTO;
-        public TokenService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContext, IAuthService authService)
+
+        public TokenService()
         {
-            _authService = authService;
+            
+        }
+        public TokenService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContext)
+        {
             _httpAccessor = httpContext;
             _configuration = configuration;
             _uow = unitOfWork;
@@ -61,14 +64,13 @@ namespace Lookeach.Infrastructure.Services
             }
         }
 
-        public async Task<RefreshToken> AddRefreshToken(string rt)
+        public async Task<RefreshToken> AddRefreshToken(string rt, ClaimDTO claims)
         {
             var token = _httpAccessor.HttpContext.Request.Headers["Authorize"].First()!.Split(" ").Last();
             if (token == null)
             {
                 throw new UnauthorizedAccessException("No token in header");
             }
-            var claims = await _authService.GetClaimDTOByAccessToken(token);
             var user = await _userRepository.GetUserById(claims.Id);
             if (user == null)
             {
@@ -106,14 +108,13 @@ namespace Lookeach.Infrastructure.Services
             await _accessTokenRepository.AddAccessToken(token, userId);
         }
 
-        public async Task<string> GetAccessTokenFromRequest()
+        public async Task<string> GetAccessTokenFromRequest(ClaimDTO claims)
         {
             var token = _httpAccessor.HttpContext.Request.Headers["Authorize"].First()!.Split(" ").Last();
             if (token == null)
             {
                 throw new UnauthorizedAccessException("No token in header");
             }
-            var claims = await _authService.GetClaimDTOByAccessToken(token);
             var user = await _userRepository.GetUserById(claims.Id);
             if (user == null)
             {
