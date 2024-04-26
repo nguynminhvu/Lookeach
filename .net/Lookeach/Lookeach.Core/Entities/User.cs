@@ -7,15 +7,37 @@ namespace Lookeach.Core.Entities
         public string Username { get; set; }
         public string Name { get; set; }
         public DateTime Dob { get; set; }
-        public string Address { get; set; }
+        public string? Address { get; set; }
         public string Gender { get; set; }
         public string Email { get; set; }
-        public string Phone { get; set; }
-        public string Thumbnail { get; set; }
+        public string? Phone { get; set; }
+        public string? Thumbnail { get; set; }
         public bool EmailConfirm { get; set; }
         public string Password { get; set; }
         public bool IsActived { get; set; }
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
+
+        protected User(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId)
+        {
+            Username = username;
+            Id = id;
+            Name = name;
+            Dob = dob;
+            if (address != null)
+            {
+                Address = address;
+            }
+            Gender = gender;
+            if (phone != null)
+            {
+                Phone = phone;
+            }
+            Email = email;
+            Password = password;
+            RoleId = roleId;
+        }
+        public static User CreateUser(string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId)
+            => new User(Guid.NewGuid(), username, name, dob, address, gender, email, phone, password, roleId);
     }
 }

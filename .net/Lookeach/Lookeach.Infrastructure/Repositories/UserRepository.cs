@@ -1,5 +1,6 @@
 ﻿using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
+using Lookeach.Core.ViewModels.Users;
 using Lookeach.Infrastructure.Data;
 using Lookeach.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,17 @@ namespace Lookeach.Infrastructure.Repositories
         public UserRepository(LookeachContext appDbContext) : base(appDbContext)
         {
             _context = appDbContext;
+        }
+
+        public async Task<User> CreateUser(UserCreateModel userCreateModel, Guid roleId)
+        {
+            var user = User
+                .CreateUser(userCreateModel.Username, userCreateModel.Name, userCreateModel.Dob, userCreateModel.Address,
+                userCreateModel.Gender, userCreateModel.Email, userCreateModel.Phone, userCreateModel.Password, roleId);
+
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
 
         public async Task<User> GetUserByEmailAndPassword(string email, string password, string? include = null!)

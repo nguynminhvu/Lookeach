@@ -3,16 +3,14 @@ using Lookeach.Core.DTOs;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Infrastructure.Repositories;
+using Lookeach.Core.ViewModels.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace Lookeach.Infrastructure.Services
 {
@@ -39,6 +37,11 @@ namespace Lookeach.Infrastructure.Services
             _aesService = aesService;
             _configuration.GetSection(nameof(JwtDTO)).Bind(_jwtDTO);
             _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
+        }
+
+        public Task<User> CreateUserRole(UserCreateModel userCreateModel)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<ClaimDTO> GetClaimDTOByAccessToken(string token)
