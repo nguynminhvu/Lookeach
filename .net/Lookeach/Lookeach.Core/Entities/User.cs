@@ -17,8 +17,11 @@ namespace Lookeach.Core.Entities
         public bool IsActived { get; set; }
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
-
-        protected User(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId)
+        private User()
+        {
+            
+        }
+        protected User(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId, Guid createBy, Guid modifiedBy, DateTime createOn, DateTime modifiedOn)
         {
             Username = username;
             Id = id;
@@ -36,8 +39,13 @@ namespace Lookeach.Core.Entities
             Email = email;
             Password = password;
             RoleId = roleId;
+            ModifiedBy = modifiedBy;
+            ModifiedOn = modifiedOn;
+            CreatedBy = createBy;
+            CreatedOn = createOn;
         }
-        public static User CreateUser(string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId)
-            => new User(Guid.NewGuid(), username, name, dob, address, gender, email, phone, password, roleId);
+
+        public static User CreateUser(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId, Guid createdBy, Guid modifiedBy)
+            => new User(id, username, name, dob, address, gender, email, phone, password, roleId, createdBy, modifiedBy, DateTime.Now, DateTime.Now);
     }
 }

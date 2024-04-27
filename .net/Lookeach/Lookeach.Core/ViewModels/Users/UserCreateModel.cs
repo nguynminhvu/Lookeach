@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Lookeach.Core.ViewModels.Users
 {
     public class UserCreateModel
     {
+        [Required(ErrorMessage = "Role is require")]
+        public Guid RoleId { get; set; }
+
         [Required(ErrorMessage ="Username at least 5 character")]
         [MinLength(5,ErrorMessage = "Username at least 5 character")]
         public string Username { get; set; }

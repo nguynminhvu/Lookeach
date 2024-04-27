@@ -14,7 +14,7 @@ namespace Lookeach.Extensions.Jwt
 
         public async Task Invoke(HttpContext httpContext, IAuthService authService)
         {
-            var token = httpContext.Request.Headers.Authorization.First()!.Split(" ").Last();
+            var token = (httpContext.Request.Headers.Authorization.FirstOrDefault() + "").Split(" ").Last();
 
             if (string.IsNullOrEmpty(token) || !(await authService.GetTokenValid(token)))
             {

@@ -10,7 +10,7 @@ namespace Lookeach.Application.Services
         Task<bool> Logout();
         Task<ClaimDTO> GetClaimDTOByAccessToken(string token);
         Task<bool> GetTokenValid(string token);
-        Task<User> CreateUserRole(UserCreateModel userCreateModel);
-
+        Task<User> CreateUser(UserCreateModel userCreateModel, Guid roleId);
+        Task<string> RenewToken(string refreshToken);
     }
 }

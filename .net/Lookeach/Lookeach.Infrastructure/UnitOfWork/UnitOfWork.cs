@@ -29,7 +29,6 @@ namespace Lookeach.Infrastructure.UnitOfWork
             ProductRepository = new ProductRepository(_context);
             ProductSourcingRepository = new ProductSourcingRepository(_context);
             ProductVoucherRepository = new ProductVoucherRepository(_context);
-            RefreshTokenRepository = new RefreshTokenRepository(_context);
             RoleRepository = new RoleRepository(_context);
             ShopVoucherRepository = new ShopVoucherRepository(_context);
             SizeRepository = new SizeRepository(_context);
@@ -71,7 +70,6 @@ namespace Lookeach.Infrastructure.UnitOfWork
 
         public IProductVoucherRepository ProductVoucherRepository { get; private set; }
 
-        public IRefreshTokenRepository RefreshTokenRepository { get; private set; }
 
         public IRoleRepository RoleRepository { get; private set; }
 

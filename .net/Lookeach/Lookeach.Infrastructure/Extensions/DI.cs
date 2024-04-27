@@ -15,16 +15,23 @@ namespace Lookeach.Infrastructure.Extensions
         public static void InfrastructureInject(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<LookeachContext>(x => x.UseSqlServer(GetConnectionString()));
-            services.AddScoped<IUnitOfWork, Lookeach.Infrastructure.UnitOfWork.UnitOfWork>();
+            services.AddTransient<IUnitOfWork, Lookeach.Infrastructure.UnitOfWork.UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAesService, AesService>();
+            services.AddScoped<IRoleService, RoleService>();
 
-            var redisDto = new RedisDTO();
-            configuration.GetSection(nameof(RedisDTO)).Bind(redisDto);
-            services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(redisDto.Address));
-            services.AddStackExchangeRedisCache(x => x.Configuration = redisDto.Address);
-
+            try
+            {
+                var redisDto = new RedisDTO();
+                configuration.GetSection(nameof(RedisDTO)).Bind(redisDto);
+                services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(redisDto.Address));
+                services.AddStackExchangeRedisCache(x => x.Configuration = redisDto.Address);
+            }
+            catch
+            {
+                throw new Exception("Cache invalid, try again");
+            }
         }
 
         private static string GetConnectionString()

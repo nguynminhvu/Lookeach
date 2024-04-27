@@ -3,7 +3,7 @@ using Lookeach.Core.Repositories.Base;
 
 namespace Lookeach.Core.Repositories
 {
-    public interface IMessageRepository : IRepository<Message>
+    public interface IMessageRepository : IRepository<ChatMessage>
     {
     }
 }

@@ -22,6 +22,66 @@ namespace Lookeach.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CategoryGenderType", b =>
+                {
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GenderTypesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CategoriesId", "GenderTypesId");
+
+                    b.HasIndex("GenderTypesId");
+
+                    b.ToTable("CategoryGenderType");
+                });
+
+            modelBuilder.Entity("CategoryProduct", b =>
+                {
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CategoriesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("CategoryProduct");
+                });
+
+            modelBuilder.Entity("CategoryProductSourcing", b =>
+                {
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductSourcingsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CategoriesId", "ProductSourcingsId");
+
+                    b.HasIndex("ProductSourcingsId");
+
+                    b.ToTable("CategoryProductSourcing");
+                });
+
+            modelBuilder.Entity("ColorProduct", b =>
+                {
+                    b.Property<Guid>("ColorsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ColorsId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("ColorProduct");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.AccessToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -39,6 +99,10 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -79,6 +143,27 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.BrandImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("BrandImages");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Cart", b =>
@@ -148,6 +233,9 @@ namespace Lookeach.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CategoryVoucherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -166,16 +254,36 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryVoucherId");
+
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.CategoryImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("CategoryImages");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CreatedBy")
@@ -194,8 +302,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("VoucherId");
 
@@ -225,128 +331,28 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.Color", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.ChatImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CreatedBy")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ProductSourcingId")
+                    b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ChatId");
 
-                    b.HasIndex("ProductSourcingId");
+                    b.HasIndex("ImageId");
 
-                    b.ToTable("Colors");
+                    b.ToTable("ChatImages");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.GenderType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("GenderTypes");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.Image", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BrandId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("MessageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ProductSourcingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("MessageId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductSourcingId");
-
-                    b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.Message", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.ChatMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -380,7 +386,98 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Message");
+                    b.ToTable("ChatMessage");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.Color", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ProductSourcingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductSourcingId");
+
+                    b.ToTable("Colors");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.GenderType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GenderTypes");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ChatMessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatMessageId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Order", b =>
@@ -525,6 +622,9 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid?>("ProductVoucherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -532,7 +632,30 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.HasIndex("BrandId");
 
+                    b.HasIndex("ProductVoucherId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.ProductImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.ProductSourcing", b =>
@@ -583,6 +706,27 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("ProductSourcings");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.ProductSourcingImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductSourcingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("ProductSourcingId");
+
+                    b.ToTable("ProductSourcingImages");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>
                 {
                     b.Property<Guid>("Id")
@@ -601,51 +745,14 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("VoucherId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("VoucherId");
 
                     b.ToTable("ProductVouchers");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
@@ -681,15 +788,10 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("VoucherId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("VoucherId");
 
@@ -718,15 +820,10 @@ namespace Lookeach.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("ProductSourcingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("ProductSourcingId");
 
@@ -740,7 +837,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ChatId")
@@ -784,14 +880,15 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ShopVoucherId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Thumbnail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
@@ -803,6 +900,8 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasIndex("ChatId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("ShopVoucherId");
 
                     b.ToTable("Users");
                 });
@@ -852,6 +951,81 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("Vouchers");
                 });
 
+            modelBuilder.Entity("ProductSize", b =>
+                {
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SizesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProductsId", "SizesId");
+
+                    b.HasIndex("SizesId");
+
+                    b.ToTable("ProductSize");
+                });
+
+            modelBuilder.Entity("CategoryGenderType", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.GenderType", null)
+                        .WithMany()
+                        .HasForeignKey("GenderTypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CategoryProduct", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CategoryProductSourcing", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.ProductSourcing", null)
+                        .WithMany()
+                        .HasForeignKey("ProductSourcingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ColorProduct", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Color", null)
+                        .WithMany()
+                        .HasForeignKey("ColorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.AccessToken", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.User", "User")
@@ -861,6 +1035,25 @@ namespace Lookeach.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.BrandImage", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Brand", "Brand")
+                        .WithMany("BrandImages")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.CartItem", b =>
@@ -890,67 +1083,63 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.Category", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.CategoryVoucher", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("CategoryVoucherId");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.CategoryImage", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("CategoryImages")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Lookeach.Core.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
+                {
                     b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
                         .WithMany()
                         .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
                     b.Navigation("Voucher");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.Color", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.ChatImage", b =>
                 {
-                    b.HasOne("Lookeach.Core.Entities.Product", null)
-                        .WithMany("Colors")
-                        .HasForeignKey("ProductId");
+                    b.HasOne("Lookeach.Core.Entities.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Lookeach.Core.Entities.ProductSourcing", null)
-                        .WithMany("Colors")
-                        .HasForeignKey("ProductSourcingId");
+                    b.HasOne("Lookeach.Core.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.GenderType", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.Category", null)
-                        .WithMany("GenderTypes")
-                        .HasForeignKey("CategoryId");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.Image", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.Brand", null)
-                        .WithMany("Images")
-                        .HasForeignKey("BrandId");
-
-                    b.HasOne("Lookeach.Core.Entities.Category", null)
-                        .WithMany("Images")
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("Lookeach.Core.Entities.Message", null)
-                        .WithMany("Images")
-                        .HasForeignKey("MessageId");
-
-                    b.HasOne("Lookeach.Core.Entities.Product", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Lookeach.Core.Entities.ProductSourcing", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ProductSourcingId");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.Message", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.ChatMessage", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.Chat", "Chat")
                         .WithMany("Messages")
@@ -967,6 +1156,20 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Chat");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.Color", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.ProductSourcing", null)
+                        .WithMany("Colors")
+                        .HasForeignKey("ProductSourcingId");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.Image", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.ChatMessage", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ChatMessageId");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Order", b =>
@@ -1021,7 +1224,30 @@ namespace Lookeach.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Lookeach.Core.Entities.ProductVoucher", null)
+                        .WithMany("Products")
+                        .HasForeignKey("ProductVoucherId");
+
                     b.Navigation("Brand");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.ProductImage", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.ProductSourcing", b =>
@@ -1035,61 +1261,49 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Brand");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.ProductSourcingImage", b =>
                 {
-                    b.HasOne("Lookeach.Core.Entities.Product", "Product")
+                    b.HasOne("Lookeach.Core.Entities.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Lookeach.Core.Entities.ProductSourcing", "ProductSourcing")
+                        .WithMany("ProductSourcingImages")
+                        .HasForeignKey("ProductSourcingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+
+                    b.Navigation("ProductSourcing");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>
+                {
                     b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
                         .WithMany()
                         .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
 
                     b.Navigation("Voucher");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.ShopVoucher", b =>
                 {
-                    b.HasOne("Lookeach.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
                         .WithMany()
                         .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
 
                     b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Size", b =>
                 {
-                    b.HasOne("Lookeach.Core.Entities.Product", null)
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("Lookeach.Core.Entities.ProductSourcing", null)
                         .WithMany("Sizes")
                         .HasForeignKey("ProductSourcingId");
@@ -1107,12 +1321,31 @@ namespace Lookeach.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Lookeach.Core.Entities.ShopVoucher", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ShopVoucherId");
+
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ProductSize", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Size", null)
+                        .WithMany()
+                        .HasForeignKey("SizesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Brand", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("BrandImages");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Cart", b =>
@@ -1122,9 +1355,12 @@ namespace Lookeach.Infrastructure.Migrations
 
             modelBuilder.Entity("Lookeach.Core.Entities.Category", b =>
                 {
-                    b.Navigation("GenderTypes");
+                    b.Navigation("CategoryImages");
+                });
 
-                    b.Navigation("Images");
+            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
+                {
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Chat", b =>
@@ -1134,7 +1370,7 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.Message", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.ChatMessage", b =>
                 {
                     b.Navigation("Images");
                 });
@@ -1146,23 +1382,29 @@ namespace Lookeach.Infrastructure.Migrations
 
             modelBuilder.Entity("Lookeach.Core.Entities.Product", b =>
                 {
-                    b.Navigation("Colors");
-
-                    b.Navigation("Images");
-
-                    b.Navigation("Sizes");
+                    b.Navigation("ProductImages");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.ProductSourcing", b =>
                 {
                     b.Navigation("Colors");
 
-                    b.Navigation("Images");
+                    b.Navigation("ProductSourcingImages");
 
                     b.Navigation("Sizes");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.ShopVoucher", b =>
                 {
                     b.Navigation("Users");
                 });

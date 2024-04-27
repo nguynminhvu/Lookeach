@@ -2,7 +2,7 @@
 
 namespace Lookeach.Core.Entities
 {
-    public class Message:Audit<DateTime,Guid>
+    public class ChatMessage:Audit<DateTime,Guid>
     {
         public Guid ChatId { get; set; }
         public Guid UserId { get; set; }

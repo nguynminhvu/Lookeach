@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 namespace Lookeach.Extensions.SwaggerOption
 {
     public static class SwaggerConfig
@@ -8,6 +9,9 @@ namespace Lookeach.Extensions.SwaggerOption
         {
             services.AddSwaggerGen(c =>
             {
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
+                    $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
                     Title = "Lookeach Application",
@@ -23,7 +27,7 @@ namespace Lookeach.Extensions.SwaggerOption
                 c.DescribeAllParametersInCamelCase();
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
-                    Name = "Authorize",
+                    Name = "Authorization",
                     Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.",
                     In = ParameterLocation.Header,
                     Scheme = JwtBearerDefaults.AuthenticationScheme

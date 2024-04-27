@@ -7,10 +7,7 @@ using Lookeach.Core.ViewModels.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Lookeach.Infrastructure.Services
 {
@@ -26,7 +23,7 @@ namespace Lookeach.Infrastructure.Services
         private JwtDTO _jwtDTO;
         private RedisDTO _redisDTO;
 
-        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IHttpContextAccessor httpContextAccessor)
+        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, configuration, httpContextAccessor, connectionMultiplexer, distributedCache)
         {
             _httpAccessor = httpContextAccessor;
             _connectionMutiple = connectionMultiplexer;
@@ -39,69 +36,9 @@ namespace Lookeach.Infrastructure.Services
             _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
         }
 
-        public Task<User> CreateUserRole(UserCreateModel userCreateModel)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<User> CreateUser(UserCreateModel userCreateModel, Guid roleId)
+            => await _userRepository.CreateUser(userCreateModel, roleId);
 
-        public async Task<ClaimDTO> GetClaimDTOByAccessToken(string token)
-        {
-            try
-            {
-                var keyExample = _configuration["JwtSecret"] + "";
-                var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(token, new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(keyExample)),
-                    ValidateIssuer = false, //**
-                    ValidateAudience = false, //** 
-                    ClockSkew = TimeSpan.Zero,
-                    ValidIssuer = _jwtDTO.Issuer,
-                    ValidAudience = _jwtDTO.Audience,
-
-                }, out SecurityToken securityToken);
-                var jwtToken = (JwtSecurityToken)securityToken;
-                var id = jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier)!.Value;
-                var email = jwtToken.Claims.First(x => x.Type == ClaimTypes.Email)!.Value;
-                var role = jwtToken.Claims.First(x => x.Type == ClaimTypes.Role)!.Value;
-
-                if (Guid.TryParse(id, out Guid newId) is false ||
-                    string.IsNullOrEmpty(email) ||
-                    string.IsNullOrEmpty(role)
-                    )
-                {
-                    return null!;
-                }
-                await Task.CompletedTask;
-                return new ClaimDTO
-                {
-                    Id = newId,
-                    Email = email,
-                    Role = role
-                };
-            }
-            catch (Exception ex)
-            {
-                return null!;
-            }
-        }
-
-        public async Task<bool> GetTokenValid(string token)
-        {
-            try
-            {
-                if (_connectionMutiple.GetServer(_redisDTO.Address, _redisDTO.Port).IsConnected)
-                {
-                    return (await _distributedCache.GetStringAsync(token) + "") != "";
-                }
-                return (await _uow.AccessTokenRepository.GetAccessTokenByToken(token) + "") != "";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
 
         public async Task<string> Login(LoginDTO loginDTO)
         {
@@ -123,15 +60,15 @@ namespace Lookeach.Infrastructure.Services
 
         public async Task<bool> Logout()
         {
-            var tokenCt = _httpAccessor.HttpContext.Request.Headers["Authorize"].First()!.Split(" ").Last();
-            if (tokenCt == null!)
-            {
-                throw new UnauthorizedAccessException("Not found user");
-            }
-            var token = await GetAccessTokenFromRequest(await GetClaimDTOByAccessToken(tokenCt));
-            await _distributedCache.RemoveAsync(token);
-            await DeleteAccessToken(token);
-            return true;
+            var tokenCt = _httpAccessor.HttpContext.Request.Headers["Authorization"].First()!.Split(" ").Last();
+            return await DeleteAccessToken(tokenCt);
+        }
+
+        public async Task<string> RenewToken(string refreshToken)
+        {
+            var rs = await RenewAccessToken(refreshToken);
+            if (rs == null) throw new Exception("Can't renew token");
+            return rs;
         }
     }
 }
