@@ -1,12 +1,11 @@
-using Lookeach.Extensions.Jwt;
 using Lookeach.Application.Extensions;
-using Lookeach.Infrastructure.Extensions;
-using Lookeach.Extensions.SwaggerOption;
-using Lookeach.Extensions.Exceptions;
-using System.Text.Json.Serialization;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Serialization;
 using Lookeach.Exceptions;
+using Lookeach.Extensions.Exceptions;
+using Lookeach.Extensions.Jwt;
+using Lookeach.Extensions.SwaggerOption;
+using Lookeach.Infrastructure.Extensions;
+using Newtonsoft.Json.Serialization;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
