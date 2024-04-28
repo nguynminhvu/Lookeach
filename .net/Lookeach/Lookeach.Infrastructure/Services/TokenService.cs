@@ -125,8 +125,6 @@ namespace Lookeach.Infrastructure.Services
             }
         }
 
-
-
         public async Task<string> GenerateToken(User user)
         {
             var key = Encoding.UTF8.GetBytes(_jwtDTO.JwtSecret);
@@ -178,7 +176,7 @@ namespace Lookeach.Infrastructure.Services
             if (await CheckRefreshTokenExpire(token.RefreshToken) is false)
             {
                 await DeleteAccessToken(token.RefreshToken);
-                throw new ArgumentNullException("Refresh token expired, login again");
+                throw new SecurityTokenExpiredException("Refresh token expired, login again");
             }
             var user = await _userRepository.GetUserById(token.CreatedBy);
             if (user == null)

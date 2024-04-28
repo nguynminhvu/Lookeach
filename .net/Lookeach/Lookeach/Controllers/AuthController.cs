@@ -147,6 +147,33 @@ namespace Lookeach.Controllers
         }
 
 
+        /// <summary>
+        /// Endpoint confirm email, user will call in their email
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet("confirm-email/{code}")]
+        public async Task<IActionResult> ConfirmEmail([FromRoute] string code)
+        {
+            var rs = await _mediator.Send(new ConfirmEmailCommand(code));
+            if (rs != null)
+            {
+                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Error = null!;
+                return StatusCode(StatusCodes.Status202Accepted, responseViewModel);
+            }
+            responseViewModel.IsFailure = true;
+            responseViewModel.IsSuccess = false;
+            responseViewModel.Value = null!;
+            responseViewModel.Error = new ErrorViewModel
+            {
+                Code = 500,
+                Message = "Can't confirm email, try again"
+            };
+            return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
+        }
+
+        #region Test auth
         [HttpGet("test-free")]
         public IActionResult GetResource()
         {
@@ -173,5 +200,6 @@ namespace Lookeach.Controllers
         {
             return Ok();
         }
+        #endregion
     }
 }

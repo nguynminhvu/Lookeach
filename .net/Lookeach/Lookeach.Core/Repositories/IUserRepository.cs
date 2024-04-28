@@ -10,5 +10,8 @@ namespace Lookeach.Core.Repositories
         Task<User> GetUserByEmailAndPassword(string email, string password, string? include = null!);
         Task<User> GetUserById(Guid id);
         Task<User> CreateUser(UserCreateModel userCreateModel, Guid roleId);
+        Task<User> GetUserByUsername(string username);
+        Task<User> GetUserByEmail(string email);
+        Task<bool> UpdateUser(User user);
     }
 }
