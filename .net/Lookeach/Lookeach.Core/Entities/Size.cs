@@ -5,5 +5,6 @@ namespace Lookeach.Core.Entities
     public class Size : Audit<DateTime, Guid>
     {
         public string Name { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

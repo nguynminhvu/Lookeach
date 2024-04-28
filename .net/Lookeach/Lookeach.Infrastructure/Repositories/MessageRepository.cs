@@ -5,7 +5,7 @@ using Lookeach.Infrastructure.Repositories.Base;
 
 namespace Lookeach.Infrastructure.Repositories
 {
-    public class MessageRepository : Repository<Message>, IMessageRepository
+    public class MessageRepository : Repository<ChatMessage>, IMessageRepository
     {
         public MessageRepository(LookeachContext appDbContext) : base(appDbContext)
         {

@@ -21,7 +21,6 @@ namespace Lookeach.Core.UnitOfWorks
         IProductRepository ProductRepository { get; }
         IProductSourcingRepository ProductSourcingRepository { get; }
         IProductVoucherRepository ProductVoucherRepository { get; }
-        IRefreshTokenRepository RefreshTokenRepository { get; }
         IRoleRepository RoleRepository { get; }
         IShopVoucherRepository ShopVoucherRepository { get; }
         ISizeRepository SizeRepository { get; }

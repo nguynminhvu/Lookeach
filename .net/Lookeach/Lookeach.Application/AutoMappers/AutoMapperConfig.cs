@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Lookeach.Core.Entities;
+using Lookeach.Core.ViewModels.Roles;
 using Lookeach.Core.ViewModels.Users;
 
-namespace Lookeach.Infrastructure.AutoMappers
+namespace Lookeach.Application.AutoMappers
 {
     public class AutoMapperConfig
     {
@@ -24,6 +25,7 @@ namespace Lookeach.Infrastructure.AutoMappers
         public MapperHandler()
         {
             CreateMap<User, UserViewModel>().ReverseMap();
+            CreateMap<Role, RoleViewModel>().ReverseMap();
         }
     }
 }

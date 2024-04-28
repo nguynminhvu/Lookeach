@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Lookeach.Infrastructure.Repositories.Base
 {
-    public class Repository<T> :IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly LookeachContext _context;
         private readonly DbSet<T> _entity;
@@ -62,7 +62,10 @@ namespace Lookeach.Infrastructure.Repositories.Base
 
                 query = query.Skip(index * size).Take(size);
             }
-
+            if (orderBy != null!)
+            {
+                query = orderBy(query);
+            }
             return query;
         }
 

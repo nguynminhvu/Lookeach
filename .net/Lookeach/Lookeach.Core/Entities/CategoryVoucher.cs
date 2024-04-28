@@ -10,8 +10,7 @@ namespace Lookeach.Core.Entities
     public class CategoryVoucher:Audit<DateTime,Guid>
     {
         public Guid VoucherId { get; set; }
-        public Guid CategoryId { get; set; }
         public Voucher Voucher { get; set; }
-        public Category Category { get; set; }
+        public ICollection<Category> Categories { get; set; }
     }
 }

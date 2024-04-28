@@ -1,4 +1,5 @@
 ﻿using Lookeach.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using System.Net;
 
 namespace Lookeach.Extensions.Jwt
@@ -14,7 +15,14 @@ namespace Lookeach.Extensions.Jwt
 
         public async Task Invoke(HttpContext httpContext, IAuthService authService)
         {
-            var token = httpContext.Request.Headers.Authorization.First()!.Split(" ").Last();
+            var endpoint = httpContext.GetEndpoint();
+            var metadata = endpoint?.Metadata;
+            if (metadata!=null && metadata.FirstOrDefault(x => x.ToString()!.Contains("Authorize Roles"))==null!)
+            {
+                await _next(httpContext);
+                return;
+            }
+            var token = (httpContext.Request.Headers.Authorization.FirstOrDefault() + "").Split(" ").Last();
 
             if (string.IsNullOrEmpty(token) || !(await authService.GetTokenValid(token)))
             {

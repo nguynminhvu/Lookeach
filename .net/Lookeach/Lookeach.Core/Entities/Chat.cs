@@ -4,7 +4,7 @@ namespace Lookeach.Core.Entities
 {
     public class Chat : Audit<DateTime, Guid>
     {
-        public ICollection<Message> Messages { get; set; }
+        public ICollection<ChatMessage> Messages { get; set; }
         public ICollection<User> Users { get; set; }
     }
 }
