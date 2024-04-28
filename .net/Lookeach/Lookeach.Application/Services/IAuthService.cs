@@ -12,5 +12,6 @@ namespace Lookeach.Application.Services
         Task<bool> GetTokenValid(string token);
         Task<User> CreateUser(UserCreateModel userCreateModel, Guid roleId);
         Task<string> RenewToken(string refreshToken);
+        Task<UserViewModel> ConfirmEmail(string tokenCode);
     }
 }
