@@ -44,10 +44,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseMiddleware<JwtRedis>();
+
 app.UseAuthorization();
 app.UseLookeachException();
+
 app.MapControllers();
 
 app.Run();

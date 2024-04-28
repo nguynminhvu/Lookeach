@@ -10,7 +10,7 @@ using System.Net.Http;
 
 namespace Lookeach.Extensions.AuthAttribute
 {
-    public class Authorize 
+    public class Authorize : IAsyncAuthorizationFilter
     {
         private readonly IAuthService _authService;
 
@@ -19,34 +19,34 @@ namespace Lookeach.Extensions.AuthAttribute
             _authService = authService;
         }
 
-        //public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
-        //{
-        //    var auth = context.ActionDescriptor.EndpointMetadata.Any(x => x.GetType() == typeof(AuthorizeAttribute));
-        //    if (auth)
-        //    {
-        //        var token = (context.HttpContext.Request.Headers.Authorization.FirstOrDefault() + "").Split(" ").Last();
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        {
+            var auth = context.ActionDescriptor.EndpointMetadata.Any(x => x.GetType() == typeof(AuthorizeAttribute));
+            if (auth)
+            {
+                var token = (context.HttpContext.Request.Headers.Authorization.FirstOrDefault() + "").Split(" ").Last();
 
-        //        if (string.IsNullOrEmpty(token) || !(await _authService.GetTokenValid(token)))
-        //        {
-        //            ResponseViewModel responseView = new ResponseViewModel
-        //            {
-        //                Error = new ErrorViewModel
-        //                {
-        //                    Code = (int)HttpStatusCode.BadRequest,
-        //                    Message = "Token invalid"
-        //                },
-        //                IsFailure = true,
-        //                IsSuccess = false,
-        //                Value = null!
-        //            };
+                if (string.IsNullOrEmpty(token) || !(await _authService.GetTokenValid(token)))
+                {
+                    ResponseViewModel responseView = new ResponseViewModel
+                    {
+                        Error = new ErrorViewModel
+                        {
+                            Code = (int)HttpStatusCode.BadRequest,
+                            Message = "Token invalid"
+                        },
+                        IsFailure = true,
+                        IsSuccess = false,
+                        Value = null!
+                    };
 
-        //            context.Result = new ObjectResult(responseView)
-        //            {
-        //                StatusCode = (int)HttpStatusCode.BadRequest
-        //            };
-        //            return;
-        //        }
-        //    }
-        //}
+                    context.Result = new ObjectResult(responseView)
+                    {
+                        StatusCode = (int)HttpStatusCode.BadRequest
+                    };
+                    return;
+                }
+            }
+        }
     }
 }

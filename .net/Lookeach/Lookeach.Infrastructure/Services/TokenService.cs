@@ -25,8 +25,8 @@ namespace Lookeach.Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly IAccessTokenRepository _accessTokenRepository;
         private JwtDTO _jwtDTO = new();
-        private RefreshTokenDTO _refreshTokenDTO;
-        private RedisDTO _redisDTO;
+        private RefreshTokenDTO _refreshTokenDTO = new();
+        private RedisDTO _redisDTO = new();
 
         public TokenService()
         {
@@ -63,7 +63,7 @@ namespace Lookeach.Infrastructure.Services
         }
         public async Task<bool> CheckRefreshTokenExpire(string token)
         {
-            var rt = await _accessTokenRepository.GetAccessTokenByToken(token);
+            var rt = await _accessTokenRepository.GetAccessTokenByRefreshToken(token);
             if (rt == null) throw new UnauthorizedAccessException("Refresh token invalid");
             var time = rt.CreatedOn.AddMinutes(_refreshTokenDTO.ExpireMinute);
             if (time < DateTime.Now)
@@ -171,14 +171,26 @@ namespace Lookeach.Infrastructure.Services
             {
                 throw new UnauthorizedAccessException("Invalid token, login please");
             }
+            if (token.ModifiedOn.AddMinutes(_jwtDTO.ExpireMinute) > DateTime.Now)
+            {
+                throw new UnauthorizedAccessException("Token still valid, can't renew token");
+            }
             if (await CheckRefreshTokenExpire(token.RefreshToken) is false)
             {
                 await DeleteAccessToken(token.RefreshToken);
                 throw new ArgumentNullException("Refresh token expired, login again");
             }
-            var rs = await _accessTokenRepository.UpdateTokenByRefreshToken(token.Token, refreshToken);
+            var user = await _userRepository.GetUserById(token.CreatedBy);
+            if (user == null)
+            {
+                throw new ArgumentNullException("Not found user");
+            }
+            string oldToken = token.Token;
+            var rs = await _accessTokenRepository.UpdateTokenByRefreshToken(await GenerateToken(user), refreshToken);
             if (rs != null)
             {
+                await _distributedCache.RemoveAsync(oldToken);
+                await _distributedCache.SetStringAsync(rs.Token, rs.ModifiedBy + "");
                 return rs.Token;
             }
             return null!;

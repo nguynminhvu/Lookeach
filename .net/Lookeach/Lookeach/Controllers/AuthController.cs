@@ -146,17 +146,28 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
+
+        [HttpGet("test-free")]
+        public IActionResult GetResource()
+        {
+            return Ok("hehe");
+        }
+
         [Authorize(Roles = "Customer")]
         [HttpGet("test-customer")]
         public IActionResult GetCustomer()
         {
-            return Ok();
+            return Ok("hehe");
         }
+
+        [Authorize(Roles = "Merchant")]
         [HttpGet("test-merchant")]
         public IActionResult GetMerchant()
         {
             return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("test-admin")]
         public IActionResult GetAdmin()
         {

@@ -1,6 +1,9 @@
-﻿using Lookeach.Core.DTOs;
+﻿using Azure;
+using Lookeach.Core.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 
 namespace Lookeach.Extensions.Jwt
@@ -41,6 +44,7 @@ namespace Lookeach.Extensions.Jwt
                         if (x.Exception.GetType() == typeof(SecurityTokenExpiredException))
                         {
                             x.Response!.Headers!.TryAdd("IS-LOOKEACH-TOKEN-EXPIRED", "true");
+                            Console.WriteLine("Hello het han");
                         }
                         return Task.CompletedTask;
                     }

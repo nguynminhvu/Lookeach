@@ -1,6 +1,7 @@
 ﻿using Lookeach.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.IdentityModel.Tokens;
 using System.Net;
 
 namespace Lookeach.Exceptions
@@ -37,6 +38,12 @@ namespace Lookeach.Exceptions
             }
             if (context.Exception is UnauthorizedAccessException)
             {
+                responseView.Error.Code = 401;
+            }
+            if (context.Exception is SecurityTokenExpiredException || context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+            {
+                context.HttpContext.Response!.Headers!.TryAdd("IS-LOOKEACH-TOKEN-EXPIRED", "true");
+                responseView.Error.Message = "The token provided has expired.";
                 responseView.Error.Code = 401;
             }
             context.Result = new ObjectResult(responseView)

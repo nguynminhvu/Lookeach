@@ -36,14 +36,14 @@ namespace Lookeach.Infrastructure.Repositories
             {
                 foreach (var item in include.Split(","))
                 {
-                    query= query.Include(item);
+                    query = query.Include(item);
                 }
             }
             return (await query.FirstOrDefaultAsync(x => x.Email == email && x.Password == password))!;
         }
 
         public async Task<User> GetUserById(Guid id)
-             => (await _context.Users.FirstOrDefaultAsync(x => x.Id == id))!;
+             => (await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == id))!;
 
 
 
@@ -56,7 +56,7 @@ namespace Lookeach.Infrastructure.Repositories
             {
                 foreach (var item in include.Split(","))
                 {
-                    query= query.Include(item);
+                    query = query.Include(item);
                 }
             }
             return (await query.FirstOrDefaultAsync(x => x.Username == username && x.Password == password))!;

@@ -60,6 +60,7 @@ namespace Lookeach.Infrastructure.Repositories
             var tk = await _context.AccessTokens.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
             if (tk==null) throw new Exception("Can't refresh token, token ibvalid");
             tk.Token = token;
+            tk.ModifiedOn=DateTime.Now;
             Update(tk);
             await _context.SaveChangesAsync();
             return tk;
