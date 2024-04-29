@@ -20,6 +20,7 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAesService, AesService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IBrandService, BrandService>();
 
             try
             {

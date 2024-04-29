@@ -5,5 +5,6 @@ namespace Lookeach.Core.Repositories
 {
     public interface IImageRepository:IRepository<Image>
     {
+        Task<List<Image>> GetImagesByListId(List<Guid> imageId); 
     }
 }
