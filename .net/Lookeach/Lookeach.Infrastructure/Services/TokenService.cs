@@ -91,9 +91,9 @@ namespace Lookeach.Infrastructure.Services
 
                 }, out SecurityToken securityToken);
                 var jwtToken = (JwtSecurityToken)securityToken;
-                var id = jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier)!.Value;
-                var email = jwtToken.Claims.First(x => x.Type == ClaimTypes.Email)!.Value;
-                var role = jwtToken.Claims.First(x => x.Type == ClaimTypes.Role)!.Value;
+                var id = jwtToken.Claims.First(x => x.Type == "nameid")!.Value;
+                var email = jwtToken.Claims.First(x => x.Type == "email")!.Value;
+                var role = jwtToken.Claims.First(x => x.Type == "role")!.Value;
 
                 if (Guid.TryParse(id, out Guid newId) is false ||
                     string.IsNullOrEmpty(email) ||

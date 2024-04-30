@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Lookeach.Core.Entities;
+using Lookeach.Core.ViewModels.Brands;
+using Lookeach.Core.ViewModels.Images;
 using Lookeach.Core.ViewModels.Roles;
 using Lookeach.Core.ViewModels.Users;
 
@@ -26,6 +28,9 @@ namespace Lookeach.Application.AutoMappers
         {
             CreateMap<User, UserViewModel>().ReverseMap();
             CreateMap<Role, RoleViewModel>().ReverseMap();
+            CreateMap<Brand, BrandViewModel>().ReverseMap();
+            CreateMap<BrandImage, BrandImageViewModel>().ReverseMap();
+            CreateMap<Image, ImageViewModel>().ReverseMap();
         }
     }
 }
