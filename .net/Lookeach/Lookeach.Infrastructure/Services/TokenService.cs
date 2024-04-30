@@ -32,7 +32,6 @@ namespace Lookeach.Infrastructure.Services
         {
 
         }
-
         public TokenService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContext, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
@@ -73,8 +72,14 @@ namespace Lookeach.Infrastructure.Services
             return true;
         }
 
-        public async Task<ClaimDTO> GetClaimDTOByAccessToken(string token)
+        public async Task<ClaimDTO> GetClaimDTOByAccessToken(string? token = null!)
         {
+            if (string.IsNullOrEmpty(token))
+            {
+                token = (_httpAccessor.HttpContext.Request.Headers["Authorization"].First() + "").Split(" ").Last();
+            }
+            if (token == null!) throw new UnauthorizedAccessException("Not found token, login please");
+           
             try
             {
                 var keyExample = _jwtDTO.JwtSecret;

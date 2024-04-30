@@ -2,7 +2,7 @@
 
 namespace Lookeach.Core.UnitOfWorks
 {
-    public interface IUnitOfWork 
+    public interface IUnitOfWork
     {
         IAccessTokenRepository AccessTokenRepository { get; }
         IBrandRepository BrandRepository { get; }
@@ -27,7 +27,7 @@ namespace Lookeach.Core.UnitOfWorks
         IUserRepository UserRepository { get; }
         IVoucherRepository VoucherRepository { get; }
         IBrandImageRepository BrandImageRepository { get; }
-        
+        ICategoryImageRepository CategoryImageRepository { get; }
         Task<int> SaveChangesAsync();
 
     }

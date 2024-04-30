@@ -6,7 +6,7 @@ namespace Lookeach.Core.Entities
     {
         public string Url { get; set; }
 
-        public Image(Guid id,string url, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
+        public Image(Guid id, string url, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
         {
             Id = id;
             if (string.IsNullOrEmpty(url)) throw new ArgumentNullException("Url is required");
@@ -17,7 +17,7 @@ namespace Lookeach.Core.Entities
             CreatedOn = createdOn;
         }
 
-        public static Image Create(string url, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
-            => new Image(Guid.NewGuid(),url, createdBy, createdOn, modifiedBy, modifiedOn);
+        public static Image Create(string url, Guid createdBy, Guid modifiedBy)
+            => new Image(Guid.NewGuid(), url, createdBy, DateTime.Now, modifiedBy, DateTime.Now);
     }
 }

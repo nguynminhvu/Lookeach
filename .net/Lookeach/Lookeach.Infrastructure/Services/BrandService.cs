@@ -63,7 +63,7 @@ namespace Lookeach.Infrastructure.Services
                         var url = await item.UploadToFirebase(BRAND, _fireBaseDTO);
                         if (url == null!) throw new Exception("Can't update Image");
                         subLink.Add(url);
-                        var image = Image.Create(url!, claim.Id, DateTime.Now, claim.Id, DateTime.Now);
+                        var image = Image.Create(url!, claim.Id, claim.Id);
                         var brandImage = BrandImage.Create(brand.Id, image.Id);
 
                         await _imageRepository.AddAsync(image);
@@ -80,7 +80,7 @@ namespace Lookeach.Infrastructure.Services
                 }
             }
 
-            return AutoMapperConfig.Mapper.Map<BrandViewModel>(brand);
+            return await GetBrand(brand.Id);
         }
 
         public async Task<BrandViewModel> GetBrand(Guid id)
@@ -136,7 +136,7 @@ namespace Lookeach.Infrastructure.Services
                     {
                         var url = await item.UploadToFirebase(BRAND, _fireBaseDTO);
                         if (url == null!) throw new Exception("Can't update Image");
-                        var image = Image.Create(url!, claim.Id, DateTime.Now, claim.Id, DateTime.Now);
+                        var image = Image.Create(url!, claim.Id, claim.Id);
                         subLink.Add(url);
                         var brandImage = BrandImage.Create(brand.Id, image.Id);
 
