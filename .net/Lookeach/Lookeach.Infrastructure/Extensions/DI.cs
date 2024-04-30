@@ -22,6 +22,7 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IGenderTypeService, GenderTypeService>();
 
             try
             {

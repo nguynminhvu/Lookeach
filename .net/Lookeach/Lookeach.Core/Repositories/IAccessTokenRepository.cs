@@ -11,6 +11,6 @@ namespace Lookeach.Core.Repositories
         Task<bool> RemoveTokenByUserId(Guid id);
         Task<bool> RemoveTokenByToken(string token);
         Task<AccessToken> AddAccessToken(string token, Guid userId, string refreshToken);
-        Task<AccessToken> UpdateTokenByRefreshToken(string token, string refreshToken);
+        Task<AccessToken> UpdateTokenByRefreshToken(string token, string refreshToken, Guid modifiedBy);
     }
 }

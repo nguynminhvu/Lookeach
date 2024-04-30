@@ -4,12 +4,12 @@ namespace Lookeach.Core.Entities
 {
     public class AccessToken : Audit<DateTime, Guid>
     {
-        public Guid UserId { get; set; }
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
+        public Guid UserId { get; private set; }
+        public string Token { get; private set; }
+        public string RefreshToken { get; private set; }
         public User User { get; set; }
 
-        protected AccessToken(Guid userId, string token,string refreshToken, DateTime createdOn, DateTime modifiedOn, Guid modifiedBy, Guid createdBy)
+        protected AccessToken(Guid userId, string token, string refreshToken, DateTime createdOn, DateTime modifiedOn, Guid modifiedBy, Guid createdBy)
         {
             UserId = userId;
             Token = token;
@@ -21,5 +21,12 @@ namespace Lookeach.Core.Entities
 
         }
         public static AccessToken Create(Guid userId, string token, string refreshToken) => new AccessToken(userId, token, refreshToken, DateTime.Now, DateTime.Now, userId, userId);
+
+        public void Update(string token, Guid modifiedBy)
+        {
+            Token = token;
+            ModifiedBy = modifiedBy;
+            ModifiedOn = DateTime.Now;
+        }
     }
 }
