@@ -21,6 +21,7 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IAesService, AesService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             try
             {
@@ -29,7 +30,7 @@ namespace Lookeach.Infrastructure.Extensions
                 services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(redisDto.Address));
                 services.AddStackExchangeRedisCache(x => x.Configuration = redisDto.Address);
             }
-            catch
+            catch (RedisConnectionException ex)
             {
                 throw new Exception("Cache invalid, try again");
             }

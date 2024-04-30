@@ -20,7 +20,7 @@ namespace Lookeach.Infrastructure.Repositories
             _context=appDbContext;
         }
 
-        public async Task<List<CategoryImage>> GetBrandImagesByCategoryId(Guid categoryId)
+        public async Task<List<CategoryImage>> GetCategoryImagesByCategoryId(Guid categoryId)
            => await _context.CategoryImages.Where(x => x.CategoryId == categoryId).ToListAsync();
     }
 }

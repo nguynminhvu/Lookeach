@@ -5,6 +5,6 @@ namespace Lookeach.Core.Repositories
 {
     public interface ICategoryImageRepository : IRepository<CategoryImage>
     {
-        Task<List<CategoryImage>> GetBrandImagesByCategoryId(Guid categoryId);
+        Task<List<CategoryImage>> GetCategoryImagesByCategoryId(Guid categoryId);
     }
 }

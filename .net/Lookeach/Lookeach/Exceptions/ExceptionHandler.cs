@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 using System.Net;
 
 namespace Lookeach.Exceptions
@@ -45,6 +46,12 @@ namespace Lookeach.Exceptions
                 context.HttpContext.Response!.Headers!.TryAdd("IS-LOOKEACH-TOKEN-EXPIRED", "true");
                 responseView.Error.Message = "The token provided has expired.";
                 responseView.Error.Code = 401;
+            }
+            if (context.Exception is RedisConnectionException)
+            {
+                responseView.Error.Code = 500;
+                responseView.Error.Message = "Redis server down, call Michael now";
+
             }
             context.Result = new ObjectResult(responseView)
             {
