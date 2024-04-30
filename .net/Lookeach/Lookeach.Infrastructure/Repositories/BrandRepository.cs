@@ -44,7 +44,7 @@ namespace Lookeach.Infrastructure.Repositories
 
             if (query.Select(x => x.BrandImages).Any(x => x != null!))
             {
-                query = query.Include(x => x.BrandImages).ThenInclude(x => x.Image);
+                query = query.Include(x => x.BrandImages)!.ThenInclude(x => x.Image);
             }
             return await query.ToListAsync();
         }
