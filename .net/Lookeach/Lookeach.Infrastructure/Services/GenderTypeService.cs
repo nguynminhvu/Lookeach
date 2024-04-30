@@ -27,9 +27,8 @@ namespace Lookeach.Infrastructure.Services
         public async Task<GenderTypeViewModel> CreateGenderType(string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-            string token = "";
 
-            var claim = await GetClaimDTOByAccessToken(token);
+            var claim = await GetClaimDTOByAccessToken();
 
             var genderType = GenderType.Create(name, claim.Id, claim.Id);
 
@@ -45,7 +44,7 @@ namespace Lookeach.Infrastructure.Services
 
         public async Task<List<GenderTypeViewModel>> GetGenderTypes(string? name = null, int? pageIndex = null!, int? pageSize = null!)
         {
-            return AutoMapperConfig.Mapper.Map<List<GenderTypeViewModel>>(await _genderTypeRepository.GetGenderTypes());
+            return AutoMapperConfig.Mapper.Map<List<GenderTypeViewModel>>(await _genderTypeRepository.GetGenderTypes(name,pageIndex,pageSize));
         }
 
 

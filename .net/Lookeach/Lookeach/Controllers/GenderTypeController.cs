@@ -33,6 +33,7 @@ namespace Lookeach.Controllers
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
                 responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                return StatusCode(StatusCodes.Status201Created, responseViewModel);
             }
             responseViewModel.IsFailure = true;
             responseViewModel.IsSuccess = false;
@@ -57,6 +58,7 @@ namespace Lookeach.Controllers
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
                 responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                return StatusCode(StatusCodes.Status200OK, responseViewModel);
             }
             responseViewModel.IsFailure = true;
             responseViewModel.IsSuccess = false;
@@ -73,14 +75,28 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> GetGenderType([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetGenderTypeByIdQuery(id));
-            return Ok(rs);
+            ResponseViewModel responseViewModel = new ResponseViewModel
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = JsonConvert.SerializeObject(rs)
+            };
+            return Ok(responseViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetGenderTypes(string? name, int? pageIndex, int? pageSize)
         {
             var rs = await _mediator.Send(new GetGenderTypesQuery(name, pageIndex, pageSize));
-            return Ok(rs);
+            ResponseViewModel responseViewModel = new ResponseViewModel
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = JsonConvert.SerializeObject(rs)
+            };
+            return Ok(responseViewModel);
         }
     }
 }
