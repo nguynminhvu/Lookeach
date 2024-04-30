@@ -1,5 +1,6 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
+using Lookeach.Core.DTOs;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
@@ -18,7 +19,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IBrandRepository _brandRepository;
         private readonly IBrandImageRepository _brandImageRepository;
         private readonly IHttpContextAccessor _httpAccessor;
-        private readonly FirebaseHelpers _firebaseHelpers;
+        private readonly FirebaseDTO _fireBaseDTO;
         private readonly IImageRepository _imageRepository;
         private readonly IConfiguration _configuration;
         private const string BRAND = "Brand";
@@ -29,7 +30,7 @@ namespace Lookeach.Infrastructure.Services
             _uow = unitOfWork;
             _brandRepository = _uow.BrandRepository;
             _brandImageRepository = _uow.BrandImageRepository;
-            _firebaseHelpers = new FirebaseHelpers(_configuration);
+            _configuration.GetSection(nameof(FirebaseDTO)).Bind(_fireBaseDTO);
             _imageRepository = _uow.ImageRepository;
         }
 
@@ -38,19 +39,7 @@ namespace Lookeach.Infrastructure.Services
             if (brandCreateModel.Images != null)
             {
                 string[] permittedExtensions = { ".png", ".jpg", ".jpeg" };
-
-                foreach (var item in brandCreateModel.Images)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await item.CopyToAsync(memoryStream);
-
-                        if (!FileHelper.IsValidFileExtensionAndSignature(item.FileName, memoryStream, permittedExtensions))
-                        {
-                            throw new Exception("Image required png, jpg, jpeg");
-                        }
-                    }
-                }
+                await brandCreateModel.Images.ValidImage(permittedExtensions);
             }
             var id = Guid.NewGuid();
             var brand = Brand.Create(id, brandCreateModel.Name);
@@ -65,14 +54,13 @@ namespace Lookeach.Infrastructure.Services
             if (claim == null!) throw new UnauthorizedAccessException("Your action not support, not found token");
 
             List<string> subLink = new List<string>();
-            List<BrandImage> branimages = new List<BrandImage>();
             try
             {
                 if (brandCreateModel.Images != null && brandCreateModel.Images.Count > 0)
                 {
                     foreach (var item in brandCreateModel.Images)
                     {
-                        var url = await _firebaseHelpers.UploadToFirebase(item, BRAND);
+                        var url = await item.UploadToFirebase(BRAND, _fireBaseDTO);
                         if (url == null!) throw new Exception("Can't update Image");
                         subLink.Add(url);
                         var image = Image.Create(url!, claim.Id, DateTime.Now, claim.Id, DateTime.Now);
@@ -88,7 +76,7 @@ namespace Lookeach.Infrastructure.Services
             {
                 foreach (var item in subLink)
                 {
-                    await _firebaseHelpers.DeleteImage(item, BRAND);
+                    await item.DeleteImage(BRAND, _fireBaseDTO);
                 }
             }
 
@@ -129,7 +117,7 @@ namespace Lookeach.Infrastructure.Services
                 {
                     brand.BrandImages.Clear();
                 }
-
+                _brandRepository.Update(brand);
                 if (brandUpdateModel.Images != null! && brandUpdateModel.Images.Count >= 0)
                 {
                     var token = (_httpAccessor.HttpContext.Request.Headers["Authorization"].First() + "").Split(" ").Last();
@@ -142,32 +130,19 @@ namespace Lookeach.Infrastructure.Services
 
                     string[] permittedExtensions = { ".png", ".jpg", ".jpeg" };
 
+                    await brandUpdateModel.Images.ValidImage(permittedExtensions);
+
                     foreach (var item in brandUpdateModel.Images)
                     {
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await item.CopyToAsync(memoryStream);
+                        var url = await item.UploadToFirebase(BRAND, _fireBaseDTO);
+                        if (url == null!) throw new Exception("Can't update Image");
+                        var image = Image.Create(url!, claim.Id, DateTime.Now, claim.Id, DateTime.Now);
+                        subLink.Add(url);
+                        var brandImage = BrandImage.Create(brand.Id, image.Id);
 
-                            if (!FileHelper.IsValidFileExtensionAndSignature(item.FileName, memoryStream, permittedExtensions))
-                            {
-                                throw new Exception("Image required png, jpg, jpeg");
-                            }
-                        }
-                    }
-                    if (brandUpdateModel.Images != null && brandUpdateModel.Images.Count > 0)
-                    {
-                        foreach (var item in brandUpdateModel.Images)
-                        {
-                            var url = await _firebaseHelpers.UploadToFirebase(item, BRAND);
-                            if (url == null!) throw new Exception("Can't update Image");
-                            var image = Image.Create(url!, claim.Id, DateTime.Now, claim.Id, DateTime.Now);
-                            subLink.Add(url);
-                            var brandImage = BrandImage.Create(brand.Id, image.Id);
-
-                            await _imageRepository.AddAsync(image);
-                            await _brandImageRepository.AddAsync(brandImage);
-                        };
-                    }
+                        await _imageRepository.AddAsync(image);
+                        await _brandImageRepository.AddAsync(brandImage);
+                    };
                 }
                 await _uow.SaveChangesAsync();
                 return AutoMapperConfig.Mapper.Map<BrandViewModel>(brand);
@@ -176,7 +151,7 @@ namespace Lookeach.Infrastructure.Services
             {
                 foreach (var item in subLink)
                 {
-                    await _firebaseHelpers.DeleteImage(item, BRAND);
+                    await item.DeleteImage(BRAND, _fireBaseDTO);
                 }
                 throw new Exception(ex.Message);
             }
