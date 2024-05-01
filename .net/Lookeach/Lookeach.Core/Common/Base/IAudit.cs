@@ -2,9 +2,9 @@
 {
     public interface IAudit<T, KT> : IBaseEntity<KT>
     {
-        KT CreatedBy { get; set; }
-        T CreatedOn { get; set; }
-        KT ModifiedBy { get; set; }
-        T ModifiedOn { get; set; }
+        KT CreatedBy { get;  }
+        T CreatedOn { get;  }
+        KT ModifiedBy { get;  }
+        T ModifiedOn { get;  }
     }
 }

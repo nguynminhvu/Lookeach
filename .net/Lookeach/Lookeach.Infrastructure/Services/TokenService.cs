@@ -32,6 +32,14 @@ namespace Lookeach.Infrastructure.Services
         {
 
         }
+        public TokenService(IConfiguration configuration, IHttpContextAccessor httpContext)
+        {
+            _httpAccessor = httpContext;
+            _configuration = configuration;
+            _configuration.GetSection(nameof(JwtDTO)).Bind(_jwtDTO);
+            _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
+            _configuration.GetSection(nameof(RefreshTokenDTO)).Bind(_refreshTokenDTO);
+        }
         public TokenService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContext, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
@@ -74,12 +82,18 @@ namespace Lookeach.Infrastructure.Services
 
         public async Task<ClaimDTO> GetClaimDTOByAccessToken(string? token = null!)
         {
-            if (string.IsNullOrEmpty(token))
+            try
             {
-                token = (_httpAccessor.HttpContext.Request.Headers["Authorization"].First() + "").Split(" ").Last();
+                if (token == null)
+                {
+                    token = (_httpAccessor.HttpContext.Request.Headers["Authorization"].First() + "").Split(" ").Last();
+                }
+            }
+            catch
+            {
+                throw new UnauthorizedAccessException("Login session has expired");
             }
             if (token == null!) throw new UnauthorizedAccessException("Not found token, login please");
-           
             try
             {
                 var keyExample = _jwtDTO.JwtSecret;
@@ -189,7 +203,12 @@ namespace Lookeach.Infrastructure.Services
                 throw new ArgumentNullException("Not found user");
             }
             string oldToken = token.Token;
-            var rs = await _accessTokenRepository.UpdateTokenByRefreshToken(await GenerateToken(user), refreshToken);
+            var claim = await GetClaimDTOByAccessToken();
+            if (claim == null!)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            var rs = await _accessTokenRepository.UpdateTokenByRefreshToken(await GenerateToken(user), refreshToken, claim.Id);
             if (rs != null)
             {
                 await _distributedCache.RemoveAsync(oldToken);

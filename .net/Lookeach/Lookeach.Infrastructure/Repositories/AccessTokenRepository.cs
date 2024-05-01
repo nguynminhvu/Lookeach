@@ -55,12 +55,11 @@ namespace Lookeach.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<AccessToken> UpdateTokenByRefreshToken(string token, string refreshToken)
+        public async Task<AccessToken> UpdateTokenByRefreshToken(string token, string refreshToken, Guid modifiedBy)
         {
             var tk = await _context.AccessTokens.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
-            if (tk==null) throw new Exception("Can't refresh token, token ibvalid");
-            tk.Token = token;
-            tk.ModifiedOn=DateTime.Now;
+            if (tk==null) throw new Exception("Can't refresh token, token invalid");
+            tk.Update(token, modifiedBy);
             Update(tk);
             await _context.SaveChangesAsync();
             return tk;

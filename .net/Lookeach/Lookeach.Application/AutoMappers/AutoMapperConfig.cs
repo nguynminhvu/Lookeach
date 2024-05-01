@@ -2,8 +2,10 @@
 using Lookeach.Core.Entities;
 using Lookeach.Core.ViewModels.Brands;
 using Lookeach.Core.ViewModels.Categories;
+using Lookeach.Core.ViewModels.GenderTypes;
 using Lookeach.Core.ViewModels.Images;
 using Lookeach.Core.ViewModels.Roles;
+using Lookeach.Core.ViewModels.Sizes;
 using Lookeach.Core.ViewModels.Users;
 
 namespace Lookeach.Application.AutoMappers
@@ -19,7 +21,6 @@ namespace Lookeach.Application.AutoMappers
             });
             return config.CreateMapper();
         });
-
         public static IMapper Mapper => Lazy.Value;
     }
 
@@ -33,7 +34,9 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<BrandImage, BrandImageViewModel>().ReverseMap();
             CreateMap<Image, ImageViewModel>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
-            CreateMap<CategoryImage, CategoryImageViewModel>();
+            CreateMap<CategoryImage, CategoryImageViewModel>().ReverseMap();
+            CreateMap<GenderType, GenderTypeViewModel>().ReverseMap();
+            CreateMap<Size, SizeViewModel>().ReverseMap();
         }
     }
 }
