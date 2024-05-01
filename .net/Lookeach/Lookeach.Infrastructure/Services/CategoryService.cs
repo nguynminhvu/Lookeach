@@ -24,7 +24,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IConfiguration _configuration;
         private readonly IImageRepository _imageRepository;
 
-        public CategoryService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IConfiguration configuration) : base(unitOfWork, configuration, httpContextAccessor, connectionMultiplexer, distributedCache)
+        public CategoryService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IConfiguration configuration) : base(configuration, httpContextAccessor)
         {
             _uow = unitOfWork;
             _categoryRepository = _uow.CategoryRepository;

@@ -32,6 +32,14 @@ namespace Lookeach.Infrastructure.Services
         {
 
         }
+        public TokenService(IConfiguration configuration, IHttpContextAccessor httpContext)
+        {
+            _httpAccessor = httpContext;
+            _configuration = configuration;
+            _configuration.GetSection(nameof(JwtDTO)).Bind(_jwtDTO);
+            _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
+            _configuration.GetSection(nameof(RefreshTokenDTO)).Bind(_refreshTokenDTO);
+        }
         public TokenService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContext, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
@@ -196,7 +204,7 @@ namespace Lookeach.Infrastructure.Services
             }
             string oldToken = token.Token;
             var claim = await GetClaimDTOByAccessToken();
-            if (claim==null!)
+            if (claim == null!)
             {
                 throw new UnauthorizedAccessException();
             }

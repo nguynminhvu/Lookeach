@@ -17,7 +17,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IGenderTypeRepository _genderTypeRepository;
         private readonly IHttpContextAccessor _httpAccessor;
         private readonly IConfiguration _configuration;
-        public GenderTypeService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer) : base(unitOfWork, configuration, httpContextAccessor, connectionMultiplexer, distributedCache)
+        public GenderTypeService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer) : base( configuration, httpContextAccessor)
         {
             _uow = unitOfWork;
             _httpAccessor = httpContextAccessor;

@@ -23,7 +23,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IImageRepository _imageRepository;
         private readonly IConfiguration _configuration;
         private const string BRAND = "Brand";
-        public BrandService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache) : base(unitOfWork, configuration, httpContextAccessor, connectionMultiplexer, distributedCache)
+        public BrandService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache) : base(configuration, httpContextAccessor)
         {
             _configuration = configuration;
             _httpAccessor = httpContextAccessor;
