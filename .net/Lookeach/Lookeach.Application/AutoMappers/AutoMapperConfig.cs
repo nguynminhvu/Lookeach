@@ -2,6 +2,7 @@
 using Lookeach.Core.Entities;
 using Lookeach.Core.ViewModels.Brands;
 using Lookeach.Core.ViewModels.Categories;
+using Lookeach.Core.ViewModels.Colors;
 using Lookeach.Core.ViewModels.GenderTypes;
 using Lookeach.Core.ViewModels.Images;
 using Lookeach.Core.ViewModels.Roles;
@@ -37,6 +38,7 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<CategoryImage, CategoryImageViewModel>().ReverseMap();
             CreateMap<GenderType, GenderTypeViewModel>().ReverseMap();
             CreateMap<Size, SizeViewModel>().ReverseMap();
+            CreateMap<Color, ColorViewModel>().ReverseMap();
         }
     }
 }
