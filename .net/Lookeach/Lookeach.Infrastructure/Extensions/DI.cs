@@ -24,6 +24,8 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IGenderTypeService, GenderTypeService>();
             services.AddScoped<ISizeService, SizeService>();
+            services.AddScoped<IColorService, ColorService>();
+
             try
             {
                 var redisDto = new RedisDTO();
