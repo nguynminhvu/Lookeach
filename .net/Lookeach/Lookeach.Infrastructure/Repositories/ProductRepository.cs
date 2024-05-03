@@ -3,7 +3,6 @@ using Lookeach.Core.Repositories;
 using Lookeach.Infrastructure.Data;
 using Lookeach.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Lookeach.Infrastructure.Repositories
 {
@@ -98,14 +97,56 @@ namespace Lookeach.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public Task<Product> GetProductbyId(Guid id, string? include = null)
+        public async Task<Product> GetProductById(Guid id, string? include = null)
         {
-            throw new NotImplementedException();
+            IQueryable<Product> query = _context.Products;
+            query = query.Where(x => x.Id == id);
+            if (query != null && query.Count() > 0)
+            {
+                Include(ref query, include);
+                return (await query.FirstOrDefaultAsync())!;
+            }
+            return null!;
         }
 
-        public Task<List<Product>> GetProducts(string? name = null, int? quantity = null, decimal? priceFrom = null, decimal? priceTo = null, int? pageIndex = null, int? pageSize = null, string? includes = null)
+        public async Task<List<Product>> GetProducts(string? name = null, int? quantity = null, decimal? priceFrom = null, decimal? priceTo = null, int? pageIndex = null, int? pageSize = null, string? includes = null)
         {
-            throw new NotImplementedException();
+            IQueryable<Product> query = _context.Products;
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
+            }
+            if (quantity != null)
+            {
+                query = query.Where(x => x.Quantity >= quantity);
+            }
+            if (priceFrom.HasValue)
+            {
+                query = query.Where(x => x.Price >= priceFrom);
+            }
+            if (priceTo.HasValue)
+            {
+                query = query.Where(x => x.Price <= priceTo);
+            }
+            Pagination(ref query, pageIndex, pageSize);
+            Include(ref query, includes);
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<Product>> GetProducts(DateTime? dateFrom = null!, DateTime? dateTo = null!, int? pageIndex = null, int? pageSize = null, string? includes = null)
+        {
+            IQueryable<Product> query = _context.Products;
+            if (dateFrom.HasValue)
+            {
+                query = query.Where(x => x.CreatedOn >= dateFrom);
+            }
+            if (dateTo.HasValue)
+            {
+                query = query.Where(x => x.CreatedOn <= dateTo);
+            }
+            Pagination(ref query, pageIndex, pageSize);
+            Include(ref query, includes);
+            return await query.ToListAsync();
         }
     }
 }
