@@ -609,6 +609,9 @@ namespace Lookeach.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActived")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -626,6 +629,9 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sold")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -696,6 +702,9 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("Sold")
+                        .HasColumnType("int");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
@@ -712,17 +721,12 @@ namespace Lookeach.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductSourcingId")
+                    b.Property<Guid?>("ProductSourcingId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
-
-                    b.HasIndex("ProductSourcingId");
+                    b.HasIndex("ProductSourcingId1");
 
                     b.ToTable("ProductSourcingImages");
                 });
@@ -1263,21 +1267,9 @@ namespace Lookeach.Infrastructure.Migrations
 
             modelBuilder.Entity("Lookeach.Core.Entities.ProductSourcingImage", b =>
                 {
-                    b.HasOne("Lookeach.Core.Entities.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Lookeach.Core.Entities.ProductSourcing", "ProductSourcing")
+                    b.HasOne("Lookeach.Core.Entities.ProductSourcing", null)
                         .WithMany("ProductSourcingImages")
-                        .HasForeignKey("ProductSourcingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-
-                    b.Navigation("ProductSourcing");
+                        .HasForeignKey("ProductSourcingId1");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>

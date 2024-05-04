@@ -18,6 +18,10 @@ namespace Lookeach.Core.Entities
         public Brand Brand { get; set; }
         public int Version { get; set; }
 
+        private ProductSourcing()
+        {
+
+        }
         protected ProductSourcing(Guid id, string name, int quantity, int sold, decimal price, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, int version, Guid productId)
         {
             Id = id;

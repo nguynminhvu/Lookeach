@@ -18,6 +18,10 @@ namespace Lookeach.Core.Entities
         public Brand Brand { get; private set; }
         public bool IsActived { get; private set; }
 
+        private Product()
+        {
+
+        }
         protected Product(Guid id, string name, int quantity, int sold, decimal price, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
         {
             Id = id;

@@ -8,6 +8,11 @@ namespace Lookeach.Core.Entities
         public Guid ImageId { private get; set; }
         public ProductSourcing ProductSourcing { private get; set; }
         public Image Image { private get; set; }
+
+        private ProductSourcingImage()
+        {
+
+        }
         protected ProductSourcingImage(Guid id, Guid productSourcingId, Guid imageId)
         {
             Id = id;
