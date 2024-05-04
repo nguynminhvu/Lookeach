@@ -28,6 +28,8 @@ namespace Lookeach.Core.UnitOfWorks
         IVoucherRepository VoucherRepository { get; }
         IBrandImageRepository BrandImageRepository { get; }
         ICategoryImageRepository CategoryImageRepository { get; }
+        IProductImageRepository ProductImageRepository { get; }
+        IProductSourcingImageRepository ProductSourcingImageRepository { get; }
         Task<int> SaveChangesAsync();
 
     }

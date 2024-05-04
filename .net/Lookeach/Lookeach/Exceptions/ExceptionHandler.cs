@@ -17,7 +17,6 @@ namespace Lookeach.Exceptions
                 context.ExceptionHandled = true;
             }
         }
-
         private void HandlerException(ExceptionContext context)
         {
             ResponseViewModel responseView = new ResponseViewModel

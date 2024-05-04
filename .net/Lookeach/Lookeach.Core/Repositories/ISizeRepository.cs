@@ -7,5 +7,6 @@ namespace Lookeach.Core.Repositories
     {
         Task<List<Size>> GetSizes(string? name = null!, int? pageIndex = null!, int? pageSize = null!);
         Task<Size> GetSizeById(Guid id);
+        Task<List<Size>> GetSizeByIds(List<Guid> sizedIds);
     }
 }

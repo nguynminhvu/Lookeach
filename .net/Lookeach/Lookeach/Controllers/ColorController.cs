@@ -19,7 +19,7 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{id}/size")]
+        [HttpGet("color/{id}")]
         public async Task<IActionResult> GetColor([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetColorByIdQuery(id));
@@ -34,7 +34,7 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
-        [HttpGet]
+        [HttpGet("colors")]
         public async Task<IActionResult> GetColors(string? name, int? pageIndex, int? pageSize)
         {
             var rs = await _mediator.Send(new GetColorsQuery(name, pageIndex, pageSize));
@@ -49,7 +49,7 @@ namespace Lookeach.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("color/create")]
         public async Task<IActionResult> CreateColor([FromBody] string name)
         {
             var rs = await _mediator.Send(new CreateColorCommand(name));
@@ -64,7 +64,7 @@ namespace Lookeach.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPut("color/update")]
         public async Task<IActionResult> UpdateColor([FromBody] ColorUpdateModel ColorUpdateModel)
         {
             var rs = await _mediator.Send(new UpdateColorCommand(ColorUpdateModel));

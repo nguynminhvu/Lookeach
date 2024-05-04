@@ -10,9 +10,9 @@ namespace Lookeach.Core.ViewModels.Products
         public decimal Price { get; set; }
         public string Description { get; set; }
         public ICollection<IFormFile>? Images { get; set; }
-        public ICollection<Guid>? Sizes { get; set; }
-        public ICollection<Guid>? Colors { get; set; }
-        public ICollection<Guid> Categories { get; set; }
+        public ICollection<Guid>? Sizes { get; set; } = new List<Guid>();
+        public ICollection<Guid>? Colors { get; set; } = new List<Guid>();
+        public ICollection<Guid> Categories { get; set; } = new List<Guid>();
         public Guid BrandId { get; set; }
     }
 }

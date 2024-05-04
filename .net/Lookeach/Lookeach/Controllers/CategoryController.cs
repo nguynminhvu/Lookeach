@@ -19,7 +19,7 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost("category/create")]
         public async Task<IActionResult> CreateCategory([FromForm] CategoryCreateModel categoryCreateModel)
         {
             ResponseViewModel responseViewModel = new ResponseViewModel();
@@ -43,7 +43,7 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
-        [HttpPut]
+        [HttpPut("category/update")]
         public async Task<IActionResult> UpdateCategory([FromForm] CategoryUpdateModel categoryUpdateModel)
         {
             ResponseViewModel responseViewModel = new ResponseViewModel();
@@ -67,7 +67,7 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
-        [HttpGet("{id}/category")]
+        [HttpGet("category/{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetCategoryByIdQuery(id));
@@ -81,7 +81,7 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
-        [HttpGet]
+        [HttpGet("categories")]
         public async Task<IActionResult> GetCategories(string? name, int? pageIndex, int? pageSize)
         {
             var rs = await _mediator.Send(new GetCategoriesQuery(name, pageIndex, pageSize));

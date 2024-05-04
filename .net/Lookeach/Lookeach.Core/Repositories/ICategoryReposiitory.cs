@@ -8,5 +8,6 @@ namespace Lookeach.Core.Repositories
         Task<Category> GetCategoryByIdIncludeImage(Guid id);
         Task<Category> GetCategoryById(Guid id);
         Task<List<Category>> GetCategoriesIncludeImage(string? name = null!, int? pageIndex = null!, int? pageSize = null!);
+        Task<List<Category>> GetCategoriesByIds(List<Guid> ids);
     }
 }

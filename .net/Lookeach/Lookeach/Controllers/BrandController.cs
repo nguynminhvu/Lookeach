@@ -20,7 +20,7 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet()]
+        [HttpGet("brands")]
         public async Task<IActionResult> GetBrands(string? name, int? pageIndex, int? pageSize)
         {
             List<BrandViewModel> rs = new List<BrandViewModel>();
@@ -42,7 +42,7 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
-        [HttpGet("{id}/brand")]
+        [HttpGet("brand/{id}")]
         public async Task<IActionResult> GetBrandById([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetBrandByIdQuery(id));
@@ -62,7 +62,7 @@ namespace Lookeach.Controllers
         /// <param name="brandCreateModel"></param>
         /// <returns></returns>
         [Authorize(Roles ="Merchant")]
-        [HttpPost]
+        [HttpPost("brand/create")]
         public async Task<IActionResult> CreateBrand([FromForm] BrandCreateModel brandCreateModel)
         {
             var rs = await _mediator.Send(new CreateBrandCommand(brandCreateModel));
@@ -92,7 +92,7 @@ namespace Lookeach.Controllers
         /// <param name="brandUpdateModel"></param>
         /// <returns></returns>
         [Authorize(Roles = "Merchant")]
-        [HttpPut]
+        [HttpPut("brand/update")]
         public async Task<IActionResult> UpdateBrand([FromForm] BrandUpdateModel brandUpdateModel)
         {
             var rs = await _mediator.Send(new UpdateBrandCommand(brandUpdateModel));

@@ -121,7 +121,7 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <returns></returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
-        [HttpPost("renew-token")]
+        [HttpPost("token/renew")]
         public async Task<IActionResult> ReNew()
         {
             var token = (HttpContext.Request.Headers["RefreshToken"].FirstOrDefault() + "").Split(" ").Last();
