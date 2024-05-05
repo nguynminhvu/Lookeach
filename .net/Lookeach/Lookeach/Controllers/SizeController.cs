@@ -54,7 +54,7 @@ namespace Lookeach.Controllers
         [HttpPost("size/create")]
         public async Task<IActionResult> CreateSize([FromBody] string name)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<SizeViewModel> responseViewModel = new ResponseBase<SizeViewModel>();
 
             var rs = await _mediator.Send(new CreateSizeCommand(name));
 
@@ -63,7 +63,7 @@ namespace Lookeach.Controllers
                 responseViewModel.Error = null!;
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status201Created, responseViewModel);
             }
             responseViewModel.Error = new ErrorViewModel
@@ -82,7 +82,7 @@ namespace Lookeach.Controllers
         [HttpPut("size/update")]
         public async Task<IActionResult> UpdateSize([FromBody] SizeUpdateModel sizeUpdateModel)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<SizeViewModel> responseViewModel = new ResponseBase<SizeViewModel>();
 
             var rs = await _mediator.Send(new UpdateSizeCommand(sizeUpdateModel));
 
@@ -91,7 +91,7 @@ namespace Lookeach.Controllers
                 responseViewModel.Error = null!;
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status200OK, responseViewModel);
             }
             responseViewModel.Error = new ErrorViewModel

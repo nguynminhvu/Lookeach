@@ -40,6 +40,16 @@ namespace Lookeach.Infrastructure.Services
             _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
             _configuration.GetSection(nameof(RefreshTokenDTO)).Bind(_refreshTokenDTO);
         }
+        public TokenService(IConfiguration configuration, IHttpContextAccessor httpContext, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache)
+        {
+            _distributedCache = distributedCache;
+            _connectionMutiple = connectionMultiplexer;
+            _httpAccessor = httpContext;
+            _configuration = configuration;
+            _configuration.GetSection(nameof(JwtDTO)).Bind(_jwtDTO);
+            _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
+            _configuration.GetSection(nameof(RefreshTokenDTO)).Bind(_refreshTokenDTO);
+        }
         public TokenService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContext, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;

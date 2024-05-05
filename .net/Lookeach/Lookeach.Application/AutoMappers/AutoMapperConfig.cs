@@ -41,6 +41,7 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<Size, SizeViewModel>().ReverseMap();
             CreateMap<Color, ColorViewModel>().ReverseMap();
             CreateMap<Product, ProductViewModel>();
+            CreateMap<ProductImage, ProductImageViewModel>();
         }
     }
 }

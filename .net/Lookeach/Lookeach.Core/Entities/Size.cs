@@ -6,7 +6,7 @@ namespace Lookeach.Core.Entities
     {
         public string Name { get; private set; }
         public ICollection<Product> Products { get; private set; }
-
+        public ICollection<ProductSourcing> ProductSourcings { get; set; }
         protected Size(Guid id, string name, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
         {
             Id = id;

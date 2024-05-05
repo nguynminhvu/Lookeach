@@ -29,7 +29,7 @@ namespace Lookeach.Infrastructure.Services
         private EmailSenderDTO _emailSenderDTO = new();
         private EmailDTO _emailDTO = new();
 
-        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IHttpContextAccessor httpContextAccessor) : base(configuration, httpContextAccessor)
+        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, configuration, httpContextAccessor,connectionMultiplexer,distributedCache)
         {
             _httpAccessor = httpContextAccessor;
             _connectionMutiple = connectionMultiplexer;

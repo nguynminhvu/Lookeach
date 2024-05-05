@@ -1,6 +1,7 @@
 ﻿using Lookeach.Application.Commands.Brands;
 using Lookeach.Application.Queries.Brands;
 using Lookeach.Core.ViewModels.Brands;
+using Lookeach.Core.ViewModels.Categories;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -32,12 +33,12 @@ namespace Lookeach.Controllers
             {
                 rs = await _mediator.Send(new GetAllBrandQuery(pageIndex, pageSize));
             }
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<List<BrandViewModel>> responseViewModel = new ResponseBase<List<BrandViewModel>>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value = rs
             };
             return Ok(responseViewModel);
         }
@@ -46,12 +47,12 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> GetBrandById([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetBrandByIdQuery(id));
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<BrandViewModel> responseViewModel = new ResponseBase<BrandViewModel>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value = rs
             };
             return Ok(responseViewModel);
         }

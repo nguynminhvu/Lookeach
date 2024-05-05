@@ -6,6 +6,7 @@ using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Lookeach.Controllers
 {
@@ -24,55 +25,104 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> GetProduct([FromRoute] Guid id)
         {
             if (id == Guid.Empty) throw new ArgumentException("id required");
-            return Ok(await _mediator.Send(new GetProductByIdQuery(id)));
+            ResponseBase<ProductViewModel> responseViewModel = new ResponseBase<ProductViewModel>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetProductByIdQuery(id))
+            };
+            return Ok(responseViewModel);
         }
 
         [HttpGet("products/by-categories")]
         public async Task<IActionResult> GetProductByCategoryId([FromQuery] List<Guid> categoryIds, int? pageIndex = null, int? pageSize = null, bool? mostRecent = false, bool? mostSale = false, bool? lowToHigh = false, bool? highToLow = false)
         {
-            return Ok(await _mediator.Send(new GetProductByCategoryIdsQuery(categoryIds, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow)));
+            ResponseBase<List<ProductViewModel>> responseViewModel = new ResponseBase<List<ProductViewModel>>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetProductByCategoryIdsQuery(categoryIds, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow))
+            };
+            return Ok(responseViewModel);
         }
 
         [HttpGet("products/by-colors")]
         public async Task<IActionResult> GetProductByColorId([FromQuery] List<Guid> colorIds, int? pageIndex = null, int? pageSize = null, bool? mostRecent = false, bool? mostSale = false, bool? lowToHigh = false, bool? highToLow = false)
         {
-            return Ok(await _mediator.Send(new GetProductByColorsIdsQuery(colorIds, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow)));
+            ResponseBase<List<ProductViewModel>> responseViewModel = new ResponseBase<List<ProductViewModel>>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetProductByColorsIdsQuery(colorIds, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow))
+            };
+            return Ok(responseViewModel);
         }
 
         [HttpGet("products/by-sizes")]
         public async Task<IActionResult> GetProductBySizesId([FromQuery] List<Guid> sizeIds, int? pageIndex = null, int? pageSize = null, bool? mostRecent = false, bool? mostSale = false, bool? lowToHigh = false, bool? highToLow = false)
         {
-            return Ok(await _mediator.Send(new GetProductBySizeIdsQuery(sizeIds, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow)));
+            ResponseBase<List<ProductViewModel>> responseViewModel = new ResponseBase<List<ProductViewModel>>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetProductBySizeIdsQuery(sizeIds, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow))
+            };
+            return Ok(responseViewModel);
         }
 
         [HttpGet("products/{id}/by-brand")]
         public async Task<IActionResult> GetProductByBrandId([FromRoute] Guid brandId, [FromQuery] int? pageIndex = null, int? pageSize = null, bool? mostRecent = false, bool? mostSale = false, bool? lowToHigh = false, bool? highToLow = false)
         {
-            return Ok(await _mediator.Send(new GetProductByBrandIdQuery(brandId, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow)));
+            ResponseBase<List<ProductViewModel>> responseViewModel = new ResponseBase<List<ProductViewModel>>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetProductByBrandIdQuery(brandId, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow))
+            };
+            return Ok(responseViewModel);
         }
         [HttpGet("products/most-sale")]
         public async Task<IActionResult> GetProductMostSale(DateTime dateFrom, DateTime dateTo, int? pageIndex = null, int? pageSize = null)
         {
-            return Ok(await _mediator.Send(new GetProductsMostSaleQuery(pageIndex, pageSize, dateFrom, dateTo)));
+            ResponseBase<List<ProductViewModel>> responseViewModel = new ResponseBase<List<ProductViewModel>>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetProductsMostSaleQuery(pageIndex, pageSize, dateFrom, dateTo))
+            };
+            return Ok(responseViewModel);
         }
 
         [HttpGet("products")]
         public async Task<IActionResult> GetProducts(string? name = null, int? quantity = null, decimal? priceFrom = null, decimal? priceTo = null, int? pageIndex = null, int? pageSize = null, bool? mostRecent = false, bool? mostSale = false, bool? lowToHigh = false, bool? highToLow = false)
         {
-            return Ok(await _mediator.Send(new GetProductsQuery(name, quantity, priceFrom, priceTo, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow)));
+            ResponseBase<List<ProductViewModel>> responseViewModel = new ResponseBase<List<ProductViewModel>>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetProductsQuery(name, quantity, priceFrom, priceTo, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow))
+            };
+            return Ok(responseViewModel);
         }
 
         [HttpPost("product/create")]
         public async Task<IActionResult> CreateProduct([FromForm] ProductCreateModel productCreateModel)
         {
             var rs = await _mediator.Send(new CreateProductCommand(productCreateModel));
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<ProductViewModel> responseViewModel = new ResponseBase<ProductViewModel>();
             if (rs != null)
             {
                 responseViewModel.IsFailure = false;
                 responseViewModel.Error = null!;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status201Created, responseViewModel);
             }
             responseViewModel.IsFailure = true;
@@ -91,13 +141,13 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> UpdateProduct([FromForm] ProductUpdateModel productUpdateModel)
         {
             var rs = await _mediator.Send(new UpdateProductCommand(productUpdateModel));
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<ProductViewModel> responseViewModel = new ResponseBase<ProductViewModel>();
             if (rs != null)
             {
                 responseViewModel.IsFailure = false;
                 responseViewModel.Error = null!;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return Ok(responseViewModel);
             }
             responseViewModel.IsFailure = true;
@@ -115,13 +165,13 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new DeleteProductCommand(id));
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<string> responseViewModel = new ResponseBase<string>();
             if (rs)
             {
                 responseViewModel.IsFailure = false;
                 responseViewModel.Error = null!;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs + "";
                 return Ok(responseViewModel);
             }
             responseViewModel.IsFailure = true;

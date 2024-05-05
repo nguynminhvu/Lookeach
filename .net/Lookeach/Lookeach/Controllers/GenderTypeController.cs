@@ -23,7 +23,7 @@ namespace Lookeach.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGenderType([FromBody] string name)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<GenderTypeViewModel> responseViewModel = new ResponseBase<GenderTypeViewModel>
 
             var rs = await _mediator.Send(new CreateGenderTypeCommand(name));
 
@@ -32,7 +32,7 @@ namespace Lookeach.Controllers
                 responseViewModel.Error = null!;
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status201Created, responseViewModel);
             }
             responseViewModel.IsFailure = true;
@@ -49,7 +49,7 @@ namespace Lookeach.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateGenderType([FromBody] GenderTypeUpdateModel genderTypeUpdateModel)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<GenderTypeViewModel> responseViewModel = new ResponseBase<GenderTypeViewModel>
 
             var rs = await _mediator.Send(new UpdateGenderTypeCommand(genderTypeUpdateModel));
             if (rs != null)
@@ -57,7 +57,7 @@ namespace Lookeach.Controllers
                 responseViewModel.Error = null!;
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status200OK, responseViewModel);
             }
             responseViewModel.IsFailure = true;
@@ -75,12 +75,12 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> GetGenderType([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetGenderTypeByIdQuery(id));
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<GenderTypeViewModel> responseViewModel = new ResponseBase<GenderTypeViewModel>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value = rs
             };
             return Ok(responseViewModel);
         }
@@ -89,12 +89,12 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> GetGenderTypes(string? name, int? pageIndex, int? pageSize)
         {
             var rs = await _mediator.Send(new GetGenderTypesQuery(name, pageIndex, pageSize));
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<List<GenderTypeViewModel>> responseViewModel = new ResponseBase<List<GenderTypeViewModel>>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value = rs
             };
             return Ok(responseViewModel);
         }
