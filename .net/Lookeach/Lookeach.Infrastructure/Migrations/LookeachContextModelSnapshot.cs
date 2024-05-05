@@ -181,67 +181,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("BrandImages");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.Cart", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.CartItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ProductVersion")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CartItems");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -642,6 +581,9 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Sold")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Version")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1095,33 +1037,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.CartItem", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.Cart", "Cart")
-                        .WithMany("CartItems")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Lookeach.Core.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Lookeach.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.Category", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.CategoryVoucher", null)
@@ -1374,11 +1289,6 @@ namespace Lookeach.Infrastructure.Migrations
             modelBuilder.Entity("Lookeach.Core.Entities.Brand", b =>
                 {
                     b.Navigation("BrandImages");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.Cart", b =>
-                {
-                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Category", b =>

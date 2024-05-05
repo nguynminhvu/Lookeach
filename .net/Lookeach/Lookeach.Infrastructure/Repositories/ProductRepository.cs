@@ -39,7 +39,7 @@ namespace Lookeach.Infrastructure.Repositories
                 }
                 else
                 {
-                    products = products.Include(x => x.Sizes).Include(x => x.Categories).Include(x => x.Colors);
+                    products = products.Include(x => x.Sizes).Include(x => x.Categories).Include(x => x.Colors).Include(x => x.Brand);
                 }
             }
             if (products.Select(x => x.ProductImages).Any(x => x != null!))
@@ -146,6 +146,14 @@ namespace Lookeach.Infrastructure.Repositories
             }
             Pagination(ref query, pageIndex, pageSize);
             Include(ref query, includes);
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<Product>> GetProductByIds(List<Guid> ids, string? include = null)
+        {
+            IQueryable<Product> query = _context.Products;
+            query = query.Where(x => ids.Contains(x.Id));
+            Include(ref query, include);
             return await query.ToListAsync();
         }
     }

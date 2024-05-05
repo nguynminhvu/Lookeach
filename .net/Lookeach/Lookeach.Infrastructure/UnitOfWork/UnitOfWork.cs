@@ -14,8 +14,6 @@ namespace Lookeach.Infrastructure.UnitOfWork
             _context = lookeachContext;
             AccessTokenRepository = new AccessTokenRepository(_context);
             BrandRepository = new BrandRepository(_context);
-            CartRepository = new CartRepository(_context);
-            CartItemRepository = new CartItemRepository(_context);
             CategoryRepository = new CategoryRepository(_context);
             ChatRepository = new ChatRepository(_context);
             ChatUserRepository = new ChatUserRepository(_context);
@@ -28,9 +26,7 @@ namespace Lookeach.Infrastructure.UnitOfWork
             PaymentMethodRepository = new PaymentMethodRepository(_context);
             ProductRepository = new ProductRepository(_context);
             ProductSourcingRepository = new ProductSourcingRepository(_context);
-            ProductVoucherRepository = new ProductVoucherRepository(_context);
             RoleRepository = new RoleRepository(_context);
-            ShopVoucherRepository = new ShopVoucherRepository(_context);
             SizeRepository = new SizeRepository(_context);
             UserRepository = new UserRepository(_context);
             VoucherRepository = new VoucherRepository(_context);
@@ -43,10 +39,6 @@ namespace Lookeach.Infrastructure.UnitOfWork
         public IAccessTokenRepository AccessTokenRepository { get; private set; }
 
         public IBrandRepository BrandRepository { get; private set; }
-
-        public ICartRepository CartRepository { get; private set; }
-
-        public ICartItemRepository CartItemRepository { get; private set; }
 
         public ICategoryReposiitory CategoryRepository { get; private set; }
 
@@ -72,11 +64,7 @@ namespace Lookeach.Infrastructure.UnitOfWork
 
         public IProductSourcingRepository ProductSourcingRepository { get; private set; }
 
-        public IProductVoucherRepository ProductVoucherRepository { get; private set; }
-
         public IRoleRepository RoleRepository { get; private set; }
-
-        public IShopVoucherRepository ShopVoucherRepository { get; private set; }
 
         public ISizeRepository SizeRepository { get; private set; }
 

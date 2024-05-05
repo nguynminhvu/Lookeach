@@ -173,11 +173,12 @@ namespace Lookeach.Infrastructure.Services
             var categories = await _categoryRepository.GetCategoriesByIds(productUpdateModel.Categories.ToList());
             if (categories.Count == 0) throw new Exception("Category invalid, try again");
 
-            product.UpdateProduct(productUpdateModel.Name, productUpdateModel.Quantity, productUpdateModel.Price, productUpdateModel.Description, sizes, colors, categories, productUpdateModel.BrandId, claim.Id);
             int version = await _productSourcingRepository.GetLastVersionByProductId(productUpdateModel.Id);
 
+            product.UpdateProduct(productUpdateModel.Name, productUpdateModel.Quantity, productUpdateModel.Price, productUpdateModel.Description, sizes, colors, categories, productUpdateModel.BrandId, claim.Id, version++);
+
             var productSourcing = ProductSourcing.CreateProductSourcing(productUpdateModel.Name, productUpdateModel.Quantity, productUpdateModel.Price, productUpdateModel.Description, sizes, colors, categories, productUpdateModel.BrandId, claim.Id, version++, product.Id);
-           
+
             _productRepository.Update(product);
             await _productSourcingRepository.AddAsync(productSourcing);
             if (productUpdateModel.Images.Count > 0)

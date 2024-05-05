@@ -6,6 +6,7 @@ namespace Lookeach.Core.Repositories
     public interface IProductRepository : IRepository<Product>
     {
         Task<Product> GetProductById(Guid id, string? include = null!);
+        Task<List<Product>> GetProductByIds(List<Guid> ids, string? include = null!);
         Task<List<Product>> GetProducts(string? name = null!, int? quantity = null!, decimal? priceFrom = null!, decimal? priceTo = null!, int? pageIndex = null!, int? pageSize = null!, string? includes = null!);
         Task<List<Product>> GetProductByCategoryId(List<Guid> categoryIds, int? pageIndex = null!, int? pageSize = null!, string? includes=null!);
         Task<List<Product>> GetProductBtSizeId(List<Guid> sizes, int? pageIndex = null!, int? pageSize = null!, string? includes = null!);

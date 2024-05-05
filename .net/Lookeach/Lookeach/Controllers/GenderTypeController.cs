@@ -23,7 +23,7 @@ namespace Lookeach.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGenderType([FromBody] string name)
         {
-            ResponseBase<GenderTypeViewModel> responseViewModel = new ResponseBase<GenderTypeViewModel>
+            ResponseBase<GenderTypeViewModel> responseViewModel = new ResponseBase<GenderTypeViewModel>();
 
             var rs = await _mediator.Send(new CreateGenderTypeCommand(name));
 
@@ -49,7 +49,7 @@ namespace Lookeach.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateGenderType([FromBody] GenderTypeUpdateModel genderTypeUpdateModel)
         {
-            ResponseBase<GenderTypeViewModel> responseViewModel = new ResponseBase<GenderTypeViewModel>
+            ResponseBase<GenderTypeViewModel> responseViewModel = new ResponseBase<GenderTypeViewModel>();
 
             var rs = await _mediator.Send(new UpdateGenderTypeCommand(genderTypeUpdateModel));
             if (rs != null)

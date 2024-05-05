@@ -75,14 +75,14 @@ namespace Lookeach.Controllers
         }
 
         [HttpGet("products/{id}/by-brand")]
-        public async Task<IActionResult> GetProductByBrandId([FromRoute] Guid brandId, [FromQuery] int? pageIndex = null, int? pageSize = null, bool? mostRecent = false, bool? mostSale = false, bool? lowToHigh = false, bool? highToLow = false)
+        public async Task<IActionResult> GetProductByBrandId([FromRoute] Guid id, [FromQuery] int? pageIndex = null, int? pageSize = null, bool? mostRecent = false, bool? mostSale = false, bool? lowToHigh = false, bool? highToLow = false)
         {
             ResponseBase<List<ProductViewModel>> responseViewModel = new ResponseBase<List<ProductViewModel>>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = await _mediator.Send(new GetProductByBrandIdQuery(brandId, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow))
+                Value = await _mediator.Send(new GetProductByBrandIdQuery(id, pageIndex, pageSize, mostRecent, mostSale, lowToHigh, highToLow))
             };
             return Ok(responseViewModel);
         }
