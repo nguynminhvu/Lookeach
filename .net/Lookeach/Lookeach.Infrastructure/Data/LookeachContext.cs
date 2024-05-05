@@ -28,10 +28,7 @@ namespace Lookeach.Infrastructure.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<AccessToken> AccessTokens { get; set; }
         public DbSet<Brand> Brands { get; set; }
-        public DbSet<Cart> Carts { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryVoucher> CategoryVouchers { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<GenderType> GenderTypes { get; set; }
@@ -41,8 +38,6 @@ namespace Lookeach.Infrastructure.Data
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductSourcing> ProductSourcings { get; set; }
-        public DbSet<ProductVoucher> ProductVouchers { get; set; }
-        public DbSet<ShopVoucher> ShopVouchers { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }

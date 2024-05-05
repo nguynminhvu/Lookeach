@@ -6,6 +6,7 @@ namespace Lookeach.Core.Entities
     {
         public string Name { get; set; }
         public ICollection<Product> Products { get; set; }
+        public ICollection<ProductSourcing> ProductSourcings { get; set; }
 
         protected Color(Guid id, string name, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
         {

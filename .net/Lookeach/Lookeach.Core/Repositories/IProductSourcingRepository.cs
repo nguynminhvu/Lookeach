@@ -3,7 +3,8 @@ using Lookeach.Core.Repositories.Base;
 
 namespace Lookeach.Core.Repositories
 {
-    public interface IProductSourcingRepository:IRepository<ProductSourcing>
+    public interface IProductSourcingRepository : IRepository<ProductSourcing>
     {
+        Task<int> GetLastVersionByProductId(Guid id);
     }
 }

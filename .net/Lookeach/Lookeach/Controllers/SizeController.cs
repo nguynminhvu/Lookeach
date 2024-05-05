@@ -20,7 +20,7 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{id}/size")]
+        [HttpGet("size/{id}")]
         public async Task<IActionResult> GetSize([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetSizeByIdQuery(id));
@@ -36,7 +36,7 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
-        [HttpGet]
+        [HttpGet("sizes")]
         public async Task<IActionResult> GetSizes(string? name, int? pageIndex, int? pageSize)
         {
             var rs = await _mediator.Send(new GetSizesQuery(name, pageIndex, pageSize));
@@ -51,10 +51,10 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
-        [HttpPost]
+        [HttpPost("size/create")]
         public async Task<IActionResult> CreateSize([FromBody] string name)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<SizeViewModel> responseViewModel = new ResponseBase<SizeViewModel>();
 
             var rs = await _mediator.Send(new CreateSizeCommand(name));
 
@@ -63,7 +63,7 @@ namespace Lookeach.Controllers
                 responseViewModel.Error = null!;
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status201Created, responseViewModel);
             }
             responseViewModel.Error = new ErrorViewModel
@@ -79,10 +79,10 @@ namespace Lookeach.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPut("size/update")]
         public async Task<IActionResult> UpdateSize([FromBody] SizeUpdateModel sizeUpdateModel)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<SizeViewModel> responseViewModel = new ResponseBase<SizeViewModel>();
 
             var rs = await _mediator.Send(new UpdateSizeCommand(sizeUpdateModel));
 
@@ -91,7 +91,7 @@ namespace Lookeach.Controllers
                 responseViewModel.Error = null!;
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status200OK, responseViewModel);
             }
             responseViewModel.Error = new ErrorViewModel

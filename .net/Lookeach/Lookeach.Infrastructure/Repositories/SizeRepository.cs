@@ -32,5 +32,11 @@ namespace Lookeach.Infrastructure.Repositories
             }
             return await query.ToListAsync();
         }
+
+        public async Task<List<Size>> GetSizeByIds(List<Guid> sizedIds)
+        {
+            if (sizedIds == null! || sizedIds.Count == 0) return new List<Size>();
+            return await _context.Sizes.Where(x => sizedIds.Contains(x.Id)).ToListAsync();
+        }
     }
 }

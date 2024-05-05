@@ -34,5 +34,11 @@ namespace Lookeach.Infrastructure.Repositories
             }
             return await query.ToListAsync();
         }
+
+        public async Task<List<Color>> GetColorByIds(List<Guid> ids)
+        {
+            if (ids == null! || ids.Count == 0) return new List<Color>();
+            return await _context.Colors.Where(x => ids.Contains(x.Id)).ToListAsync();
+        }
     }
 }

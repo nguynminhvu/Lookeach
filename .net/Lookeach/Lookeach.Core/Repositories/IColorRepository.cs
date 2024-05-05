@@ -8,5 +8,6 @@ namespace Lookeach.Core.Repositories
     {
         Task<Color> GetColorById(Guid id);
         Task<List<Color>> GetColorsByName(string? name = null!, int? pageIndex = null!, int? pageSize = null!);
+        Task<List<Color>> GetColorByIds(List<Guid> ids);
     }
 }

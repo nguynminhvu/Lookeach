@@ -1,6 +1,7 @@
 ﻿using Lookeach.Application.Commands.Categories;
 using Lookeach.Application.Queries.Categories;
 using Lookeach.Core.ViewModels.Categories;
+using Lookeach.Core.ViewModels.Colors;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +20,17 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost("category/create")]
         public async Task<IActionResult> CreateCategory([FromForm] CategoryCreateModel categoryCreateModel)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<CategoryViewModel> responseViewModel = new ResponseBase<CategoryViewModel>();
             var rs = await _mediator.Send(new CreateCategoryCommand(categoryCreateModel));
             if (rs != null)
             {
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
                 responseViewModel.Error = null!;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return StatusCode(StatusCodes.Status201Created, responseViewModel);
             }
             responseViewModel.IsFailure = true;
@@ -43,17 +44,17 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
-        [HttpPut]
+        [HttpPut("category/update")]
         public async Task<IActionResult> UpdateCategory([FromForm] CategoryUpdateModel categoryUpdateModel)
         {
-            ResponseViewModel responseViewModel = new ResponseViewModel();
+            ResponseBase<CategoryViewModel> responseViewModel = new ResponseBase<CategoryViewModel>();
             var rs = await _mediator.Send(new UpdateCategoryCommand(categoryUpdateModel));
             if (rs != null)
             {
                 responseViewModel.IsFailure = false;
                 responseViewModel.IsSuccess = true;
                 responseViewModel.Error = null!;
-                responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                responseViewModel.Value = rs;
                 return Ok(responseViewModel);
             }
             responseViewModel.IsFailure = true;
@@ -67,30 +68,30 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
-        [HttpGet("{id}/category")]
+        [HttpGet("category/{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] Guid id)
         {
             var rs = await _mediator.Send(new GetCategoryByIdQuery(id));
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<CategoryViewModel> responseViewModel = new ResponseBase<CategoryViewModel>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value =rs
             };
             return Ok(responseViewModel);
         }
 
-        [HttpGet]
+        [HttpGet("categories")]
         public async Task<IActionResult> GetCategories(string? name, int? pageIndex, int? pageSize)
         {
             var rs = await _mediator.Send(new GetCategoriesQuery(name, pageIndex, pageSize));
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<List<CategoryViewModel>> responseViewModel = new ResponseBase<List<CategoryViewModel>>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value =rs
             };
             return Ok(responseViewModel);
         }

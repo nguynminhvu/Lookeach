@@ -45,5 +45,10 @@ namespace Lookeach.Infrastructure.Repositories
             }
             return await GetCategoryById(id);
         }
+
+        public async Task<List<Category>> GetCategoriesByIds(List<Guid> ids)
+        {
+            return await _context.Categories.Where(x => ids.Contains(x.Id)).ToListAsync();
+        }
     }
 }

@@ -14,11 +14,6 @@ namespace Lookeach.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private ResponseViewModel responseViewModel = new ResponseViewModel
-        {
-            IsFailure = false,
-            IsSuccess = true,
-        };
 
         public AuthController(IMediator mediator)
         {
@@ -73,13 +68,14 @@ namespace Lookeach.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> CreateUser([FromBody] UserCreateModel userCreateModel)
         {
+            ResponseBase<UserViewModel> responseViewModel = new ResponseBase<UserViewModel>();
             if (ModelState.IsValid)
             {
                 var rs = await _mediator.Send(new CreateUserCommand(userCreateModel, userCreateModel.RoleId));
                 if (rs != null)
                 {
                     responseViewModel.Error = null!;
-                    responseViewModel.Value = JsonConvert.SerializeObject(rs);
+                    responseViewModel.Value = rs;
                     return StatusCode(StatusCodes.Status201Created, responseViewModel);
                 }
                 responseViewModel.Error = new ErrorViewModel
@@ -121,9 +117,11 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <returns></returns>
         /// <exception cref="UnauthorizedAccessException"></exception>
-        [HttpPost("renew-token")]
+        [HttpPost("token/renew")]
         public async Task<IActionResult> ReNew()
         {
+            ResponseBase<string> responseViewModel = new ResponseBase<string>();
+
             var token = (HttpContext.Request.Headers["RefreshToken"].FirstOrDefault() + "").Split(" ").Last();
 
             if (string.IsNullOrEmpty(token)) throw new UnauthorizedAccessException("Token invalid, login please");
@@ -155,6 +153,8 @@ namespace Lookeach.Controllers
         [HttpGet("confirm-email/{code}")]
         public async Task<IActionResult> ConfirmEmail([FromRoute] string code)
         {
+            ResponseBase<string> responseViewModel = new ResponseBase<string>();
+
             var rs = await _mediator.Send(new ConfirmEmailCommand(code));
             if (rs != null)
             {
@@ -172,34 +172,5 @@ namespace Lookeach.Controllers
             };
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
-
-        #region Test auth
-        //[HttpGet("test-free")]
-        //public IActionResult GetResource()
-        //{
-        //    return Ok("hehe");
-        //}
-
-        //[Authorize(Roles = "Customer")]
-        //[HttpGet("test-customer")]
-        //public IActionResult GetCustomer()
-        //{
-        //    return Ok("hehe");
-        //}
-
-        //[Authorize(Roles = "Merchant")]
-        //[HttpGet("test-merchant")]
-        //public IActionResult GetMerchant()
-        //{
-        //    return Ok();
-        //}
-
-        //[Authorize(Roles = "Admin")]
-        //[HttpGet("test-admin")]
-        //public IActionResult GetAdmin()
-        //{
-        //    return Ok();
-        //}
-        #endregion
     }
 }

@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lookeach", "Lookeach\Lookeach.csproj", "{7C9F4331-E685-4438-B82F-8D02E27FB738}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lookeach", "Lookeach\Lookeach.csproj", "{7C9F4331-E685-4438-B82F-8D02E27FB738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lookeach.Core", "Lookeach.Core\Lookeach.Core.csproj", "{4F702DFF-6C95-4B8F-8663-3962B16EACA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lookeach.Core", "Lookeach.Core\Lookeach.Core.csproj", "{4F702DFF-6C95-4B8F-8663-3962B16EACA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lookeach.Application", "Lookeach.Application\Lookeach.Application.csproj", "{4979755E-7C52-4235-A18B-886A6589BAE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lookeach.Application", "Lookeach.Application\Lookeach.Application.csproj", "{4979755E-7C52-4235-A18B-886A6589BAE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lookeach.Infrastructure", "Lookeach.Infrastructure\Lookeach.Infrastructure.csproj", "{DC41DDF8-85E7-4048-80DF-6152D44CCD42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lookeach.Infrastructure", "Lookeach.Infrastructure\Lookeach.Infrastructure.csproj", "{DC41DDF8-85E7-4048-80DF-6152D44CCD42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,9 +5,11 @@ using Lookeach.Core.ViewModels.Categories;
 using Lookeach.Core.ViewModels.Colors;
 using Lookeach.Core.ViewModels.GenderTypes;
 using Lookeach.Core.ViewModels.Images;
+using Lookeach.Core.ViewModels.Products;
 using Lookeach.Core.ViewModels.Roles;
 using Lookeach.Core.ViewModels.Sizes;
 using Lookeach.Core.ViewModels.Users;
+using Lookeach.Core.ViewModels.Vouchers;
 
 namespace Lookeach.Application.AutoMappers
 {
@@ -39,6 +41,9 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<GenderType, GenderTypeViewModel>().ReverseMap();
             CreateMap<Size, SizeViewModel>().ReverseMap();
             CreateMap<Color, ColorViewModel>().ReverseMap();
+            CreateMap<Product, ProductViewModel>().ReverseMap();
+            CreateMap<ProductImage, ProductImageViewModel>().ReverseMap(); 
+            CreateMap<Voucher, VoucherViewModel>().ReverseMap();
         }
     }
 }

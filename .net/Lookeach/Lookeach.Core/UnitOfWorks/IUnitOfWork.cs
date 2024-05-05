@@ -6,8 +6,6 @@ namespace Lookeach.Core.UnitOfWorks
     {
         IAccessTokenRepository AccessTokenRepository { get; }
         IBrandRepository BrandRepository { get; }
-        ICartRepository CartRepository { get; }
-        ICartItemRepository CartItemRepository { get; }
         ICategoryReposiitory CategoryRepository { get; }
         IChatRepository ChatRepository { get; }
         IChatUserRepository ChatUserRepository { get; }
@@ -20,14 +18,14 @@ namespace Lookeach.Core.UnitOfWorks
         IPaymentMethodRepository PaymentMethodRepository { get; }
         IProductRepository ProductRepository { get; }
         IProductSourcingRepository ProductSourcingRepository { get; }
-        IProductVoucherRepository ProductVoucherRepository { get; }
         IRoleRepository RoleRepository { get; }
-        IShopVoucherRepository ShopVoucherRepository { get; }
         ISizeRepository SizeRepository { get; }
         IUserRepository UserRepository { get; }
         IVoucherRepository VoucherRepository { get; }
         IBrandImageRepository BrandImageRepository { get; }
         ICategoryImageRepository CategoryImageRepository { get; }
+        IProductImageRepository ProductImageRepository { get; }
+        IProductSourcingImageRepository ProductSourcingImageRepository { get; }
         Task<int> SaveChangesAsync();
 
     }
