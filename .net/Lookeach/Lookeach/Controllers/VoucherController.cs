@@ -30,21 +30,25 @@ namespace Lookeach.Controllers
             };
             return Ok(responseBase);
         }
-
-        [HttpGet("vouchers/{id}/by-userid")]
-        public async Task<IActionResult> GetVoucherByUserId([FromRoute] Guid id)
+        
+        [HttpGet("vouchers/{userid}/by-userid")]
+        public async Task<IActionResult> GetVoucherByUserId([FromRoute] Guid userid)
         {
             ResponseBase<List<VoucherViewModel>> responseBase = new ResponseBase<List<VoucherViewModel>>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = await _mediator.Send(new GetVoucherByUserIdQuery(id))
+                Value = await _mediator.Send(new GetVoucherByUserIdQuery(userid))
             };
             return Ok(responseBase);
         }
-
-        [HttpPost]
+        /// <summary>
+        /// Date format yyyy-MM-dd HH:mm
+        /// </summary>
+        /// <param name="voucherCreateModel"></param>
+        /// <returns></returns>
+        [HttpPost("voucher/create")]
         public async Task<IActionResult> CreateVoucher([FromBody] VoucherCreateModel voucherCreateModel)
         {
             ResponseBase<VoucherViewModel> responseBase = new ResponseBase<VoucherViewModel>
@@ -57,8 +61,12 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status201Created, responseBase);
         }
 
-
-        [HttpPut]
+        /// <summary>
+        /// Date format yyyy-MM-dd HH:mm
+        /// </summary>
+        /// <param name="voucherUpdateModel"></param>
+        /// <returns></returns>
+        [HttpPut("voucher/update")]
         public async Task<IActionResult> UpdateVoucher([FromBody] VoucherUpdateModel voucherUpdateModel)
         {
             ResponseBase<VoucherViewModel> responseBase = new ResponseBase<VoucherViewModel>

@@ -187,9 +187,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryVoucherId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -207,8 +204,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryVoucherId");
 
                     b.ToTable("Categories");
                 });
@@ -232,34 +227,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasIndex("ImageId");
 
                     b.ToTable("CategoryImages");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("VoucherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VoucherId");
-
-                    b.ToTable("CategoryVouchers");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Chat", b =>
@@ -574,9 +541,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("ProductVoucherId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -589,8 +553,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("ProductVoucherId");
 
                     b.ToTable("Products");
                 });
@@ -683,34 +645,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("ProductSourcingImages");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("VoucherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VoucherId");
-
-                    b.ToTable("ProductVouchers");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -724,34 +658,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.ShopVoucher", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("VoucherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VoucherId");
-
-                    b.ToTable("ShopVouchers");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Size", b =>
@@ -836,9 +742,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ShopVoucherId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Thumbnail")
                         .HasColumnType("nvarchar(max)");
 
@@ -851,8 +754,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasIndex("ChatId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("ShopVoucherId");
 
                     b.ToTable("Users");
                 });
@@ -879,20 +780,23 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<bool>("IsActived")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsCategoryVoucher")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsProductVoucher")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsShopVoucher")
-                        .HasColumnType("bit");
+                    b.Property<decimal>("MaxPriceOff")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PriceCondition")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SlotAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SlotEachPerson")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
@@ -1037,13 +941,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.Category", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.CategoryVoucher", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("CategoryVoucherId");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.CategoryImage", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.Category", "Category")
@@ -1061,17 +958,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
-                        .WithMany()
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.ChatImage", b =>
@@ -1171,10 +1057,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Lookeach.Core.Entities.ProductVoucher", null)
-                        .WithMany("Products")
-                        .HasForeignKey("ProductVoucherId");
-
                     b.Navigation("Brand");
                 });
 
@@ -1215,28 +1097,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasForeignKey("ProductSourcingId1");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
-                        .WithMany()
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Voucher");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.ShopVoucher", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
-                        .WithMany()
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Voucher");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.User", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.Chat", null)
@@ -1248,10 +1108,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Lookeach.Core.Entities.ShopVoucher", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ShopVoucherId");
 
                     b.Navigation("Role");
                 });
@@ -1296,11 +1152,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("CategoryImages");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.CategoryVoucher", b =>
-                {
-                    b.Navigation("Categories");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.Chat", b =>
                 {
                     b.Navigation("Messages");
@@ -1328,17 +1179,7 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("ProductSourcingImages");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.ProductVoucher", b =>
-                {
-                    b.Navigation("Products");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.ShopVoucher", b =>
                 {
                     b.Navigation("Users");
                 });

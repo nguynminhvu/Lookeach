@@ -15,6 +15,7 @@ namespace Lookeach.Application.Handlers.Vouchers
         }
         public async Task<VoucherViewModel> Handle(CreateVoucherCommand request, CancellationToken cancellationToken)
         {
+            if (request.VoucherCreateModel.StartTime >= request.VoucherCreateModel.EndTime) throw new Exception("Datetime invalid");
             var rs = await _voucherService.CreateVoucher(request.VoucherCreateModel);
             return rs != null ? rs : throw new Exception("Can't create voucher");
         }

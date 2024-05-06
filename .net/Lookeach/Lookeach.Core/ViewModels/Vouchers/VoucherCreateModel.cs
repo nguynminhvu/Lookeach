@@ -5,16 +5,16 @@ namespace Lookeach.Core.ViewModels.Vouchers
     public class VoucherCreateModel
     {
         [Required]
-        public decimal PriceCondition { get; private set; }
+        public decimal PriceCondition { get;  set; }
         [Required]
-        public decimal MaxPriceOff { get; private set; }
+        public decimal MaxPriceOff { get;  set; }
         [Required]
-        public DateTime StartTime { get; private set; }
+        public DateTime StartTime { get;  set; }
         [Required]
-        public DateTime EndTime { get; private set; }
+        public DateTime EndTime { get;  set; }
         [Required]
-        public int SlotEachPerson { get; private set; }
+        public int SlotEachPerson { get;  set; }
         [Required]
-        public int SlotAvailable { get; private set; }
+        public int SlotAvailable { get;  set; }
     }
 }

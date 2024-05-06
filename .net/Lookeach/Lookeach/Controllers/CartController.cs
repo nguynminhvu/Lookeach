@@ -19,6 +19,10 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Check sum before call api
+        /// </summary>
+        /// <returns>CartViewModel</returns>
         [HttpPatch]
         public async Task<IActionResult> UpdateCart([FromBody] CartUpdateModel cartUpdateModel)
         {
@@ -43,8 +47,12 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseBase);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>CartViewModel</returns>
         [HttpGet]
-        public async Task<IActionResult> UpdateCart()
+        public async Task<IActionResult> GetCart()
         {
             ResponseBase<CartViewModel> responseBase = new ResponseBase<CartViewModel>();
             responseBase.IsSuccess = true;
