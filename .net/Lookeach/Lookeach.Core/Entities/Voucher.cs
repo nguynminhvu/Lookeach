@@ -7,6 +7,7 @@ namespace Lookeach.Core.Entities
         public string Code { get; private set; }
         public decimal PriceCondition { get; private set; }
         public decimal MaxPriceOff { get; private set; }
+        public double LevelOff { get; set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
         public int SlotEachPerson { get; private set; }

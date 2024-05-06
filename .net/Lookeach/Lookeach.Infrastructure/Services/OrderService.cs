@@ -34,21 +34,21 @@ namespace Lookeach.Infrastructure.Services
         {
             var claim = await GetClaimDTOByAccessToken();
             if (claim == null!) throw new UnauthorizedAccessException();
-        
+
             Guid orderId = Guid.NewGuid();
             List<Voucher> vouchers = null!;
             List<OrderItem> orderItems = new List<OrderItem>();
             List<OrderItem> productShop = new List<OrderItem>();
             Dictionary<Guid, int> productIds = new Dictionary<Guid, int>();
             Dictionary<Guid, ProductStrucTemp> productCal = new Dictionary<Guid, ProductStrucTemp>();
-        
+
 
             if (orderCreateModel.VoucherIds != null && orderCreateModel.VoucherIds.Count > 0)
             {
                 vouchers = new List<Voucher>();
                 vouchers = await _voucherRepository.GetMany(x => orderCreateModel.VoucherIds.Contains(x.Id)).ToListAsync();
             }
-           
+
             foreach (var item in orderCreateModel.OrderItems)
             {
                 productIds.Add(item.ProductId, item.Quantity);
@@ -110,7 +110,26 @@ namespace Lookeach.Infrastructure.Services
             await _uow.SaveChangesAsync();
             return await GetOrderById(order.Id);
         }
-       
+        private void ValidVoucher(ref Order order, List<Voucher> vouchers, Dictionary<Guid, ProductStrucTemp> valuePairs)
+        {
+            decimal total = 0;
+            foreach (var item in vouchers)
+            {
+                if (valuePairs.ContainsKey(item.CreatedBy))
+                {
+                    var itemOrder = valuePairs[item.CreatedBy];
+                    if ((itemOrder.Amount) * ((decimal)(item.LevelOff / 100)) > item.MaxPriceOff)
+                    {
+                        total += item.MaxPriceOff;
+                    }
+                    else
+                    {
+                        total += (itemOrder.Amount) * ((decimal)(item.LevelOff / 100));
+                    }
+                }
+            }
+
+        }
         public Task<OrderViewModel> GetOrderById(Guid id)
         {
             throw new NotImplementedException();
