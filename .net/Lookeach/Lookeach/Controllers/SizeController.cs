@@ -25,12 +25,12 @@ namespace Lookeach.Controllers
         {
             var rs = await _mediator.Send(new GetSizeByIdQuery(id));
 
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<SizeViewModel> responseViewModel = new ResponseBase<SizeViewModel>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value = rs
             };
 
             return Ok(responseViewModel);
@@ -40,12 +40,12 @@ namespace Lookeach.Controllers
         public async Task<IActionResult> GetSizes(string? name, int? pageIndex, int? pageSize)
         {
             var rs = await _mediator.Send(new GetSizesQuery(name, pageIndex, pageSize));
-            ResponseViewModel responseViewModel = new ResponseViewModel
+            ResponseBase<List<SizeViewModel>> responseViewModel = new ResponseBase<List<SizeViewModel>>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = JsonConvert.SerializeObject(rs)
+                Value = rs
             };
 
             return Ok(responseViewModel);

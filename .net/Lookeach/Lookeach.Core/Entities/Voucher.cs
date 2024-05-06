@@ -12,7 +12,10 @@ namespace Lookeach.Core.Entities
         public int SlotEachPerson { get; private set; }
         public int SlotAvailable { get; private set; }
         public bool IsActived { get; private set; }
-
+        private Voucher()
+        {
+            
+        }
         private Voucher(Guid id, string code, decimal priceCondition, decimal maxPriceOff, DateTime startTime, DateTime endTime, int slotPerson, int slotAvailable, bool isActive, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
         {
             Id = id;
