@@ -28,7 +28,7 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IVoucherService, VoucherService>();
-
+            services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             try
             {
                 var redisDto = new RedisDTO();
