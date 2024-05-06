@@ -13,6 +13,8 @@ namespace Lookeach.Core.ViewModels.Orders
         public Guid PaymentMethodId { get; set; }
         public PaymentMethodViewModel PaymentMethod { get; set; }
         public ICollection<OrderItemViewModel> OrderItems { get; set; }
-        public ICollection<VoucherViewModel> Vouchers { get; set; }
+        public ICollection<VoucherViewModel>? Vouchers { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
     }
 }

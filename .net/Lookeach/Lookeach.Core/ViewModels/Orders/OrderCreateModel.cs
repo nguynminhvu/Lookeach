@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lookeach.Core.ViewModels.Orders
+﻿namespace Lookeach.Core.ViewModels.Orders
 {
-    internal class OrderCreateModel
+    public class OrderCreateModel
     {
+        public decimal Amount { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+        public string? Email { get; set; }
+        public Guid UserId { get; set; }
+        public Guid PaymentMethodId { get; set; }
+        public List<OrderItemCreateModel> OrderItems { get; set; }
+        public List<Guid>? VoucherIds { get; set; }
     }
 }

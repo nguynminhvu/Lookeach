@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lookeach.Core.Common.Base;
 
 namespace Lookeach.Core.ViewModels.Orders
 {
-    internal class OrderUpdateModel
+    public class OrderUpdateModel : BaseEntity<Guid>
     {
+        public string Status { get; set; }
     }
 }
