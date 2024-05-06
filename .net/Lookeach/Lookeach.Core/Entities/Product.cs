@@ -87,7 +87,7 @@ namespace Lookeach.Core.Entities
             {
                 Categories = categories;
             }
-            Version=version;
+            Version = version;
             ModifiedBy = modifiedBy;
             ModifiedOn = DateTime.Now;
         }
@@ -97,6 +97,14 @@ namespace Lookeach.Core.Entities
             IsActived = status;
             ModifiedBy = modifiedBy;
             ModifiedOn = DateTime.Now;
+        }
+
+        public void UpdateInventory(int quantity, Guid modifiedBy)
+        {
+            Sold = Sold + (Quantity - quantity);
+            Quantity = quantity;
+            ModifiedOn = DateTime.Now;
+            ModifiedBy = modifiedBy;
         }
     }
 }

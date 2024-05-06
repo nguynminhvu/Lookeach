@@ -88,7 +88,13 @@ namespace Lookeach.Infrastructure.Repositories.Base
             _entity.Attach(t);
             _context.Entry(t).State = EntityState.Modified;
         }
-
-
+        public void UpdateRange(IEnumerable<T> t)
+        {
+            _entity.AttachRange(t);
+            foreach (var item in t)
+            {
+                _context.Entry(item).State = EntityState.Modified;
+            }
+        }
     }
 }

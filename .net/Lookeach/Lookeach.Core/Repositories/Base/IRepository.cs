@@ -18,5 +18,6 @@ namespace Lookeach.Core.Repositories.Base
         void RemoveRange(IEnumerable<T> entities);
 
         void Update(T t);
+        void UpdateRange(IEnumerable<T> t);
     }
 }
