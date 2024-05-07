@@ -30,7 +30,11 @@ namespace Lookeach.Controllers
             };
             return Ok(responseBase);
         }
-        
+        /// <summary>
+        /// Vouchers of merchant
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         [HttpGet("vouchers/{userid}/by-userid")]
         public async Task<IActionResult> GetVoucherByUserId([FromRoute] Guid userid)
         {
@@ -40,6 +44,22 @@ namespace Lookeach.Controllers
                 IsFailure = false,
                 IsSuccess = true,
                 Value = await _mediator.Send(new GetVoucherByUserIdQuery(userid))
+            };
+            return Ok(responseBase);
+        }
+        /// <summary>
+        /// Vouchers of admin
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("vouchers/voucherSystem")]
+        public async Task<IActionResult> GetVoucherSystem()
+        {
+            ResponseBase<List<VoucherViewModel>> responseBase = new ResponseBase<List<VoucherViewModel>>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new GetVoucherSystemQuery())
             };
             return Ok(responseBase);
         }
@@ -78,5 +98,7 @@ namespace Lookeach.Controllers
             };
             return StatusCode(StatusCodes.Status200OK, responseBase);
         }
+
+
     }
 }
