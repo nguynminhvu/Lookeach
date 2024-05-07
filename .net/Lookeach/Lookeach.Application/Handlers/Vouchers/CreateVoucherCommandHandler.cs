@@ -7,10 +7,12 @@ namespace Lookeach.Application.Handlers.Vouchers
 {
     public class CreateVoucherCommandHandler : IRequestHandler<CreateVoucherCommand, VoucherViewModel>
     {
+        private readonly IVoucherSourcingService _voucherSourcingService;
         private readonly IVoucherService _voucherService;
 
-        public CreateVoucherCommandHandler(IVoucherService voucherService)
+        public CreateVoucherCommandHandler(IVoucherService voucherService, IVoucherSourcingService voucherSourcingService)
         {
+            _voucherSourcingService= voucherSourcingService;
             _voucherService = voucherService;
         }
         public async Task<VoucherViewModel> Handle(CreateVoucherCommand request, CancellationToken cancellationToken)

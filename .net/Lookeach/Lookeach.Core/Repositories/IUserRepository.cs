@@ -13,5 +13,6 @@ namespace Lookeach.Core.Repositories
         Task<User> GetUserByUsername(string username);
         Task<User> GetUserByEmail(string email);
         Task<bool> UpdateUser(User user);
+        Task<List<User>> GetUsers(List<Guid> userIds, string? include = null!);
     }
 }

@@ -22,14 +22,15 @@ namespace Lookeach.Infrastructure.Repositories.Base
 
         public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, string include = null!)
         {
+            IQueryable<T> query = _entity;
             if (!string.IsNullOrEmpty(include))
             {
                 foreach (var item in include.Split(","))
                 {
-                    _entity.Include(item);
+                    query = query.Include(item);
                 }
             }
-            return (await _entity.FirstOrDefaultAsync(predicate))!;
+            return (await query.FirstOrDefaultAsync(predicate))!;
         }
 
         public IQueryable<T> GetAll()
@@ -88,7 +89,13 @@ namespace Lookeach.Infrastructure.Repositories.Base
             _entity.Attach(t);
             _context.Entry(t).State = EntityState.Modified;
         }
-
-
+        public void UpdateRange(IEnumerable<T> t)
+        {
+            _entity.AttachRange(t);
+            foreach (var item in t)
+            {
+                _context.Entry(item).State = EntityState.Modified;
+            }
+        }
     }
 }

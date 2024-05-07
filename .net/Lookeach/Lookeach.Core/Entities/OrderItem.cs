@@ -5,15 +5,45 @@ namespace Lookeach.Core.Entities
     public class OrderItem : Audit<DateTime, Guid>
     {
         public Guid OrderId { get; set; }
-        public Guid UserId { get; set; }
         public Guid ProductId { get; set; }
+        public Guid MerchantId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public int ProductVersion { get; set; }
-        public Guid? VoucherId { get; set; }
-        public Voucher Voucher { get; set; }
-        public User User { get; set; }
         public Product Product { get; set; }
         public Order Order { get; set; }
+        private OrderItem()
+        {
+
+        }
+
+        protected OrderItem(Guid id, Guid orderId, Guid productId, decimal price, int quantity, int productVersion, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, Product product, Guid merchantId)
+        {
+            Id = id;
+            OrderId = orderId;
+            ProductId = productId;
+            if (price < 0)
+            {
+                throw new Exception("Price invalid");
+            }
+            Price = price;
+            if (quantity <= 0)
+            {
+                throw new Exception("Quantity invalid");
+            }
+            MerchantId = merchantId;
+            Product = product;
+            Quantity = quantity;
+            ProductVersion = productVersion;
+            CreatedBy = createdBy;
+            ModifiedBy = modifiedBy;
+            CreatedOn = createdOn;
+            ModifiedOn = modifiedOn;
+        }
+
+        public static OrderItem Create(Guid orderId, Guid productId, decimal price, int quantity, int productVersion, Guid createdBy, Product product, Guid merchantId)
+        {
+            return new OrderItem(Guid.NewGuid(), orderId, productId, price, quantity, productVersion, createdBy, DateTime.Now, createdBy, DateTime.Now, product,  merchantId);
+        }
     }
 }

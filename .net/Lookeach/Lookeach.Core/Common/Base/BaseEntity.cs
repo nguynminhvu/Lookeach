@@ -7,6 +7,6 @@ namespace Lookeach.Core.Common.Base
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public KT Id { get; set; }
+        public virtual KT Id { get; set; }
     }
 }
