@@ -9,5 +9,6 @@ namespace Lookeach.Application.Services
         Task<List<VoucherViewModel>> GetVoucherByUserId(Guid id);
         Task<bool> DeleteVoucher(Guid id);
         Task<VoucherViewModel> GetVoucherById(Guid id);
+        Task<List<VoucherViewModel>> GetVouchersSystem();
     }
 }

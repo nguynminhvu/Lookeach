@@ -6,6 +6,7 @@ using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
 using Lookeach.Core.ViewModels.Vouchers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 
@@ -31,7 +32,7 @@ namespace Lookeach.Infrastructure.Services
             var claim = await GetClaimDTOByAccessToken();
             if (claim == null!) throw new UnauthorizedAccessException("Login session expired");
             bool isSystem = claim.Role == RoleName.ADMIN;
-            var voucher = Voucher.Create(GenCodeVoucher(10), voucherCreateModel.PriceCondition, voucherCreateModel.MaxPriceOff, voucherCreateModel.StartTime, voucherCreateModel.EndTime, voucherCreateModel.SlotEachPerson, voucherCreateModel.SlotAvailable, true, isSystem,claim.Id);
+            var voucher = Voucher.Create(GenCodeVoucher(10), voucherCreateModel.PriceCondition, voucherCreateModel.MaxPriceOff, voucherCreateModel.StartTime, voucherCreateModel.EndTime, voucherCreateModel.SlotEachPerson, voucherCreateModel.SlotAvailable, true, isSystem, claim.Id);
             await _voucherRepository.AddAsync(voucher);
             await _uow.SaveChangesAsync();
             return await GetVoucherById(voucher.Id);
@@ -46,7 +47,7 @@ namespace Lookeach.Infrastructure.Services
             voucher.DeleteVoucher(false);
             _voucherRepository.Update(voucher);
             var rs = await _uow.SaveChangesAsync();
-            return rs>0;
+            return rs > 0;
         }
 
         public async Task<List<VoucherViewModel>> GetVoucherByUserId(Guid id)
@@ -79,6 +80,10 @@ namespace Lookeach.Infrastructure.Services
         public async Task<VoucherViewModel> GetVoucherById(Guid id)
         {
             return AutoMapperConfig.Mapper.Map<VoucherViewModel>(await _voucherRepository.GetVoucherById(id));
+        }
+        public async Task<List<VoucherViewModel>> GetVouchersSystem()
+        {
+            return AutoMapperConfig.Mapper.Map<List<VoucherViewModel>>(await _voucherRepository.GetMany(x => x.IsSystem && x.EndTime > DateTime.Now).ToListAsync());
         }
     }
 }
