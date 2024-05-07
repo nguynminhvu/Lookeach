@@ -6,17 +6,17 @@ namespace Lookeach.Core.Entities
 {
     public class Order : Audit<DateTime, Guid>
     {
-        public decimal Amount { get; set; }
-        public Guid UserId { get; set; }
-        public User User { get; set; }
-        public Guid PaymentMethodId { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
-        public string? Email { get; set; }
-        public string Status { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
-        public ICollection<OrderItem> OrderItems { get; set; }
-        public ICollection<Voucher>? Vouchers { get; set; }
+        public decimal Amount { get; private set; }
+        public Guid UserId { get; private set; }
+        public User User { get; private set; }
+        public Guid PaymentMethodId { get; private set; }
+        public string Address { get; private set; }
+        public string Phone { get; private set; }
+        public string? Email { get; private set; }
+        public string Status { get; private set; }
+        public PaymentMethod PaymentMethod { get; private set; }
+        public ICollection<OrderItem> OrderItems { get; private set; }
+        public ICollection<Voucher>? Vouchers { get; private set; }
 
         private Order()
         {
@@ -57,12 +57,15 @@ namespace Lookeach.Core.Entities
             return new Order(Guid.NewGuid(), userId, amount, paymentMethodId, orderItems, address, phone, OrderStatus.CREATED, createdBy, DateTime.Now, createdBy, DateTime.Now, email, vouchers);
         }
 
-        public void Update(string status, Guid modified)
+        public void UpdateStatus(string status, Guid modified)
         {
             Status = status;
             ModifiedBy = modified;
             ModifiedOn = DateTime.Now;
         }
-
+        public void UpdateAmount(decimal amount)
+        {
+            Amount = amount;
+        }
     }
 }

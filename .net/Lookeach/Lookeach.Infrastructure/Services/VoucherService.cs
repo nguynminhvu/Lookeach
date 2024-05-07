@@ -1,6 +1,7 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
 using Lookeach.Core.Entities;
+using Lookeach.Core.Enums;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
 using Lookeach.Core.ViewModels.Vouchers;
@@ -29,7 +30,8 @@ namespace Lookeach.Infrastructure.Services
         {
             var claim = await GetClaimDTOByAccessToken();
             if (claim == null!) throw new UnauthorizedAccessException("Login session expired");
-            var voucher = Voucher.Create(GenCodeVoucher(10), voucherCreateModel.PriceCondition, voucherCreateModel.MaxPriceOff, voucherCreateModel.StartTime, voucherCreateModel.EndTime, voucherCreateModel.SlotEachPerson, voucherCreateModel.SlotAvailable, true, claim.Id);
+            bool isSystem = claim.Role == RoleName.ADMIN;
+            var voucher = Voucher.Create(GenCodeVoucher(10), voucherCreateModel.PriceCondition, voucherCreateModel.MaxPriceOff, voucherCreateModel.StartTime, voucherCreateModel.EndTime, voucherCreateModel.SlotEachPerson, voucherCreateModel.SlotAvailable, true, isSystem,claim.Id);
             await _voucherRepository.AddAsync(voucher);
             await _uow.SaveChangesAsync();
             return await GetVoucherById(voucher.Id);

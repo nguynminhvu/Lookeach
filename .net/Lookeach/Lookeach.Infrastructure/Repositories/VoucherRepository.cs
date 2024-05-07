@@ -19,5 +19,8 @@ namespace Lookeach.Infrastructure.Repositories
 
         public async Task<List<Voucher>> GetVoucherByUserId(Guid id)
         => await _context.Vouchers.Where(x => x.CreatedBy == id).ToListAsync();
+
+        public async Task<List<Voucher>> GetVouchersSystem()
+        => await _context.Vouchers.Where(x => x.IsSystem && x.EndTime >= DateTime.Now).ToListAsync();
     }
 }

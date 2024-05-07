@@ -8,5 +8,6 @@ namespace Lookeach.Core.Repositories
     {
         Task<List<Voucher>> GetVoucherByUserId(Guid id);
         Task<Voucher> GetVoucherById(Guid id);
+        Task<List<Voucher>> GetVouchersSystem();
     }
 }

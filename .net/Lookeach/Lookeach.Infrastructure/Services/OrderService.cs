@@ -1,5 +1,7 @@
-﻿using Lookeach.Application.Services;
+﻿using Lookeach.Application.AutoMappers;
+using Lookeach.Application.Services;
 using Lookeach.Core.Entities;
+using Lookeach.Core.Enums;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
 using Lookeach.Core.ViewModels.Orders;
@@ -19,6 +21,8 @@ namespace Lookeach.Infrastructure.Services
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _uow;
         private readonly IUserRepository _userRepository;
+        private readonly IVoucherSourcingRepository _voucherSourcingRepository;
+
         public OrderService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration, httpContextAccessor)
         {
             _uow = unitOfWork;
@@ -28,8 +32,10 @@ namespace Lookeach.Infrastructure.Services
             _productRepository = _uow.ProductRepository;
             _orderRepository = _uow.OrderRepository;
             _userRepository = _uow.UserRepository;
+            _voucherSourcingRepository = _uow.VoucherSourcingRepository;
         }
         public record ProductStrucTemp(List<OrderItem> Products, decimal Amount);
+
         public async Task<OrderViewModel> CreateOrder(OrderCreateModel orderCreateModel)
         {
             var claim = await GetClaimDTOByAccessToken();
@@ -41,6 +47,9 @@ namespace Lookeach.Infrastructure.Services
             List<OrderItem> productShop = new List<OrderItem>();
             Dictionary<Guid, int> productIds = new Dictionary<Guid, int>();
             Dictionary<Guid, ProductStrucTemp> productCal = new Dictionary<Guid, ProductStrucTemp>();
+            HashSet<Guid> userIds = new HashSet<Guid>();
+            List<User> users = new List<User>();
+            List<VoucherSourcing> vouchersSourcings = new List<VoucherSourcing>();
 
 
             if (orderCreateModel.VoucherIds != null && orderCreateModel.VoucherIds.Count > 0)
@@ -60,36 +69,45 @@ namespace Lookeach.Infrastructure.Services
             foreach (var item in orderCreateModel.OrderItems)
             {
                 var product = products.FirstOrDefault(x => x.Id == item.ProductId)!;
+                userIds.Add(product.CreatedBy);
                 orderItems.Add(OrderItem.Create(orderId, item.ProductId, item.Price, item.Quantity, item.ProductVersion, claim.Id, product, product.CreatedBy));
             }
-
+            users = await _userRepository.GetUsers(userIds.ToList(), "Role");
             int c = 1;
             decimal litleAmount = 0;
-            while (true)
+            if (orderItems.Count == 1)
             {
-                if (orderItems[c].CreatedBy == orderItems[c - 1].CreatedBy)
+                productShop.Add(orderItems[c - 1]);
+                litleAmount = productShop[c - 1].Quantity * productShop[c - 1].Price;
+                productCal.Add(products[c - 1].CreatedBy, new ProductStrucTemp(orderItems, litleAmount));
+            }
+            else
+            {
+                while (true)
                 {
-                    productShop.Add(orderItems[c - 1]);
-                    litleAmount = productShop[c - 1].Quantity * productShop[c - 1].Price;
-                    if (c == orderItems.Count - 1)
+                    if (orderItems[c].CreatedBy == orderItems[c - 1].CreatedBy)
                     {
-                        productShop.Add(orderItems[c]);
-                        litleAmount = productShop[c].Quantity * productShop[c].Price;
+                        productShop.Add(orderItems[c - 1]);
+                        litleAmount = productShop[c - 1].Quantity * productShop[c - 1].Price;
+                        if (c == orderItems.Count - 1)
+                        {
+                            productShop.Add(orderItems[c]);
+                            litleAmount = productShop[c].Quantity * productShop[c].Price;
+                        }
+                    }
+                    else
+                    {
+                        productCal.Add(products[c - 1].CreatedBy, new ProductStrucTemp(orderItems, litleAmount));
+                        productShop = new List<OrderItem>();
+                        litleAmount = 0;
+                    }
+                    c++;
+                    if (c == products.Count)
+                    {
+                        break;
                     }
                 }
-                else
-                {
-                    productCal.Add(products[c - 1].CreatedBy, new ProductStrucTemp(orderItems, litleAmount));
-                    productShop = new List<OrderItem>();
-                    litleAmount = 0;
-                }
-                c++;
-                if (c == products.Count)
-                {
-                    break;
-                }
             }
-
             foreach (var item in products)
             {
                 if (productIds.ContainsKey(item.Id))
@@ -105,18 +123,34 @@ namespace Lookeach.Infrastructure.Services
                 }
             }
             _productRepository.UpdateRange(products.AsEnumerable());
+            vouchersSourcings = await _voucherSourcingRepository.GetMany(x => x.UserId == claim.Id).ToListAsync();
             var order = Order.Create(claim.Id, orderCreateModel.Amount, orderItems, orderCreateModel.PaymentMethodId, orderCreateModel.Address, orderCreateModel.Phone, claim.Id, orderCreateModel.Email, vouchers);
+            var voucherSystems = await _voucherRepository.GetVouchersSystem();
+            order.UpdateAmount(await ValidVoucher( vouchers, productCal, users, order.Amount, vouchersSourcings, claim.Id, voucherSystems));
+
             await _orderRepository.AddAsync(order);
             await _uow.SaveChangesAsync();
             return await GetOrderById(order.Id);
         }
-        private void ValidVoucher(ref Order order, List<Voucher> vouchers, Dictionary<Guid, ProductStrucTemp> valuePairs)
+
+        private async Task<decimal> ValidVoucher( List<Voucher> vouchers, Dictionary<Guid, ProductStrucTemp> valuePairs, List<User> users, decimal totalAmount, List<VoucherSourcing> voucherSourcings, Guid userId, List<Voucher> systemVouchers)
         {
             decimal total = 0;
+            int voucherSystem = 0;
+            if (vouchers == null!) return totalAmount;
             foreach (var item in vouchers)
             {
+                if (item.StartTime > item.EndTime || item.EndTime < DateTime.Now) throw new Exception("Voucher expired time");
+                if (item.CurrentSlot >= item.SlotAvailable) throw new Exception("Voucher slot not enough slot ");
                 if (valuePairs.ContainsKey(item.CreatedBy))
                 {
+                    var user = users.FirstOrDefault(x => x.Id == item.CreatedBy);
+                    if (user == null) throw new Exception("Can't identify voucher");
+                    var vchSourcing = voucherSourcings.Where(x => x.VoucherId == item.Id).ToList();
+                    if (vchSourcing.Count >= item.SlotEachPerson)
+                    {
+                        throw new Exception("User has not enough voucher slot");
+                    }
                     var itemOrder = valuePairs[item.CreatedBy];
                     if ((itemOrder.Amount) * ((decimal)(item.LevelOff / 100)) > item.MaxPriceOff)
                     {
@@ -126,28 +160,59 @@ namespace Lookeach.Infrastructure.Services
                     {
                         total += (itemOrder.Amount) * ((decimal)(item.LevelOff / 100));
                     }
+                    await _voucherSourcingRepository.AddAsync(VoucherSourcing.Create(userId, item.Id, userId));
+                    item.UpdateCurrentSlot(item.CurrentSlot + 1, userId);
+                    _voucherRepository.Update(item);
+                }
+                else if (systemVouchers.Where(x => x.Id == item.Id).Count() > 0)
+                {
+                    var vchSourcing = voucherSourcings.Where(x => x.VoucherId == item.Id).ToList();
+                    if (vchSourcing.Count >= item.SlotEachPerson)
+                    {
+                        throw new Exception("User has not enough voucher slot");
+                    }
+                    if (totalAmount * ((decimal)item.LevelOff / 100) > item.MaxPriceOff)
+                    {
+                        totalAmount -= item.MaxPriceOff;
+                    }
+                    else
+                    {
+                        totalAmount -= totalAmount * ((decimal)item.LevelOff / 100);
+                    }
+                    await _voucherSourcingRepository.AddAsync(VoucherSourcing.Create(userId, item.Id, userId));
+                    item.UpdateCurrentSlot(item.CurrentSlot + 1, userId);
+                    _voucherRepository.Update(item);
+                    voucherSystem++;
+                }
+                if (voucherSystem > 1)
+                {
+                    throw new Exception("Voucher system accept at most 1");
                 }
             }
-
-        }
-        public Task<OrderViewModel> GetOrderById(Guid id)
-        {
-            throw new NotImplementedException();
+            return totalAmount -= total;
         }
 
-        public Task<List<OrderViewModel>> GetOrders(DateTime? dateFrom = null, DateTime? dateTo = null)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<List<OrderViewModel>> GetOrdersByUserId(Guid id, DateTime? dateFrom = null, DateTime? dateTo = null)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<OrderViewModel> GetOrderById(Guid id)
+        => AutoMapperConfig.Mapper.Map<OrderViewModel>(await _orderRepository.FirstOrDefaultAsync(x => x.Id == id, "PaymentMethod,OrderItems,Vouchers"));
 
-        public Task<OrderViewModel> UpdateOrder(OrderUpdateModel orderUpdateModel)
+        public async Task<List<OrderViewModel>> GetOrders(DateTime? dateFrom = null, DateTime? dateTo = null, int? pageIndex = null!, int? pageSize = null!)
+        => AutoMapperConfig.Mapper.Map<List<OrderViewModel>>(await _orderRepository.GetOrders(dateFrom, dateTo, pageIndex, pageSize, null!));
+
+        public async Task<List<OrderViewModel>> GetOrdersByUserId(Guid id, DateTime? dateFrom = null, DateTime? dateTo = null, int? pageIndex = null!, int? pageSize = null!)
+        => AutoMapperConfig.Mapper.Map<List<OrderViewModel>>(await _orderRepository.GetOrdersByUserId(id, dateFrom, dateTo, pageIndex, pageSize, null!));
+
+        public async Task<OrderViewModel> UpdateOrder(OrderUpdateModel orderUpdateModel)
         {
-            throw new NotImplementedException();
+            var claim = await GetClaimDTOByAccessToken();
+            if (claim == null!) throw new UnauthorizedAccessException("Login expired time");
+
+            var order = await _orderRepository.FirstOrDefaultAsync(x => x.Id == orderUpdateModel.Id);
+            if (order == null!) throw new Exception("Order not found");
+            order.UpdateStatus(orderUpdateModel.Status, claim.Id);
+            _orderRepository.Update(order);
+            await _uow.SaveChangesAsync();
+            return await GetOrderById(order.Id);
         }
     }
 }

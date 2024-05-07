@@ -66,6 +66,20 @@ namespace Lookeach.Infrastructure.Repositories
             return (await query.FirstOrDefaultAsync(x => x.Username == username && x.Password == password && x.IsActived))!;
         }
 
+        public async Task<List<User>> GetUsers(List<Guid> userIds, string? include = null!)
+        {
+            IQueryable<User> query = _context.Users;
+
+            if (!string.IsNullOrEmpty(include))
+            {
+                foreach (var item in include.Split(","))
+                {
+                    query = query.Include(item);
+                }
+            }
+            return await query.Where(x => userIds.Contains(x.Id)).ToListAsync();
+        }
+
         public async Task<bool> UpdateUser(User user)
         {
             Update(user);

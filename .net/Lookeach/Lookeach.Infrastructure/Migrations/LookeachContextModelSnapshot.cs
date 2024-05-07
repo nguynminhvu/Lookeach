@@ -402,6 +402,10 @@ namespace Lookeach.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
@@ -410,6 +414,9 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
@@ -420,9 +427,22 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<Guid>("PaymentMethodId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -438,6 +458,9 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MerchantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
@@ -460,21 +483,11 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("VoucherId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("VoucherId");
 
                     b.ToTable("OrderItems");
                 });
@@ -774,11 +787,20 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CurrentSlot")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActived")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("LevelOff")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("MaxPriceOff")
                         .HasColumnType("decimal(18,2)");
@@ -804,6 +826,54 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vouchers");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.VoucherSourcing", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VoucherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VoucherId");
+
+                    b.ToTable("VoucherSourcings");
+                });
+
+            modelBuilder.Entity("OrderVoucher", b =>
+                {
+                    b.Property<Guid>("OrdersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VouchersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("OrdersId", "VouchersId");
+
+                    b.HasIndex("VouchersId");
+
+                    b.ToTable("OrderVoucher");
                 });
 
             modelBuilder.Entity("ProductSize", b =>
@@ -1013,7 +1083,15 @@ namespace Lookeach.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Lookeach.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("PaymentMethod");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.OrderItem", b =>
@@ -1030,23 +1108,9 @@ namespace Lookeach.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Lookeach.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
-                        .WithMany()
-                        .HasForeignKey("VoucherId");
-
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
-
-                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Product", b =>
@@ -1110,6 +1174,40 @@ namespace Lookeach.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.VoucherSourcing", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Voucher", "Voucher")
+                        .WithMany()
+                        .HasForeignKey("VoucherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Voucher");
+                });
+
+            modelBuilder.Entity("OrderVoucher", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Voucher", null)
+                        .WithMany()
+                        .HasForeignKey("VouchersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProductSize", b =>
