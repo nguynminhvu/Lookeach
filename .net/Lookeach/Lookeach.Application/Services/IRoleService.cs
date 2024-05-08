@@ -1,4 +1,5 @@
-﻿using Lookeach.Core.ViewModels.Roles;
+﻿using Lookeach.Core.DTOs;
+using Lookeach.Core.ViewModels.Roles;
 
 namespace Lookeach.Application.Services
 {
@@ -6,6 +7,7 @@ namespace Lookeach.Application.Services
     {
         Task<List<RoleViewModel>> GetRoles();
         Task<RoleViewModel> GetRoleById(Guid id);
+        Task<List<RoleDTO>> GetRoleResource(Guid id);
 
     }
 }

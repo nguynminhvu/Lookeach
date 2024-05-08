@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Lookeach.Core.DTOs;
 using Lookeach.Core.Entities;
 using Lookeach.Core.ViewModels.Brands;
 using Lookeach.Core.ViewModels.Categories;
@@ -48,7 +49,9 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<Voucher, VoucherViewModel>().ReverseMap();
             CreateMap<PaymentMethod, PaymentMethodViewModel>().ReverseMap();
             CreateMap<Order, OrderViewModel>();
-            CreateMap<OrderItem, OrderItemViewModel>();
+            CreateMap<OrderItem, OrderItemViewModel>().ReverseMap();
+            CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<Resource, ResourceDTO>().ReverseMap();
         }
     }
 }

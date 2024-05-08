@@ -35,6 +35,7 @@ namespace Lookeach.Infrastructure.UnitOfWork
             ProductImageRepository = new ProductImageRepository(_context);
             ProductSourcingImageRepository = new ProductSourcingImageRepository(_context);
             VoucherSourcingRepository = new VoucherSourcingRepository(_context);
+            ResourceRepository = new ResourceRepository(_context);
         }
 
         public IAccessTokenRepository AccessTokenRepository { get; private set; }
@@ -82,6 +83,8 @@ namespace Lookeach.Infrastructure.UnitOfWork
         public IProductSourcingImageRepository ProductSourcingImageRepository { get; private set; }
 
         public IVoucherSourcingRepository VoucherSourcingRepository { get; private set; }
+
+        public IResourceRepository ResourceRepository { get; private set; }
 
         public async Task<int> SaveChangesAsync()
           => await _context.SaveChangesAsync();

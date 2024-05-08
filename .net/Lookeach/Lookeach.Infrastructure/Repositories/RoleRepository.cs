@@ -17,7 +17,17 @@ namespace Lookeach.Infrastructure.Repositories
         public async Task<Role> GetRoleById(Guid id)
             => (await _context.Roles.FirstOrDefaultAsync(x => x.Id == id))!;
 
-        public async Task<List<Role>> GetRoles()
-            => await GetMany().ToListAsync();
+        public async Task<List<Role>> GetRoles(string? includes = null!)
+        {
+            IQueryable<Role> query = _context.Roles;
+            if (!string.IsNullOrEmpty(includes))
+            {
+                foreach (var item in includes.Split(","))
+                {
+                    query = query.Include(item);
+                }
+            }
+            return await query.ToListAsync();
+        }
     }
 }

@@ -3,9 +3,7 @@ using Lookeach.Application.Queries.Sizes;
 using Lookeach.Core.ViewModels.Sizes;
 using Lookeach.ViewModels;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Lookeach.Controllers
 {

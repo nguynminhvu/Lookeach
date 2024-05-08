@@ -31,7 +31,7 @@ namespace Lookeach.Infrastructure.Services
         {
             var claim = await GetClaimDTOByAccessToken();
             if (claim == null!) throw new UnauthorizedAccessException("Login session expired");
-            bool isSystem = claim.Role == RoleName.ADMIN;
+            bool isSystem = claim.Role == RoleName.Admin.ToString();
             var voucher = Voucher.Create(GenCodeVoucher(10), voucherCreateModel.PriceCondition, voucherCreateModel.MaxPriceOff, voucherCreateModel.StartTime, voucherCreateModel.EndTime, voucherCreateModel.SlotEachPerson, voucherCreateModel.SlotAvailable, true, isSystem, claim.Id);
             await _voucherRepository.AddAsync(voucher);
             await _uow.SaveChangesAsync();

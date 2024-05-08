@@ -46,6 +46,7 @@ namespace Lookeach.Infrastructure.Data
         public DbSet<BrandImage> BrandImages { get; set; }
         public DbSet<ChatImage> ChatImages { get; set; }
         public DbSet<VoucherSourcing> VoucherSourcings { get; set; }
+        public DbSet<Resource> Resources { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -162,14 +162,14 @@ namespace Lookeach.Infrastructure.Services
                 Subject = new System.Security.Claims.ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.NameIdentifier, user.Id + ""),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role.Name)
+                    new Claim(ClaimTypes.Role, user.Role.Name),
+                    new Claim("roleid", user.RoleId + "")
                 }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
                 Audience = _jwtDTO.Audience,
                 Issuer = _jwtDTO.Issuer,
                 Expires = DateTime.Now.AddMinutes(_jwtDTO.ExpireMinute),
             };
-
 
             var tokenHandle = new JwtSecurityTokenHandler();
             var token = tokenHandle.CreateToken(tokenDescribe);
