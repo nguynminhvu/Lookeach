@@ -3,6 +3,7 @@ using Lookeach.Application.Queries.Carts;
 using Lookeach.Core.ViewModels.Carts;
 using Lookeach.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,7 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <returns>CartViewModel</returns>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetCart()
         {
             ResponseBase<CartViewModel> responseBase = new ResponseBase<CartViewModel>();

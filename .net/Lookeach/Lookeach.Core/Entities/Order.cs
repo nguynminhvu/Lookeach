@@ -54,7 +54,7 @@ namespace Lookeach.Core.Entities
 
         public static Order Create(Guid userId, decimal amount, List<OrderItem> orderItems, Guid paymentMethodId, string address, string phone, Guid createdBy, string? email = null!, List<Voucher>? vouchers = null!)
         {
-            return new Order(Guid.NewGuid(), userId, amount, paymentMethodId, orderItems, address, phone, OrderStatus.CREATED, createdBy, DateTime.Now, createdBy, DateTime.Now, email, vouchers);
+            return new Order(Guid.NewGuid(), userId, amount, paymentMethodId, orderItems, address, phone, OrderStatus.Created.ToString(), createdBy, DateTime.Now, createdBy, DateTime.Now, email, vouchers);
         }
 
         public void UpdateStatus(string status, Guid modified)

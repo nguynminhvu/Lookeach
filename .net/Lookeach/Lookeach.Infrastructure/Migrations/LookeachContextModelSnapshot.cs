@@ -133,6 +133,39 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("AccessTokens");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.Action", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Actions");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.Brand", b =>
                 {
                     b.Property<Guid>("Id")
@@ -519,6 +552,30 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("PaymentMethods");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PermissionValue")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -656,6 +713,33 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasIndex("ProductSourcingId1");
 
                     b.ToTable("ProductSourcingImages");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.Resource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
@@ -1113,6 +1197,25 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.Permission", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Resource", "Resource")
+                        .WithMany("Permissions")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.Role", "Role")
+                        .WithMany("Permissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.Product", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.Brand", "Brand")
@@ -1277,8 +1380,15 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("ProductSourcingImages");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.Resource", b =>
+                {
+                    b.Navigation("Permissions");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
                 {
+                    b.Navigation("Permissions");
+
                     b.Navigation("Users");
                 });
 #pragma warning restore 612, 618

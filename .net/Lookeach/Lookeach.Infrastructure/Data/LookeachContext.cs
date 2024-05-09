@@ -46,7 +46,9 @@ namespace Lookeach.Infrastructure.Data
         public DbSet<BrandImage> BrandImages { get; set; }
         public DbSet<ChatImage> ChatImages { get; set; }
         public DbSet<VoucherSourcing> VoucherSourcings { get; set; }
-
+        public DbSet<Resource> Resources { get; set; }
+        public DbSet<Lookeach.Core.Entities.Action> Actions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

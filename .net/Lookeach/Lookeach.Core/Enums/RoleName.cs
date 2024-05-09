@@ -1,9 +1,10 @@
 ﻿namespace Lookeach.Core.Enums
 {
-    public static class RoleName
+    public enum RoleName
     {
-        public static  string CUSTOMER = "Customer";
-        public static  string ADMIN = "Admin";
-        public static  string MERCHANT = "Merchant";
+        SuperAdmin,
+        Customer,
+        Admin,
+        Merchant
     }
 }

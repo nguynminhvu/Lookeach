@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using System.ComponentModel.Design;
 
 namespace Lookeach.Infrastructure.Extensions
 {
@@ -31,6 +32,8 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IVoucherSourcingService, VoucherSourcingService>();
+            services.AddScoped<IActionService, ActionService>();
+            services.AddScoped<IPermissionService, PermissionService>();
             try
             {
                 var redisDto = new RedisDTO();
