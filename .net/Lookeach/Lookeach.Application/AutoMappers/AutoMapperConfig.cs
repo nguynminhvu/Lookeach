@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Lookeach.Application.DTOs;
 using Lookeach.Core.DTOs;
 using Lookeach.Core.Entities;
 using Lookeach.Core.ViewModels.Brands;
@@ -52,6 +53,8 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<OrderItem, OrderItemViewModel>().ReverseMap();
             CreateMap<Role, RoleDTO>().ReverseMap();
             CreateMap<Resource, ResourceDTO>().ReverseMap();
+            CreateMap<Permission, PermissionDTO>().ReverseMap();
+            CreateMap<Lookeach.Core.Entities.Action, ActionDTO>();
         }
     }
 }

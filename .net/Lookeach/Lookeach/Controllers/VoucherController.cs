@@ -1,5 +1,8 @@
 ﻿using Lookeach.Application.Commands.Vouchers;
 using Lookeach.Application.Queries.Vouchers;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.Core.ViewModels.Vouchers;
 using Lookeach.ViewModels;
 using MediatR;
@@ -35,6 +38,10 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
+        [LookeachAuthorize(
+            new RoleName[] { RoleName.Customer },
+            new string[] { ActionConstant.READ }
+            )]
         [HttpGet("vouchers/{userid}/by-userid")]
         public async Task<IActionResult> GetVoucherByUserId([FromRoute] Guid userid)
         {
@@ -68,6 +75,10 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <param name="voucherCreateModel"></param>
         /// <returns></returns>
+        [LookeachAuthorize(
+        new RoleName[] { RoleName.Admin },
+        new string[] { ActionConstant.WRITE }
+        )]
         [HttpPost("voucher/create")]
         public async Task<IActionResult> CreateVoucher([FromBody] VoucherCreateModel voucherCreateModel)
         {

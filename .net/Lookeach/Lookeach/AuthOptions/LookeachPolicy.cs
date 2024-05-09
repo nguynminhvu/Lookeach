@@ -1,4 +1,6 @@
 ﻿using Lookeach.AuthModels;
+using Lookeach.Constants;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
@@ -16,7 +18,7 @@ namespace Lookeach.AuthOptions
 
         public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
         {
-            return Task.FromResult(new AuthorizationPolicyBuilder("LookeachScheme").RequireAuthenticatedUser().Build());
+            return Task.FromResult(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build());
         }
 
         public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
@@ -34,7 +36,7 @@ namespace Lookeach.AuthOptions
             {
                 return FallbackPolicyProvider.GetPolicyAsync(policyName);
             }
-            var policy = new AuthorizationPolicyBuilder("LookeachScheme");
+            var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
 
             foreach (var item in policyTokens)
             {

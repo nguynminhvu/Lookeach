@@ -1,12 +1,14 @@
-﻿using Lookeach.Core.ViewModels.Resources;
-using Lookeach.Core.ViewModels.Roles;
+﻿using Lookeach.Core.Common.Base;
+using Lookeach.Core.DTOs;
 
 namespace Lookeach.Application.DTOs
 {
-    public class PermissionDTO
+    public class PermissionDTO : BaseEntity<Guid>
     {
         public Guid RoleId { get; set; }
-        public List<ResourceViewModel> Resources { get; set; }
-        public RoleViewModel Role { get; set; }
+        public Guid ResourceId { get; set; }
+        public int PermissionValue { get; set; }
+        public RoleDTO Role { get; set; }
+        public ResourceDTO Resource { get; set; }
     }
 }

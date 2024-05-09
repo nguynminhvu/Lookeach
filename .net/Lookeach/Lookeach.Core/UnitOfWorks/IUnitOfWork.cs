@@ -29,6 +29,7 @@ namespace Lookeach.Core.UnitOfWorks
         IVoucherSourcingRepository VoucherSourcingRepository { get; }
         IResourceRepository ResourceRepository { get; }
         IActionRepository ActionRepository { get; }
+        IPermissionRepository PermissionRepository { get; }
         Task<int> SaveChangesAsync();
 
     }

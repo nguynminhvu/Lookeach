@@ -6,7 +6,6 @@ namespace Lookeach.Core.Entities
     {
         public string Name { get; set; }
         public ICollection<User> Users { get; set; }
-        public int ActionValue { get; set; }
-        public ICollection<Resource> Resources { get; set; }
+        public ICollection<Permission> Permissions { get; set; }
     }
 }
