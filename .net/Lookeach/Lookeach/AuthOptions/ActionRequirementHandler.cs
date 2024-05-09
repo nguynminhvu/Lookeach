@@ -82,7 +82,7 @@ namespace Lookeach.AuthOptions
                         await ToErrorResult("Unauthorize", 401);
                         return;
                     }
-                    if (await ValidActionResource(_actionService, resource, permissonActual.PermissionValue))
+                    if (await ValidActionResource(_actionService, requirement.Actions, permissonActual.PermissionValue))
                     {
                         context.Succeed(requirement);
                         isPassed = true;
@@ -157,10 +157,11 @@ namespace Lookeach.AuthOptions
                     return false;
                 }
                 actionKey.Add(actionDTOs[i].Name.ToLower(), vlue);
+                i++;
             }
             if (actionKey.ContainsKey(action.ToLower()))
             {
-                return true;
+                return actionKey[action.ToLower()];
             }
             return false;
         }

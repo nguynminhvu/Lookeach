@@ -110,6 +110,36 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status200OK, responseBase);
         }
 
+        [LookeachAuthorize(
+            new RoleName[] { RoleName.Admin },
+            new string[] { ActionConstant.READ }
+            )]
+        [HttpGet("test-admin")]
+        public IActionResult GetRscrAdmin()
+        {
+            return Ok("wow you good");
+        }
+
+        [LookeachAuthorize(
+            new RoleName[] { RoleName.Customer },
+            new string[] { ActionConstant.READ }
+            )]
+        [HttpGet("test-customer")]
+        public IActionResult GetRscrCustomer()
+        {
+            return Ok("wow you good");
+        }
+
+
+        [LookeachAuthorize(
+            new RoleName[] { RoleName.Admin, RoleName.Customer },
+            new string[] { ActionConstant.READ }
+            )]
+        [HttpGet("test-admin-customer")]
+        public IActionResult GetRscrBoth()
+        {
+            return Ok("wow you good");
+        }
 
     }
 }

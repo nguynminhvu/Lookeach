@@ -58,8 +58,6 @@ namespace Lookeach.AuthOptions
                         return;
                     }
 
-                    entity = entity.ToLower().Replace("controller", "");
-                    entity = entity.Replace(entity[0].ToString(), entity[0].ToString().ToUpper());
                     var token = (_httpAccessor.HttpContext?.Request.Headers["Authorization"].First() + "").Split(' ').Last();
                     var claim = await _actionService.GetClaims(token);
 
