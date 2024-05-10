@@ -22,6 +22,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IUnitOfWork _uow;
         private readonly IUserRepository _userRepository;
         private readonly IVoucherSourcingRepository _voucherSourcingRepository;
+        private readonly IPaymentMethodRepository _paymentMethodRepository;
 
         public OrderService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration, httpContextAccessor)
         {
@@ -33,6 +34,7 @@ namespace Lookeach.Infrastructure.Services
             _orderRepository = _uow.OrderRepository;
             _userRepository = _uow.UserRepository;
             _voucherSourcingRepository = _uow.VoucherSourcingRepository;
+            _paymentMethodRepository= _uow.PaymentMethodRepository;
         }
         public record ProductStrucTemp(List<OrderItem> Products, decimal Amount);
 
@@ -123,8 +125,9 @@ namespace Lookeach.Infrastructure.Services
                 }
             }
             _productRepository.UpdateRange(products.AsEnumerable());
+            var paymentMethods =await _paymentMethodRepository.GetMany(x => orderCreateModel.PaymentMethodIds.Contains(x.Id)).ToListAsync();
             vouchersSourcings = await _voucherSourcingRepository.GetMany(x => x.UserId == claim.Id).ToListAsync();
-            var order = Order.Create(claim.Id, orderCreateModel.Amount, orderItems, orderCreateModel.PaymentMethodId, orderCreateModel.Address, orderCreateModel.Phone, claim.Id, orderCreateModel.Email, vouchers);
+            var order = Order.Create(claim.Id, orderCreateModel.Amount, orderItems, paymentMethods, orderCreateModel.Address, orderCreateModel.Phone, claim.Id, orderCreateModel.Email, vouchers);
             var voucherSystems = await _voucherRepository.GetVouchersSystem();
             order.UpdateAmount(await ValidVoucher( vouchers, productCal, users, order.Amount, vouchersSourcings, claim.Id, voucherSystems));
 

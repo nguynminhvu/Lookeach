@@ -5,6 +5,8 @@ namespace Lookeach.Core.Entities
     public class PaymentMethod : Audit<DateTime, Guid>
     {
         public string Name { get; private set; }
+        public ICollection<Order> Orders { get; private set; }
+
         private PaymentMethod()
         {
 

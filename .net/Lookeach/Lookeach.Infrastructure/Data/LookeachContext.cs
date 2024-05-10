@@ -49,6 +49,10 @@ namespace Lookeach.Infrastructure.Data
         public DbSet<Resource> Resources { get; set; }
         public DbSet<Lookeach.Core.Entities.Action> Actions { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<TransactionMaster> TransactionMasters { get; set; }
+        public DbSet<VNPayTransaction> VNPayTransactions { get; set; }
+        public DbSet<VNPayTransactionRefund> VNPayTransactionRefunds { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

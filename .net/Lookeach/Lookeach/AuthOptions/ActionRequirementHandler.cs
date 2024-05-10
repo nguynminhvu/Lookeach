@@ -1,7 +1,6 @@
 ﻿using Lookeach.Application.Services;
 using Lookeach.AuthModels;
 using Lookeach.Core.DTOs;
-using Lookeach.Infrastructure.Services;
 using Lookeach.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
@@ -34,7 +33,7 @@ namespace Lookeach.AuthOptions
             bool isPassed = false;
             try
             {
-                if (!context.User.Identity!.IsAuthenticated || requirement == null || string.IsNullOrEmpty(requirement.Actions) || context.HasSucceeded)
+                if (!context.User.Identity!.IsAuthenticated || requirement  == null || string.IsNullOrEmpty(requirement.Actions) || context.HasSucceeded)
                 {
                     context.Fail();
                     return;

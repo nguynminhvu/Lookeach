@@ -53,7 +53,7 @@ namespace Lookeach.Infrastructure.Repositories
                 }
                 else
                 {
-                    orders = orders.Include(x => x.OrderItems).Include(x => x.PaymentMethod).Include(x => x.Vouchers);
+                    orders = orders.Include(x => x.OrderItems).Include(x => x.PaymentMethods).Include(x => x.Vouchers);
                 }
             }
         }

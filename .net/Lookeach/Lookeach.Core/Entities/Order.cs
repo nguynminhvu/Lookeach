@@ -9,12 +9,11 @@ namespace Lookeach.Core.Entities
         public decimal Amount { get; private set; }
         public Guid UserId { get; private set; }
         public User User { get; private set; }
-        public Guid PaymentMethodId { get; private set; }
         public string Address { get; private set; }
         public string Phone { get; private set; }
         public string? Email { get; private set; }
         public string Status { get; private set; }
-        public PaymentMethod PaymentMethod { get; private set; }
+        public ICollection<PaymentMethod> PaymentMethods { get; private set; }
         public ICollection<OrderItem> OrderItems { get; private set; }
         public ICollection<Voucher>? Vouchers { get; private set; }
 
@@ -22,7 +21,7 @@ namespace Lookeach.Core.Entities
         {
 
         }
-        private Order(Guid id, Guid userId, decimal amount, Guid paymentMethodId, List<OrderItem> orderItems, string address, string phone, string status, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, string? email = null!, List<Voucher>? vouchers = null!)
+        private Order(Guid id, Guid userId, decimal amount, List<PaymentMethod> paymentMethods, List<OrderItem> orderItems, string address, string phone, string status, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, string? email = null!, List<Voucher>? vouchers = null!)
         {
             Id = id;
             decimal checkSum = 0;
@@ -33,7 +32,7 @@ namespace Lookeach.Core.Entities
             if (checkSum != amount) throw new Exception("Check sum invalid (Amount)");
             Amount = amount;
             UserId = userId;
-            PaymentMethodId = paymentMethodId;
+            PaymentMethods = paymentMethods;
             if (orderItems == null || orderItems.Count <= 0)
             {
                 throw new ArgumentNullException("Order item invalid");
@@ -52,9 +51,9 @@ namespace Lookeach.Core.Entities
             ModifiedOn = DateTime.Now;
         }
 
-        public static Order Create(Guid userId, decimal amount, List<OrderItem> orderItems, Guid paymentMethodId, string address, string phone, Guid createdBy, string? email = null!, List<Voucher>? vouchers = null!)
+        public static Order Create(Guid userId, decimal amount, List<OrderItem> orderItems, List<PaymentMethod> paymentMethods, string address, string phone, Guid createdBy, string? email = null!, List<Voucher>? vouchers = null!)
         {
-            return new Order(Guid.NewGuid(), userId, amount, paymentMethodId, orderItems, address, phone, OrderStatus.Created.ToString(), createdBy, DateTime.Now, createdBy, DateTime.Now, email, vouchers);
+            return new Order(Guid.NewGuid(), userId, amount, paymentMethods, orderItems, address, phone, OrderStatus.Created.ToString(), createdBy, DateTime.Now, createdBy, DateTime.Now, email, vouchers);
         }
 
         public void UpdateStatus(string status, Guid modified)

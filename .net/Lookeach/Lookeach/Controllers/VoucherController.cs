@@ -122,7 +122,7 @@ namespace Lookeach.Controllers
 
         [LookeachAuthorize(
             new RoleName[] { RoleName.Customer },
-            new string[] { ActionConstant.READ }
+            new string[] { ActionConstant.WRITE }
             )]
         [HttpGet("test-customer")]
         public IActionResult GetRscrCustomer()
