@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.DTOs;
+﻿using Lookeach.Application.DTOs;
 
 namespace Lookeach.Application.Services
 {

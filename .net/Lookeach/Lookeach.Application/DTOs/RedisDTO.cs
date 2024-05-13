@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lookeach.Core.DTOs
+namespace Lookeach.Application.DTOs
 {
     public class RedisDTO
     {

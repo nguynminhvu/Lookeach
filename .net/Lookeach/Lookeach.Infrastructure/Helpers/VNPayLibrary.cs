@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using static Lookeach.Application.Helpers.Utils;
+using static Lookeach.Infrastructure.Helpers.Utils;
 
-namespace Lookeach.Application.Helpers;
+namespace Lookeach.Infrastructure.Helpers;
 
 public class VNPayLibrary
 {

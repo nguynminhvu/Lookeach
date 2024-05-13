@@ -1,4 +1,4 @@
-﻿namespace ArtworkSharing.Core.ViewModels.VNPAYS;
+﻿namespace Lookeach.Application.DTOs;
 
 public class VNPayDTO
 {

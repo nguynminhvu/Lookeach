@@ -1,6 +1,6 @@
 ﻿using Lookeach.Core.Common.Base;
 
-namespace Lookeach.Core.DTOs
+namespace Lookeach.Application.DTOs
 {
     public class ActionDTO:BaseEntity<Guid>
     {

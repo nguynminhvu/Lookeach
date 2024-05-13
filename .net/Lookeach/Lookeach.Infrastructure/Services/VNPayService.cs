@@ -1,4 +1,4 @@
-﻿using ArtworkSharing.Core.ViewModels.VNPAYS;
+﻿using Lookeach.Application.DTOs;
 using Lookeach.Application.Helpers;
 using Lookeach.Application.Services;
 using Lookeach.Core.Entities;
@@ -94,127 +94,127 @@ namespace Lookeach.Infrastructure.Services
 
         public async Task<VNPayViewModel> HandleQuery(string query)
         {
-            var queryString = GetFromQuery(query);
-            if (pParams["vnp_ResponseCode"] + "" != "00")
-            {
-                return new VNPayResponseModel
-                {
-                    TransactionViewModel = null!,
-                    IpnResponseViewModel = new IpnResponseViewModel
-                    {
-                        Message = ResponseMessage.TransactionNotFound,
-                        RspCode = "01"
-                    }
-                };
-            }
-            var response = Utils.HmacSHA512(Vnpay.HashSetcret, queryString);
-            if (!response.Equals(pParams["vnp_SecureHash"] + "", StringComparison.InvariantCultureIgnoreCase))
-                return new VNPayResponseModel
-                {
-                    TransactionViewModel = null!,
-                    IpnResponseViewModel = new IpnResponseViewModel
-                    {
-                        Message = ResponseMessage.ValidateHashError,
-                        RspCode = "99"
-                    }
-                };
+            //var queryString = GetFromQuery(query);
+            //if (pParams["vnp_ResponseCode"] + "" != "00")
+            //{
+            //    return new VNPayResponseModel
+            //    {
+            //        TransactionViewModel = null!,
+            //        IpnResponseViewModel = new IpnResponseViewModel
+            //        {
+            //            Message = ResponseMessage.TransactionNotFound,
+            //            RspCode = "01"
+            //        }
+            //    };
+            //}
+            //var response = Utils.HmacSHA512(Vnpay.HashSetcret, queryString);
+            //if (!response.Equals(pParams["vnp_SecureHash"] + "", StringComparison.InvariantCultureIgnoreCase))
+            //    return new VNPayResponseModel
+            //    {
+            //        TransactionViewModel = null!,
+            //        IpnResponseViewModel = new IpnResponseViewModel
+            //        {
+            //            Message = ResponseMessage.ValidateHashError,
+            //            RspCode = "99"
+            //        }
+            //    };
 
-            var transactionTransfer = await _uow.VNPayTransactionTransferRepository.FirstOrDefaultAsync(x => x.Id == Guid.Parse(pParams["vnp_TxnRef"] + "") && !x.IsCompleted);
+            //var transactionTransfer = await _uow.VNPayTransactionTransferRepository.FirstOrDefaultAsync(x => x.Id == Guid.Parse(pParams["vnp_TxnRef"] + "") && !x.IsCompleted);
 
-            if (transactionTransfer == null!)
-            {
-                return new VNPayResponseModel
-                {
-                    TransactionViewModel = null!,
-                    IpnResponseViewModel = new IpnResponseViewModel
-                    {
-                        Message = ResponseMessage.TransactionNotFound,
-                        RspCode = "01"
-                    }
-                };
-            }
+            //if (transactionTransfer == null!)
+            //{
+            //    return new VNPayResponseModel
+            //    {
+            //        TransactionViewModel = null!,
+            //        IpnResponseViewModel = new IpnResponseViewModel
+            //        {
+            //            Message = ResponseMessage.TransactionNotFound,
+            //            RspCode = "01"
+            //        }
+            //    };
+            //}
 
-            transactionTransfer.IsCompleted = true;
-            _uow.VNPayTransactionTransferRepository.UpdateVNPayTransactionTransfer(transactionTransfer);
-            await _uow.SaveChangesAsync();
-            var vNPayTransaction = new VNPayTransaction
-            {
-                TransactionId = transactionTransfer.TransactionId,
-                Amount = double.Parse(pParams["vnp_Amount"] + ""),
-                BankCode = pParams["vnp_BankCode"],
-                BankTranNo = pParams["vnp_BankTranNo"],
-                CardType = pParams["vnp_CardType"],
-                PayDate = DateTime.ParseExact(pParams["vnp_PayDate"] + "", "yyyyMMddHHmmss", CultureInfo.InvariantCulture),
-                TmnCode = pParams["vnp_TmnCode"],
-                TransactionNo = pParams["vnp_TransactionNo"],
-                Id = transactionTransfer.Id
-            };
+            //transactionTransfer.IsCompleted = true;
+            //_uow.VNPayTransactionTransferRepository.UpdateVNPayTransactionTransfer(transactionTransfer);
+            //await _uow.SaveChangesAsync();
+            //var vNPayTransaction = new VNPayTransaction
+            //{
+            //    TransactionId = transactionTransfer.TransactionId,
+            //    Amount = double.Parse(pParams["vnp_Amount"] + ""),
+            //    BankCode = pParams["vnp_BankCode"],
+            //    BankTranNo = pParams["vnp_BankTranNo"],
+            //    CardType = pParams["vnp_CardType"],
+            //    PayDate = DateTime.ParseExact(pParams["vnp_PayDate"] + "", "yyyyMMddHHmmss", CultureInfo.InvariantCulture),
+            //    TmnCode = pParams["vnp_TmnCode"],
+            //    TransactionNo = pParams["vnp_TransactionNo"],
+            //    Id = transactionTransfer.Id
+            //};
 
-            var transaction =
-                await _uow.TransactionRepository.FirstOrDefaultAsync(x => x.Id == vNPayTransaction.TransactionId);
+            //var transaction =
+            //    await _uow.TransactionRepository.FirstOrDefaultAsync(x => x.Id == vNPayTransaction.TransactionId);
 
-            if (transaction == null)
+            //if (transaction == null)
 
-                return new VNPayResponseModel
-                {
-                    TransactionViewModel = null!,
-                    IpnResponseViewModel = new IpnResponseViewModel
-                    {
-                        Message = ResponseMessage.TransactionNotFound,
-                        RspCode = "01"
-                    }
-                };
+            //    return new VNPayResponseModel
+            //    {
+            //        TransactionViewModel = null!,
+            //        IpnResponseViewModel = new IpnResponseViewModel
+            //        {
+            //            Message = ResponseMessage.TransactionNotFound,
+            //            RspCode = "01"
+            //        }
+            //    };
 
-            if (double.TryParse(pParams["vnp_Amount"] + "", out var amount))
-            {
-                amount /= 100;
+            //if (double.TryParse(pParams["vnp_Amount"] + "", out var amount))
+            //{
+            //    amount /= 100;
 
-                if (transaction.TotalBill != amount)
-                    return new VNPayResponseModel
-                    {
-                        TransactionViewModel = null!,
-                        IpnResponseViewModel = new IpnResponseViewModel
-                        {
-                            Message = ResponseMessage.AmountNotValid,
-                            RspCode = "06"
-                        }
-                    };
-            }
-            await _uow.VNPayTransactionRepository.AddAsync(vNPayTransaction);
-            await _uow.SaveChangesAsync();
-            return new VNPayResponseModel
-            {
-                TransactionViewModel = AutoMapperConfiguration.Mapper.Map<TransactionViewModel>(transaction),
-                IpnResponseViewModel = new IpnResponseViewModel
-                {
-                    Message = ResponseMessage.Success,
-                    RspCode = "00"
-                }
-            };
+            //    if (transaction.TotalBill != amount)
+            //        return new VNPayResponseModel
+            //        {
+            //            TransactionViewModel = null!,
+            //            IpnResponseViewModel = new IpnResponseViewModel
+            //            {
+            //                Message = ResponseMessage.AmountNotValid,
+            //                RspCode = "06"
+            //            }
+            //        };
+            //}
+            //await _uow.VNPayTransactionRepository.AddAsync(vNPayTransaction);
+            //await _uow.SaveChangesAsync();
+            //return new VNPayResponseModel
+            //{
+            //    TransactionViewModel = AutoMapperConfiguration.Mapper.Map<TransactionViewModel>(transaction),
+            //    IpnResponseViewModel = new IpnResponseViewModel
+            //    {
+            //        Message = ResponseMessage.Success,
+            //        RspCode = "00"
+            //    }
+            //};
         }
         private string GetIPAddress()
         {
             return Dns.GetHostByName(Dns.GetHostName()).AddressList[1] + "";
         }
-        private string GetFromQuery(string query)
-        {
-            var str = new StringBuilder();
-            if (pParams.Count > 0) pParams.Clear();
-            query = query.Substring(1);
-            var strSplit = query.Split('&');
-            foreach (var item in strSplit)
-                if (!string.IsNullOrEmpty(item) && item.StartsWith("vnp_") && item.Split("=").Length > 1)
-                    pParams.Add(item.Split("=")[0], item.Split("=")[1]);
-            foreach (var item in pParams)
-            {
-                if (item.Key.IsNullOrEmpty() || item.Value.IsNullOrEmpty() || item.Key == "vnp_SecureHashType" ||
-                    item.Key == "vnp_SecureHash") continue;
+        //private string GetFromQuery(string query)
+        //{
+        //    var str = new StringBuilder();
+        //    if (pParams.Count > 0) pParams.Clear();
+        //    query = query.Substring(1);
+        //    var strSplit = query.Split('&');
+        //    foreach (var item in strSplit)
+        //        if (!string.IsNullOrEmpty(item) && item.StartsWith("vnp_") && item.Split("=").Length > 1)
+        //            pParams.Add(item.Split("=")[0], item.Split("=")[1]);
+        //    foreach (var item in pParams)
+        //    {
+        //        if (item.Key.IsNullOrEmpty() || item.Value.IsNullOrEmpty() || item.Key == "vnp_SecureHashType" ||
+        //            item.Key == "vnp_SecureHash") continue;
 
-                str.Append($"{WebUtility.UrlEncode(item.Key)}={WebUtility.UrlEncode(item.Value)}&");
-            }
+        //        str.Append($"{WebUtility.UrlEncode(item.Key)}={WebUtility.UrlEncode(item.Value)}&");
+        //    }
 
-            str.Remove(str.Length - 1, 1);
-            return str.ToString().Replace("%2B", "+"); // fck .net. .net 4.5 + is +, higher version + is %2B 
-        }
+        //    str.Remove(str.Length - 1, 1);
+        //    return str.ToString().Replace("%2B", "+"); // fck .net. .net 4.5 + is +, higher version + is %2B 
+        //}
     }
 }

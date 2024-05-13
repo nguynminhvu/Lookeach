@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Lookeach.Application.DTOs;
-using Lookeach.Core.DTOs;
 using Lookeach.Core.Entities;
 using Lookeach.Core.ViewModels.Brands;
 using Lookeach.Core.ViewModels.Categories;

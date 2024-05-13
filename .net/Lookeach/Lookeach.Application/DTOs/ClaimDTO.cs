@@ -1,7 +1,6 @@
 ﻿using Lookeach.Core.Common.Base;
-using Lookeach.Core.Entities;
 
-namespace Lookeach.Core.DTOs
+namespace Lookeach.Application.DTOs
 {
     public class ClaimDTO : BaseEntity<Guid>
     {

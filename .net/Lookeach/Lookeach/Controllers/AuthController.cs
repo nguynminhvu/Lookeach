@@ -1,9 +1,8 @@
 ﻿using Lookeach.Application.Commands.Auths;
-using Lookeach.Core.DTOs;
+using Lookeach.Application.DTOs;
 using Lookeach.Core.ViewModels.Users;
 using Lookeach.ViewModels;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

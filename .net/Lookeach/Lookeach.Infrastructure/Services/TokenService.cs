@@ -1,5 +1,5 @@
-﻿using Lookeach.Application.Services;
-using Lookeach.Core.DTOs;
+﻿using Lookeach.Application.DTOs;
+using Lookeach.Application.Services;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;

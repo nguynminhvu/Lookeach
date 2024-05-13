@@ -1,9 +1,6 @@
-﻿using Azure;
-using Lookeach.Core.DTOs;
+﻿using Lookeach.Application.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using System.Net;
 using System.Text;
 
 namespace Lookeach.Extensions.Jwt

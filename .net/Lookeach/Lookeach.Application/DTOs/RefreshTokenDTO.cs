@@ -1,4 +1,4 @@
-﻿namespace Lookeach.Core.DTOs
+﻿namespace Lookeach.Application.DTOs
 {
     public class RefreshTokenDTO
     {

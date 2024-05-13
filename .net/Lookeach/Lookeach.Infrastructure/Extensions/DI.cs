@@ -1,5 +1,5 @@
-﻿using Lookeach.Application.Services;
-using Lookeach.Core.DTOs;
+﻿using Lookeach.Application.DTOs;
+using Lookeach.Application.Services;
 using Lookeach.Core.UnitOfWorks;
 using Lookeach.Infrastructure.Data;
 using Lookeach.Infrastructure.Services;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-using System.ComponentModel.Design;
+using System.Reflection;
 
 namespace Lookeach.Infrastructure.Extensions
 {
@@ -34,6 +34,8 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IVoucherSourcingService, VoucherSourcingService>();
             services.AddScoped<IActionService, ActionService>();
             services.AddScoped<IPermissionService, PermissionService>();
+            services.AddMediatR(x => x.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
             try
             {
                 var redisDto = new RedisDTO();
