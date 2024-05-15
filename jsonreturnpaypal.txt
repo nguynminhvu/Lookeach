@@ -1,0 +1,189 @@
+{
+    "id": "4UG08752S88117214",
+    "intent": "CAPTURE",
+    "status": "COMPLETED",
+    "payment_source": {
+        "paypal": {
+            "email_address": "vuchatnguyen@gmail.com",
+            "account_id": "EFF8L4FYV59UE",
+            "account_status": "UNVERIFIED",
+            "name": {
+                "given_name": "Michael",
+                "surname": "Nguyen"
+            },
+            "phone_number": {
+                "national_number": "840386472240"
+            },
+            "address": {
+                "address_line_1": "Thu Duc Ticy",
+                "address_line_2": "Thu Duc Citys",
+                "admin_area_2": "Bưu cục Trung tâm thành phố Hồ Chí Minh",
+                "admin_area_1": "Hồ Chí Minh",
+                "postal_code": "70000",
+                "country_code": "VN"
+            }
+        }
+    },
+    "purchase_units": [
+        {
+            "reference_id": "default",
+            "amount": {
+                "currency_code": "USD",
+                "value": "200.00",
+                "breakdown": {
+                    "item_total": {
+                        "currency_code": "USD",
+                        "value": "200.00"
+                    },
+                    "shipping": {
+                        "currency_code": "USD",
+                        "value": "0.00"
+                    },
+                    "handling": {
+                        "currency_code": "USD",
+                        "value": "0.00"
+                    },
+                    "insurance": {
+                        "currency_code": "USD",
+                        "value": "0.00"
+                    },
+                    "shipping_discount": {
+                        "currency_code": "USD",
+                        "value": "0.00"
+                    }
+                }
+            },
+            "payee": {
+                "email_address": "john_merchant@example.com",
+                "merchant_id": "C7CYMKZDG8D6E"
+            },
+            "description": "T-Shirt",
+            "soft_descriptor": "PAYPAL *JOHNMERCHAN JO",
+            "items": [
+                {
+                    "name": "T-Shirt",
+                    "unit_amount": {
+                        "currency_code": "USD",
+                        "value": "100.00"
+                    },
+                    "tax": {
+                        "currency_code": "USD",
+                        "value": "0.00"
+                    },
+                    "quantity": "1",
+                    "description": "Green XL"
+                },
+                {
+                    "name": "T-Color",
+                    "unit_amount": {
+                        "currency_code": "USD",
+                        "value": "100.00"
+                    },
+                    "tax": {
+                        "currency_code": "USD",
+                        "value": "0.00"
+                    },
+                    "quantity": "1",
+                    "description": "Red XL"
+                }
+            ],
+            "shipping": {
+                "name": {
+                    "full_name": "Nguyen Michael"
+                },
+                "address": {
+                    "address_line_1": "Thu Duc Ticy",
+                    "address_line_2": "Thu Duc Citys",
+                    "admin_area_2": "Bưu cục Trung tâm thành phố Hồ Chí Minh",
+                    "admin_area_1": "Hồ Chí Minh",
+                    "postal_code": "70000",
+                    "country_code": "VN"
+                }
+            },
+            "payments": {
+                "captures": [
+                    {
+                        "id": "38X947692E684291H",
+                        "status": "COMPLETED",
+                        "amount": {
+                            "currency_code": "USD",
+                            "value": "200.00"
+                        },
+                        "final_capture": true,
+                        "disbursement_mode": "INSTANT",
+                        "seller_protection": {
+                            "status": "ELIGIBLE",
+                            "dispute_categories": [
+                                "ITEM_NOT_RECEIVED",
+                                "UNAUTHORIZED_TRANSACTION"
+                            ]
+                        },
+                        "seller_receivable_breakdown": {
+                            "gross_amount": {
+                                "currency_code": "USD",
+                                "value": "200.00"
+                            },
+                            "paypal_fee": {
+                                "currency_code": "USD",
+                                "value": "10.47"
+                            },
+                            "net_amount": {
+                                "currency_code": "USD",
+                                "value": "189.53"
+                            }
+                        },
+                        "links": [
+                            {
+                                "href": "https://api.sandbox.paypal.com/v2/payments/captures/38X947692E684291H",
+                                "rel": "self",
+                                "method": "GET"
+                            },
+                            {
+                                "href": "https://api.sandbox.paypal.com/v2/payments/captures/38X947692E684291H/refund",
+                                "rel": "refund",
+                                "method": "POST"
+                            },
+                            {
+                                "href": "https://api.sandbox.paypal.com/v2/checkout/orders/4UG08752S88117214",
+                                "rel": "up",
+                                "method": "GET"
+                            }
+                        ],
+                        "create_time": "2024-05-15T10:06:45Z",
+                        "update_time": "2024-05-15T10:06:45Z"
+                    }
+                ]
+            }
+        }
+    ],
+    "payer": {
+        "name": {
+            "given_name": "Michael",
+            "surname": "Nguyen"
+        },
+        "email_address": "vuchatnguyen@gmail.com",
+        "payer_id": "EFF8L4FYV59UE",
+        "phone": {
+            "phone_number": {
+                "national_number": "840386472240"
+            }
+        },
+        "address": {
+            "address_line_1": "Thu Duc Ticy",
+            "address_line_2": "Thu Duc Citys",
+            "admin_area_2": "Bưu cục Trung tâm thành phố Hồ Chí Minh",
+            "admin_area_1": "Hồ Chí Minh",
+            "postal_code": "70000",
+            "country_code": "VN"
+        }
+    },
+    "create_time": "2024-05-15T09:59:32Z",
+    "update_time": "2024-05-15T10:06:45Z",
+    "links": [
+        {
+            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/4UG08752S88117214",
+            "rel": "self",
+            "method": "GET"
+        }
+    ]
+}

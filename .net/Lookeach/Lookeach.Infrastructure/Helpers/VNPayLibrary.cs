@@ -35,6 +35,10 @@ public class VNPayLibrary
 
     public string CreateRequestUrl(string baseUrl, string vnp_HashSecret)
     {
+        if (string.IsNullOrEmpty(baseUrl) || string.IsNullOrEmpty(vnp_HashSecret))
+        {
+            throw new Exception("VNPay model null!");
+        }
         var data = new StringBuilder();
         foreach (var kv in _requestData)
             if (!string.IsNullOrEmpty(kv.Value))

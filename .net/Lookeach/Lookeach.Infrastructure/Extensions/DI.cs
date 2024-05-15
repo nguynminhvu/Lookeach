@@ -1,4 +1,6 @@
-﻿using Lookeach.Application.DTOs;
+﻿using Lookeach.Application;
+using Lookeach.Application.DTOs;
+using Lookeach.Application.Interfaces.Services;
 using Lookeach.Application.Services;
 using Lookeach.Core.UnitOfWorks;
 using Lookeach.Infrastructure.Data;
@@ -34,8 +36,9 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IVoucherSourcingService, VoucherSourcingService>();
             services.AddScoped<IActionService, ActionService>();
             services.AddScoped<IPermissionService, PermissionService>();
-            services.AddMediatR(x => x.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
+            services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(ApplicationMediator).Assembly));
+            services.AddScoped<IPayPalService, PayPalService>();
+            services.AddScoped<IVNPayService, VNPayService>();
             try
             {
                 var redisDto = new RedisDTO();

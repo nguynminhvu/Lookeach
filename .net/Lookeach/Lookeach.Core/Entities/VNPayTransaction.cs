@@ -1,5 +1,4 @@
 ﻿using Lookeach.Core.Common.Base;
-
 namespace Lookeach.Core.Entities;
 
 public class VNPayTransaction : Audit<DateTime, Guid>
@@ -12,5 +11,4 @@ public class VNPayTransaction : Audit<DateTime, Guid>
     public string TmnCode { get; set; }
     public string TransactionNo { get; set; }
     public Guid OrderId { get; set; }
-
 }

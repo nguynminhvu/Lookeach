@@ -147,6 +147,64 @@ namespace Lookeach.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public ClaimDTO GetClaimDTOByAccessTokenSynchronous(string? token = null!)
+        {
+            try
+            {
+                if (token == null)
+                {
+                    token = (_httpAccessor.HttpContext.Request.Headers["Authorization"].First() + "").Split(" ").Last();
+                }
+            }
+            catch
+            {
+                throw new UnauthorizedAccessException("Login session has expired");
+            }
+            if (token == null!) throw new UnauthorizedAccessException("Not found token, login please");
+            try
+            {
+                var keyExample = _jwtDTO.JwtSecret;
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(keyExample)),
+                    ValidateIssuer = false, //**
+                    ValidateAudience = false, //** 
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = _jwtDTO.Issuer,
+                    ValidAudience = _jwtDTO.Audience,
+
+                }, out SecurityToken securityToken);
+                var jwtToken = (JwtSecurityToken)securityToken;
+                var id = jwtToken.Claims.First(x => x.Type == "nameid")!.Value;
+                var email = jwtToken.Claims.First(x => x.Type == "email")!.Value;
+                var role = jwtToken.Claims.First(x => x.Type == "role")!.Value;
+                var roleId = jwtToken.Claims.First(x => x.Type == "roleid")!.Value;
+
+                if (Guid.TryParse(id, out Guid newId) is false ||
+                    string.IsNullOrEmpty(email) ||
+                    string.IsNullOrEmpty(role) ||
+                    Guid.TryParse(roleId, out Guid newRoleId) is false
+                    )
+                {
+                    return null!;
+                }
+                return new ClaimDTO
+                {
+                    Id = newId,
+                    Email = email,
+                    Role = role,
+                    RoleId = newRoleId
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public string GenerateRefreshToken()
         {
             var rdr = new byte[32];

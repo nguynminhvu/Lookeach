@@ -74,5 +74,10 @@ namespace Lookeach.Infrastructure.Repositories
             Include(ref query, includes);
             return await query.ToListAsync();
         }
+
+        public async Task<Order> GetOrder(Guid id)
+        {
+            return (await _context.Orders.Include(x => x.OrderItems).FirstOrDefaultAsync(x => x.Id == id))!;
+        }
     }
 }
