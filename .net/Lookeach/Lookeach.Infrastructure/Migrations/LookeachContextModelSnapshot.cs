@@ -520,6 +520,148 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("OrderItems");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.PayPalAmount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemTotalCurrencyCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("ItemTotalValue")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PaypalOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaypalOrderId");
+
+                    b.ToTable("PayPalAmounts");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.PayPalItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaypalOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaypalOrderId");
+
+                    b.ToTable("PayPalItems");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.PayPalOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CaptureId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("ExchangeCurrency")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Intent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MerchantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PayeeEmailAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("PayPalOrders");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.PaymentMethod", b =>
                 {
                     b.Property<Guid>("Id")
@@ -589,6 +731,9 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DollarPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActived")
                         .HasColumnType("bit");
@@ -1339,6 +1484,39 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Lookeach.Core.Entities.PayPalAmount", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.PayPalOrder", "PaypalOrder")
+                        .WithMany("PayPalAmounts")
+                        .HasForeignKey("PaypalOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaypalOrder");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.PayPalItem", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.PayPalOrder", "PaypalOrder")
+                        .WithMany("PayPalItems")
+                        .HasForeignKey("PaypalOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaypalOrder");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.PayPalOrder", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.Permission", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.Resource", "Resource")
@@ -1544,6 +1722,13 @@ namespace Lookeach.Infrastructure.Migrations
             modelBuilder.Entity("Lookeach.Core.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.PayPalOrder", b =>
+                {
+                    b.Navigation("PayPalAmounts");
+
+                    b.Navigation("PayPalItems");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Product", b =>

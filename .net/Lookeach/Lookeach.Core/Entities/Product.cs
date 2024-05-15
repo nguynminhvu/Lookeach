@@ -8,6 +8,7 @@ namespace Lookeach.Core.Entities
         public int Quantity { get; private set; }
         public int Sold { get; private set; }
         public decimal Price { get; private set; }
+        public decimal DollarPrice { get; private set; }
         public string Description { get; private set; }
         public int Version { get; set; }
         public ICollection<ProductImage>? ProductImages { get; private set; }
@@ -22,7 +23,7 @@ namespace Lookeach.Core.Entities
         {
 
         }
-        protected Product(Guid id, string name, int quantity, int sold, decimal price, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, int version)
+        protected Product(Guid id, string name, int quantity, int sold, decimal price, decimal dollarPrice, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, int version)
         {
             Id = id;
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("Name required");
@@ -48,6 +49,7 @@ namespace Lookeach.Core.Entities
             {
                 throw new Exception("Categories required");
             }
+            DollarPrice = dollarPrice;
             Sizes = sizes;
             Colors = colors;
             Categories = categories;
@@ -58,12 +60,12 @@ namespace Lookeach.Core.Entities
             ModifiedOn = modifiedOn;
         }
 
-        public static Product CreateProduct(string name, int quantity, decimal price, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid createdBy)
+        public static Product CreateProduct(string name, int quantity, decimal price,decimal dolarPrice, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid createdBy)
         {
-            return new Product(Guid.NewGuid(), name, quantity, 0, price, description, sizes, colors, categories, brandId, createdBy, DateTime.Now, createdBy, DateTime.Now, 0);
+            return new Product(Guid.NewGuid(), name, quantity, 0, price, dolarPrice, description, sizes, colors, categories, brandId, createdBy, DateTime.Now, createdBy, DateTime.Now, 0);
         }
 
-        public void UpdateProduct(string name, int quantity, decimal price, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid modifiedBy, int version)
+        public void UpdateProduct(string name, int quantity, decimal price,decimal dollarPrice, string description, List<Size> sizes, List<Color> colors, List<Category> categories, Guid brandId, Guid modifiedBy, int version)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("Name required");
             Name = name;
@@ -75,6 +77,7 @@ namespace Lookeach.Core.Entities
             Description = description;
             if (brandId == Guid.Empty) throw new ArgumentNullException("Brand required");
             BrandId = brandId;
+            DollarPrice = dollarPrice;
             if (sizes.Count > 0)
             {
                 Sizes = sizes;

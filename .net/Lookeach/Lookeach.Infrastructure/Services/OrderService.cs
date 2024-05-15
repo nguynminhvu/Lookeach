@@ -1,4 +1,5 @@
 ﻿using Lookeach.Application.AutoMappers;
+using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Enums;
@@ -23,6 +24,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly IVoucherSourcingRepository _voucherSourcingRepository;
         private readonly IPaymentMethodRepository _paymentMethodRepository;
+        private ConcurrencyDTO _concurrencyDTO = new ConcurrencyDTO();
 
         public OrderService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(configuration, httpContextAccessor)
         {
@@ -34,9 +36,17 @@ namespace Lookeach.Infrastructure.Services
             _orderRepository = _uow.OrderRepository;
             _userRepository = _uow.UserRepository;
             _voucherSourcingRepository = _uow.VoucherSourcingRepository;
-            _paymentMethodRepository= _uow.PaymentMethodRepository;
+            _paymentMethodRepository = _uow.PaymentMethodRepository;
+            _configuration.GetSection(nameof(ConcurrencyDTO)).Bind(_concurrencyDTO);
         }
         public record ProductStrucTemp(List<OrderItem> Products, decimal Amount);
+
+        private decimal ConvertToDollar(decimal amount)
+        {
+            amount += (amount * (Math.Round((decimal)_concurrencyDTO.ExchangeFee / 100, 2)));
+            decimal result = Math.Round(amount / _concurrencyDTO.ConversionRate, 2);
+            return result;
+        }
 
         public async Task<OrderViewModel> CreateOrder(OrderCreateModel orderCreateModel)
         {
@@ -125,20 +135,23 @@ namespace Lookeach.Infrastructure.Services
                 }
             }
             _productRepository.UpdateRange(products.AsEnumerable());
-            var paymentMethods =await _paymentMethodRepository.GetMany(x => orderCreateModel.PaymentMethodIds.Contains(x.Id)).ToListAsync();
+            var paymentMethods = await _paymentMethodRepository.GetMany(x => orderCreateModel.PaymentMethodIds.Contains(x.Id)).ToListAsync();
             vouchersSourcings = await _voucherSourcingRepository.GetMany(x => x.UserId == claim.Id).ToListAsync();
-            var order = Order.Create(claim.Id, orderCreateModel.Amount, orderItems, paymentMethods, orderCreateModel.Address, orderCreateModel.Phone, claim.Id, orderCreateModel.Email, vouchers);
+            var order = Order.Create(claim.Id, orderCreateModel.Amount, ConvertToDollar(orderCreateModel.Amount), orderItems, paymentMethods, orderCreateModel.Address, orderCreateModel.Phone, claim.Id, orderCreateModel.Email, vouchers);
             var voucherSystems = await _voucherRepository.GetVouchersSystem();
-            order.UpdateAmount(await ValidVoucher( vouchers, productCal, users, order.Amount, vouchersSourcings, claim.Id, voucherSystems));
+
+            order.UpdateAmount(await ValidVoucher(vouchers, productCal, users, new decimal[] { order.Amount, order.DollarAmount }, vouchersSourcings, claim.Id, voucherSystems));
 
             await _orderRepository.AddAsync(order);
             await _uow.SaveChangesAsync();
             return await GetOrderById(order.Id);
         }
 
-        private async Task<decimal> ValidVoucher( List<Voucher> vouchers, Dictionary<Guid, ProductStrucTemp> valuePairs, List<User> users, decimal totalAmount, List<VoucherSourcing> voucherSourcings, Guid userId, List<Voucher> systemVouchers)
+        private async Task<decimal[]> ValidVoucher(List<Voucher> vouchers, Dictionary<Guid, ProductStrucTemp> valuePairs, List<User> users, decimal[] totalAmount, List<VoucherSourcing> voucherSourcings, Guid userId, List<Voucher> systemVouchers)
         {
+            decimal[] totalArray = { 0, 0 };
             decimal total = 0;
+            decimal totalAmount1 = totalAmount[0];
             int voucherSystem = 0;
             if (vouchers == null!) return totalAmount;
             foreach (var item in vouchers)
@@ -174,13 +187,13 @@ namespace Lookeach.Infrastructure.Services
                     {
                         throw new Exception("User has not enough voucher slot");
                     }
-                    if (totalAmount * ((decimal)item.LevelOff / 100) > item.MaxPriceOff)
+                    if (totalAmount1 * ((decimal)item.LevelOff / 100) > item.MaxPriceOff)
                     {
-                        totalAmount -= item.MaxPriceOff;
+                        totalAmount1 -= item.MaxPriceOff;
                     }
                     else
                     {
-                        totalAmount -= totalAmount * ((decimal)item.LevelOff / 100);
+                        totalAmount1 -= totalAmount1 * ((decimal)item.LevelOff / 100);
                     }
                     await _voucherSourcingRepository.AddAsync(VoucherSourcing.Create(userId, item.Id, userId));
                     item.UpdateCurrentSlot(item.CurrentSlot + 1, userId);
@@ -192,7 +205,10 @@ namespace Lookeach.Infrastructure.Services
                     throw new Exception("Voucher system accept at most 1");
                 }
             }
-            return totalAmount -= total;
+            totalAmount1 -= total;
+            var dollarAmount = totalAmount[1] - totalAmount[1] * (Math.Round((totalAmount[0] - totalAmount1) / totalAmount[0], 2));
+            totalArray = new[] { totalAmount1, dollarAmount };
+            return totalArray;
         }
 
 

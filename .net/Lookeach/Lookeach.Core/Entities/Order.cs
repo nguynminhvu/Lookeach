@@ -1,12 +1,12 @@
 ﻿using Lookeach.Core.Common.Base;
 using Lookeach.Core.Enums;
-using Lookeach.Core.ViewModels.Carts;
 
 namespace Lookeach.Core.Entities
 {
     public class Order : Audit<DateTime, Guid>
     {
         public decimal Amount { get; private set; }
+        public decimal DollarAmount { get; private set; }
         public Guid UserId { get; private set; }
         public User User { get; private set; }
         public string Address { get; private set; }
@@ -21,7 +21,7 @@ namespace Lookeach.Core.Entities
         {
 
         }
-        private Order(Guid id, Guid userId, decimal amount, List<PaymentMethod> paymentMethods, List<OrderItem> orderItems, string address, string phone, string status, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, string? email = null!, List<Voucher>? vouchers = null!)
+        private Order(Guid id, Guid userId, decimal amount, decimal dollarAmount, List<PaymentMethod> paymentMethods, List<OrderItem> orderItems, string address, string phone, string status, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, string? email = null!, List<Voucher>? vouchers = null!)
         {
             Id = id;
             decimal checkSum = 0;
@@ -42,6 +42,7 @@ namespace Lookeach.Core.Entities
             {
                 Vouchers = vouchers;
             }
+            DollarAmount = dollarAmount;
             Address = address;
             Phone = phone;
             Status = status;
@@ -51,9 +52,9 @@ namespace Lookeach.Core.Entities
             ModifiedOn = DateTime.Now;
         }
 
-        public static Order Create(Guid userId, decimal amount, List<OrderItem> orderItems, List<PaymentMethod> paymentMethods, string address, string phone, Guid createdBy, string? email = null!, List<Voucher>? vouchers = null!)
+        public static Order Create(Guid userId, decimal amount, decimal dollarAmount, List<OrderItem> orderItems, List<PaymentMethod> paymentMethods, string address, string phone, Guid createdBy, string? email = null!, List<Voucher>? vouchers = null!)
         {
-            return new Order(Guid.NewGuid(), userId, amount, paymentMethods, orderItems, address, phone, OrderStatus.Created.ToString(), createdBy, DateTime.Now, createdBy, DateTime.Now, email, vouchers);
+            return new Order(Guid.NewGuid(), userId, amount, dollarAmount, paymentMethods, orderItems, address, phone, OrderStatus.Created.ToString(), createdBy, DateTime.Now, createdBy, DateTime.Now, email, vouchers);
         }
 
         public void UpdateStatus(string status, Guid modified)
@@ -62,9 +63,14 @@ namespace Lookeach.Core.Entities
             ModifiedBy = modified;
             ModifiedOn = DateTime.Now;
         }
-        public void UpdateAmount(decimal amount)
+        public void UpdateAmount(decimal[] amount)
         {
-            Amount = amount;
+            if (amount.Count() <= 1)
+            {
+                throw new Exception("Amount invalid");
+            }
+            Amount = amount[0];
+            DollarAmount = amount[1];
         }
     }
 }
