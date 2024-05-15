@@ -1,5 +1,6 @@
 ﻿using Lookeach.Application;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.Interfaces;
 using Lookeach.Application.Interfaces.Services;
 using Lookeach.Application.Services;
 using Lookeach.Core.UnitOfWorks;
@@ -39,6 +40,8 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(ApplicationMediator).Assembly));
             services.AddScoped<IPayPalService, PayPalService>();
             services.AddScoped<IVNPayService, VNPayService>();
+            services.AddScoped<IIdentityUser<Guid>, IdentityUser<Guid>>();
+            services.AddScoped<ICleanContext>(x => x.GetService<LookeachContext>()!);
             try
             {
                 var redisDto = new RedisDTO();

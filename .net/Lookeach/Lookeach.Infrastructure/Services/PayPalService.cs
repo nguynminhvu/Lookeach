@@ -42,15 +42,22 @@ namespace Lookeach.Infrastructure.Services
 
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
             requestMessage.Headers.Add("Prefer", "return=representation");
-            var response = await client.SendAsync(requestMessage);
-            response.EnsureSuccessStatusCode();
-            if (response.StatusCode == HttpStatusCode.Created)
+            try
             {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                if (string.IsNullOrEmpty(responseBody)) throw new PayPalException("Response body null!!!");
-                return responseBody;
+                var response = await client.SendAsync(requestMessage);
+                response.EnsureSuccessStatusCode();
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(responseBody)) throw new PayPalException("Response body null!!!");
+                    return responseBody;
+                }
+                return null!;
             }
-            return null!;
+            catch (HttpRequestException http)
+            {
+                throw new PayPalException(http.HttpRequestError.ToString() + ", " + http.Message);
+            }
         }
 
         public async Task<string> CompletedOrder(string token)
@@ -63,17 +70,23 @@ namespace Lookeach.Infrastructure.Services
 
             var authenticationString = $"{_paypalKey.ClientId}:{_paypalKey.ClientSecret}";
             var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(authenticationString));
+            try
+            {
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"/v2/checkout/orders/{token}/capture");
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
+                requestMessage.Headers.Add("Prefer", "return=representation");
+                requestMessage.Content = new StringContent("{}");
+                requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"/v2/checkout/orders/{token}/capture");
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
-            requestMessage.Headers.Add("Prefer", "return=representation");
-            requestMessage.Content = new StringContent("{}");
-            requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var response = await client.SendAsync(requestMessage);
-            string responseBody = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
-            return responseBody;
+                var response = await client.SendAsync(requestMessage);
+                string responseBody = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
+                return responseBody;
+            }
+            catch (HttpRequestException http)
+            {
+                throw new PayPalException(http.HttpRequestError.ToString() + ", " + http.Message);
+            }
         }
     }
 }

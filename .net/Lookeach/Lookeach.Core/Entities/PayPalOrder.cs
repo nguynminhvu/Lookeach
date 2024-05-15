@@ -16,6 +16,10 @@ namespace Lookeach.Core.Entities
         public Guid OrderId { get; private set; }
         public Order Order { get; set; }
 
+        private PayPalOrder()
+        {
+            
+        }
         protected PayPalOrder(Guid id, string token, string? captureId, string intent, string status, string payeeEmail, string merchantId, double exchangCurrency, Guid orderId, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
         {
             Id = id;

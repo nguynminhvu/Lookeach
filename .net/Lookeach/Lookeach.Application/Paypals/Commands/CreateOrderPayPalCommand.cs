@@ -40,7 +40,7 @@ namespace Lookeach.Application.Paypals.Commands
 
         private double ConvertToDollar(double amount)
         {
-            double result = Math.Round(amount / _exchangeCurrency, 2);
+            double result = Math.Round(amount / _exchangeCurrency, 4);
             return result;
         }
 
@@ -82,13 +82,13 @@ namespace Lookeach.Application.Paypals.Commands
                 UnitAmount unitAmount = new UnitAmount
                 {
                     currency_code = "USD",
-                    value = ConvertToDollar((double)(item.Quantity * item.Price))
+                    value = ConvertToDollar((double)(item.Price))
                 };
 
                 items.Add(new Item
                 {
                     name = item.Product.Name,
-                    description = item.Product.Description,
+                    description = "Lookeach product order item",
                     quantity = item.Quantity,
                     unit_amount = unitAmount
                 });
@@ -96,7 +96,7 @@ namespace Lookeach.Application.Paypals.Commands
                 PayPalItem paypalItem = new PayPalItem
                 {
                     CurrencyCode = "VND",
-                    Description = item.Product.Description,
+                    Description = "Lookeach product order item",
                     Id = Guid.NewGuid(),
                     Name = item.Product.Name,
                     PaypalOrderId = paypalOrderId,

@@ -27,7 +27,7 @@ namespace Lookeach.Infrastructure.Services
         private string[] _permittedExtensions = { ".png", ".jpg", ".jpeg" };
         private const string PRODUCT = "Product";
         private FirebaseDTO _fireBaseDTO = new FirebaseDTO();
-
+        private ConcurrencyDTO _concurrencyDTO = new ConcurrencyDTO();
         public ProductService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IConfiguration configuration) : base(configuration, httpContextAccessor)
         {
             _uow = unitOfWork;
@@ -38,6 +38,7 @@ namespace Lookeach.Infrastructure.Services
             _colorRepository = _uow.ColorRepository;
             _categoryRepository = _uow.CategoryRepository;
             _configuration.GetSection(nameof(FirebaseDTO)).Bind(_fireBaseDTO);
+            _configuration.GetSection(nameof(ConcurrencyDTO)).Bind(_concurrencyDTO);
             _imageRepository = _uow.ImageRepository;
             _productImageRepository = _uow.ProductImageRepository;
             _productSourcingRepository = _uow.ProductSourcingRepository;
@@ -70,7 +71,7 @@ namespace Lookeach.Infrastructure.Services
             var categories = await _categoryRepository.GetCategoriesByIds(productCreateModel.Categories.ToList());
             if (categories.Count == 0) throw new Exception("Category invalid, try again");
 
-            var product = Product.CreateProduct(productCreateModel.Name, productCreateModel.Quantity, productCreateModel.Price, productCreateModel.Description, sizes, colors, categories, productCreateModel.BrandId, claim.Id);
+            var product = Product.CreateProduct(productCreateModel.Name, productCreateModel.Quantity, productCreateModel.Price, ConvertToDollar(productCreateModel.Price), productCreateModel.Description, sizes, colors, categories, productCreateModel.BrandId, claim.Id);
 
             await _productRepository.AddAsync(product);
 
@@ -105,6 +106,13 @@ namespace Lookeach.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
             return await GetProduct(product.Id);
+        }
+
+        private decimal ConvertToDollar(decimal amount)
+        {
+            amount += (amount * (Math.Round((decimal)_concurrencyDTO.ExchangeFee / 100, 2)));
+            decimal result = Math.Round(amount / _concurrencyDTO.ConversionRate, 2);
+            return result;
         }
 
         public async Task<ProductViewModel> GetProduct(Guid id)
@@ -175,7 +183,7 @@ namespace Lookeach.Infrastructure.Services
 
             int version = await _productSourcingRepository.GetLastVersionByProductId(productUpdateModel.Id);
 
-            product.UpdateProduct(productUpdateModel.Name, productUpdateModel.Quantity, productUpdateModel.Price, productUpdateModel.Description, sizes, colors, categories, productUpdateModel.BrandId, claim.Id, version++);
+            product.UpdateProduct(productUpdateModel.Name, productUpdateModel.Quantity, productUpdateModel.Price, ConvertToDollar(productUpdateModel.Price), productUpdateModel.Description, sizes, colors, categories, productUpdateModel.BrandId, claim.Id, version++);
 
             var productSourcing = ProductSourcing.CreateProductSourcing(productUpdateModel.Name, productUpdateModel.Quantity, productUpdateModel.Price, productUpdateModel.Description, sizes, colors, categories, productUpdateModel.BrandId, claim.Id, version++, product.Id);
 
