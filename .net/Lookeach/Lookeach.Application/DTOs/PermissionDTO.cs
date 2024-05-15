@@ -1,5 +1,4 @@
 ﻿using Lookeach.Core.Common.Base;
-using Lookeach.Core.DTOs;
 
 namespace Lookeach.Application.DTOs
 {

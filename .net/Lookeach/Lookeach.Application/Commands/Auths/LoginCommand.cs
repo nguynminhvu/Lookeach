@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.DTOs;
+﻿using Lookeach.Application.DTOs;
 using MediatR;
 
 namespace Lookeach.Application.Commands.Auths

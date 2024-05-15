@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.AutoMappers;
+using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
-using Lookeach.Core.DTOs;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
 using Microsoft.AspNetCore.Http;

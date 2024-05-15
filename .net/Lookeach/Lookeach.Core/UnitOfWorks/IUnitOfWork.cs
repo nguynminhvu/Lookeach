@@ -30,6 +30,9 @@ namespace Lookeach.Core.UnitOfWorks
         IResourceRepository ResourceRepository { get; }
         IActionRepository ActionRepository { get; }
         IPermissionRepository PermissionRepository { get; }
+        ITransactionMasterRepository TransactionMasterRepository { get; }
+        IVNPayTransactionRefundRepository VNPayTransactionRefundRepository { get; }
+        IVNPayTransactionRepository VNPayTransactionRepository { get; }
         Task<int> SaveChangesAsync();
 
     }

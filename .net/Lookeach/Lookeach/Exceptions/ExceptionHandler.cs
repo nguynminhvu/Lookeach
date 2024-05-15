@@ -50,7 +50,6 @@ namespace Lookeach.Exceptions
             {
                 responseView.Error.Code = 500;
                 responseView.Error.Message = "Redis server down, call Michael now";
-
             }
             context.Result = new ObjectResult(responseView)
             {

@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.DTOs;
+﻿using Lookeach.Application.DTOs;
 using Lookeach.Core.ViewModels.Roles;
 
 namespace Lookeach.Application.Services

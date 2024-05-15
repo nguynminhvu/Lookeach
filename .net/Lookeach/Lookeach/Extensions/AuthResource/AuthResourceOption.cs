@@ -1,6 +1,5 @@
-﻿using Lookeach.Application.Services;
-using Lookeach.Core.DTOs;
-using Lookeach.Infrastructure.Services;
+﻿using Lookeach.Application.DTOs;
+using Lookeach.Application.Services;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Lookeach.Extensions.AuthResource

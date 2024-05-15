@@ -1,5 +1,5 @@
 ﻿using Firebase.Storage;
-using Lookeach.Core.DTOs;
+using Lookeach.Application.DTOs;
 using Microsoft.AspNetCore.Http;
 
 namespace Lookeach.Infrastructure.Helpers

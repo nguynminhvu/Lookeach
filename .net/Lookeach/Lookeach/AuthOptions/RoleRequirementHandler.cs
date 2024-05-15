@@ -1,13 +1,11 @@
-﻿using Lookeach.Application.Services;
+﻿using Lookeach.Application.DTOs;
+using Lookeach.Application.Services;
 using Lookeach.AuthModels;
-using Lookeach.Core.DTOs;
-using Lookeach.Infrastructure.Services;
 using Lookeach.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using StackExchange.Redis;
-using System.Text;
 
 namespace Lookeach.AuthOptions
 {

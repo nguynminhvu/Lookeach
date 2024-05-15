@@ -38,6 +38,9 @@ namespace Lookeach.Infrastructure.UnitOfWork
             ResourceRepository = new ResourceRepository(_context);
             ActionRepository = new ActionRepository(_context);
             PermissionRepository = new PermissionRepository(_context);
+            TransactionMasterRepository = new TransactionMasterRepository(_context);
+            VNPayTransactionRefundRepository = new VNPayTransactionRefundRepository(_context);
+            VNPayTransactionRepository = new VNPayTransactionRepository(_context);
         }
 
         public IAccessTokenRepository AccessTokenRepository { get; private set; }
@@ -91,6 +94,12 @@ namespace Lookeach.Infrastructure.UnitOfWork
         public IActionRepository ActionRepository { get; private set; }
 
         public IPermissionRepository PermissionRepository { get; private set; }
+
+        public ITransactionMasterRepository TransactionMasterRepository { get; private set; }
+
+        public IVNPayTransactionRefundRepository VNPayTransactionRefundRepository { get; private set; }
+
+        public IVNPayTransactionRepository VNPayTransactionRepository { get; private set; }
 
         public async Task<int> SaveChangesAsync()
           => await _context.SaveChangesAsync();

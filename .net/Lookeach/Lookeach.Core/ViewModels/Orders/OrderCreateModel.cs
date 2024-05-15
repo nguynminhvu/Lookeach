@@ -6,7 +6,7 @@
         public string Address { get; set; }
         public string Phone { get; set; }
         public string? Email { get; set; }
-        public Guid PaymentMethodId { get; set; }
+        public List<Guid> PaymentMethodIds { get; set; }
         public List<OrderItemCreateModel> OrderItems { get; set; }
         public List<Guid>? VoucherIds { get; set; }
     }

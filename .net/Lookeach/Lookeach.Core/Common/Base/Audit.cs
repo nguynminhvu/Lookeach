@@ -7,7 +7,7 @@ namespace Lookeach.Core.Common.Base
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public KT Id { get; protected set; }
+        public KT Id { get;  set; }
         public KT CreatedBy { get; protected set; }
         public T CreatedOn { get; protected set; }
         public KT ModifiedBy { get; protected set; }

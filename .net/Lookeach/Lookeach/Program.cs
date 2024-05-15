@@ -1,4 +1,3 @@
-using Lookeach.Application.Extensions;
 using Lookeach.Exceptions;
 using Lookeach.Extensions.Exceptions;
 using Lookeach.Extensions.Injects;
@@ -31,7 +30,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerLookeach(builder.Configuration);
 
 builder.Services.AddLookeachJwt(builder.Configuration);
-builder.Services.ApplicationInject(builder.Configuration);
 builder.Services.InfrastructureInject(builder.Configuration);
 builder.Services.InjectDependency(builder.Configuration);
 var app = builder.Build();

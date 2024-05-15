@@ -53,7 +53,7 @@ namespace Lookeach.Infrastructure.Repositories
                 }
                 else
                 {
-                    orders = orders.Include(x => x.OrderItems).Include(x => x.PaymentMethod).Include(x => x.Vouchers);
+                    orders = orders.Include(x => x.OrderItems).Include(x => x.PaymentMethods).Include(x => x.Vouchers);
                 }
             }
         }
@@ -73,6 +73,11 @@ namespace Lookeach.Infrastructure.Repositories
             Pagination(ref query, pageIndex, pageSize);
             Include(ref query, includes);
             return await query.ToListAsync();
+        }
+
+        public async Task<Order> GetOrder(Guid id)
+        {
+            return (await _context.Orders.Include(x => x.OrderItems).FirstOrDefaultAsync(x => x.Id == id))!;
         }
     }
 }
