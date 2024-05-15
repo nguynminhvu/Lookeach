@@ -149,7 +149,7 @@ namespace Lookeach.Infrastructure.Services
 
         private async Task<decimal[]> ValidVoucher(List<Voucher> vouchers, Dictionary<Guid, ProductStrucTemp> valuePairs, List<User> users, decimal[] totalAmount, List<VoucherSourcing> voucherSourcings, Guid userId, List<Voucher> systemVouchers)
         {
-            decimal[] totalArray = { 0, 0 };
+            decimal[] totalArray =totalAmount ;
             decimal total = 0;
             decimal totalAmount1 = totalAmount[0];
             int voucherSystem = 0;
