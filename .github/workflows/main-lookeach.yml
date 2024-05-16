@@ -23,17 +23,12 @@ jobs:
           dotnet-version: '8.0.x'
           
       - name: Restore
-        run: dotnet restore ./Lookeach.sln
+        run: dotnet restore Lookeach.sln
         
       - name: Build
-        run: dotnet build ./Lookeach.sln --configuration Release --no-restore
+        run: dotnet build Lookeach.sln --configuration Release --no-restore
         
       - name: Publish
-        run: dotnet publish ./Lookeach.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish Lookeach.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
         
-      - name: Deployment
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.LOOKEACH_ACTION_SECRET }}
-          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      
