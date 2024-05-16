@@ -39,12 +39,6 @@ namespace Lookeach.Application.Paypals.Commands
             _configuration.GetSection(nameof(ConcurrencyDTO)).Bind(_concurrencyDTO);
         }
 
-        private decimal ConvertToDollar(decimal amount)
-        {
-            amount += (amount * (Math.Round((decimal)_concurrencyDTO.ExchangeFee / 100, 2)));
-            decimal result = Math.Round(amount / _concurrencyDTO.ConversionRate, 2);
-            return result;
-        }
         // Separate concern, do not call httpClient in ưew
         public async Task<string> Handle(CreateOrderPayPalCommand request, CancellationToken cancellationToken)
         {
@@ -60,7 +54,7 @@ namespace Lookeach.Application.Paypals.Commands
             ItemTotal itemTotal = new ItemTotal
             {
                 currency_code = "USD",
-                value = ConvertToDollar(order.Amount)
+                value = order.DollarAmount
             };
 
             Amount amount = new Amount

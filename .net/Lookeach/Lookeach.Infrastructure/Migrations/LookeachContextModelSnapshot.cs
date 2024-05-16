@@ -630,8 +630,8 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("ExchangeCurrency")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ExchangeCurrency")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Intent")
                         .IsRequired()

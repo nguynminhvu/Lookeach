@@ -213,7 +213,7 @@ namespace Lookeach.Infrastructure.Services
 
 
         public async Task<OrderViewModel> GetOrderById(Guid id)
-        => AutoMapperConfig.Mapper.Map<OrderViewModel>(await _orderRepository.FirstOrDefaultAsync(x => x.Id == id, "PaymentMethod,OrderItems,Vouchers"));
+        => AutoMapperConfig.Mapper.Map<OrderViewModel>(await _orderRepository.FirstOrDefaultAsync(x => x.Id == id, "PaymentMethods,OrderItems,Vouchers"));
 
         public async Task<List<OrderViewModel>> GetOrders(DateTime? dateFrom = null, DateTime? dateTo = null, int? pageIndex = null!, int? pageSize = null!)
         => AutoMapperConfig.Mapper.Map<List<OrderViewModel>>(await _orderRepository.GetOrders(dateFrom, dateTo, pageIndex, pageSize, null!));
