@@ -1,4 +1,5 @@
-﻿using Lookeach.Application.Interfaces;
+﻿using Lookeach.Application.DTOs;
+using Lookeach.Application.Interfaces;
 using Lookeach.Application.Interfaces.Services;
 using Lookeach.Application.Paypals.Models;
 using Lookeach.Core.Entities;
@@ -24,9 +25,9 @@ namespace Lookeach.Application.Paypals.Commands
         private readonly IConfiguration _configuration;
         private readonly IPayPalService _payPalService;
         private readonly ICleanContext _context;
-        private double _exchangeCurrency;
         private ApplicationContext _applicationContext = new ApplicationContext();
         private readonly IIdentityUser<Guid> _identityUser;
+        private ConcurrencyDTO _concurrencyDTO = new ConcurrencyDTO();
 
         public CreateOrderPayPalCommandHandler(ICleanContext cleanContext, IPayPalService payPalService, IConfiguration configuration, IIdentityUser<Guid> identityUser)
         {
@@ -34,16 +35,16 @@ namespace Lookeach.Application.Paypals.Commands
             _configuration = configuration;
             _payPalService = payPalService;
             _context = cleanContext;
-            _configuration.GetSection("ApplicationContext").Bind(_applicationContext);
-            _exchangeCurrency = double.Parse(_configuration.GetSection("ExchangeCurrency").Value + "");
+            _configuration.GetSection(nameof(ApplicationContext)).Bind(_applicationContext);
+            _configuration.GetSection(nameof(ConcurrencyDTO)).Bind(_concurrencyDTO);
         }
 
-        private double ConvertToDollar(double amount)
+        private decimal ConvertToDollar(decimal amount)
         {
-            double result = Math.Round(amount / _exchangeCurrency, 4);
+            amount += (amount * (Math.Round((decimal)_concurrencyDTO.ExchangeFee / 100, 2)));
+            decimal result = Math.Round(amount / _concurrencyDTO.ConversionRate, 2);
             return result;
         }
-
         // Separate concern, do not call httpClient in ưew
         public async Task<string> Handle(CreateOrderPayPalCommand request, CancellationToken cancellationToken)
         {
@@ -59,7 +60,7 @@ namespace Lookeach.Application.Paypals.Commands
             ItemTotal itemTotal = new ItemTotal
             {
                 currency_code = "USD",
-                value = ConvertToDollar((double)order.Amount)
+                value = ConvertToDollar(order.Amount)
             };
 
             Amount amount = new Amount
@@ -68,47 +69,38 @@ namespace Lookeach.Application.Paypals.Commands
                 {
                     item_total = itemTotal
                 },
-                value = ConvertToDollar((double)order.Amount),
+                value = order.DollarAmount,
                 currency_code = "USD"
             };
 
             List<PurchaseUnit> purchase_units = new List<PurchaseUnit>();
-            List<Item> items = new List<Item>();
+            //   List<Item> items = new List<Item>();
             List<PayPalItem> payPalItems = new List<PayPalItem>();
             Guid paypalOrderId = Guid.NewGuid();
 
             foreach (var item in order.OrderItems)
             {
-                UnitAmount unitAmount = new UnitAmount
-                {
-                    currency_code = "USD",
-                    value = ConvertToDollar((double)(item.Price))
-                };
+                //UnitAmount unitAmount = new UnitAmount
+                //{
+                //    currency_code = "USD",
+                //    value = item.DollarPrice
+                //};
 
-                items.Add(new Item
-                {
-                    name = item.Product.Name,
-                    description = "Lookeach product order item",
-                    quantity = item.Quantity,
-                    unit_amount = unitAmount
-                });
+                //items.Add(new Item
+                //{
+                //    name = item.Product.Name,
+                //    description = "Lookeach product order item",
+                //    quantity = item.Quantity,
+                //    unit_amount = unitAmount
+                //});
 
-                PayPalItem paypalItem = new PayPalItem
-                {
-                    CurrencyCode = "VND",
-                    Description = "Lookeach product order item",
-                    Id = Guid.NewGuid(),
-                    Name = item.Product.Name,
-                    PaypalOrderId = paypalOrderId,
-                    Quantity = 1,
-                    Value = ConvertToDollar((double)(item.Quantity * item.Price)),
-                };
+                payPalItems.Add(PayPalItem.Create(Guid.NewGuid(), item.Product.Name, "Lookeach product order item", item.Quantity, "USD", item.DollarPrice, paypalOrderId,_identityUser.UserId));
             }
 
             purchase_units.Add(new PurchaseUnit
             {
-                amount = amount,
-                items = items
+                amount = amount
+                //items = items
             });
 
             paypalOrder.purchase_units = purchase_units;
@@ -139,16 +131,16 @@ namespace Lookeach.Application.Paypals.Commands
                 if (i == 1) break;
             }
 
-            PayPalOrder paypal = PayPalOrder.Create(paypalOrderId, jObj["id"] + "", paypalOrder.intent, order.Status, payeeEmail, merchantId, _exchangeCurrency, order.Id, _identityUser.UserId);
+            PayPalOrder paypal = PayPalOrder.Create(paypalOrderId, jObj["id"] + "", paypalOrder.intent, order.Status, payeeEmail, merchantId, _concurrencyDTO.ConversionRate, order.Id, _identityUser.UserId);
 
             PayPalAmount paypalAmount = new PayPalAmount
             {
-                CurrencyCode = "VND",
+                CurrencyCode = "USD",
                 Id = Guid.NewGuid(),
-                ItemTotalCurrencyCode = "VND",
-                ItemTotalValue = ConvertToDollar((double)order.Amount),
+                ItemTotalCurrencyCode = "USD",
+                ItemTotalValue = order.DollarAmount,
                 PaypalOrderId = paypal.Id,
-                Value = ConvertToDollar((double)order.Amount)
+                Value = order.DollarAmount,
             };
 
             TransactionMaster transactionMaster = TransactionMaster.Create(paypal.Id, order.Id, paymentMethod.Id, false, _identityUser.UserId);

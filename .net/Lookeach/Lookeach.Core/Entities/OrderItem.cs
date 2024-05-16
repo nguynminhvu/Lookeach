@@ -8,6 +8,7 @@ namespace Lookeach.Core.Entities
         public Guid ProductId { get; set; }
         public Guid MerchantId { get; set; }
         public decimal Price { get; set; }
+        public decimal DollarPrice { get; set; }
         public int Quantity { get; set; }
         public int ProductVersion { get; set; }
         public Product Product { get; set; }
@@ -17,7 +18,7 @@ namespace Lookeach.Core.Entities
 
         }
 
-        protected OrderItem(Guid id, Guid orderId, Guid productId, decimal price, int quantity, int productVersion, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, Product product, Guid merchantId)
+        protected OrderItem(Guid id, Guid orderId, Guid productId, decimal price, decimal dollarPrice, int quantity, int productVersion, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn, Product product, Guid merchantId)
         {
             Id = id;
             OrderId = orderId;
@@ -31,6 +32,7 @@ namespace Lookeach.Core.Entities
             {
                 throw new Exception("Quantity invalid");
             }
+            DollarPrice = dollarPrice;
             MerchantId = merchantId;
             Product = product;
             Quantity = quantity;
@@ -41,9 +43,9 @@ namespace Lookeach.Core.Entities
             ModifiedOn = modifiedOn;
         }
 
-        public static OrderItem Create(Guid orderId, Guid productId, decimal price, int quantity, int productVersion, Guid createdBy, Product product, Guid merchantId)
+        public static OrderItem Create(Guid orderId, Guid productId, decimal price, decimal dollarPrice, int quantity, int productVersion, Guid createdBy, Product product, Guid merchantId)
         {
-            return new OrderItem(Guid.NewGuid(), orderId, productId, price, quantity, productVersion, createdBy, DateTime.Now, createdBy, DateTime.Now, product,  merchantId);
+            return new OrderItem(Guid.NewGuid(), orderId, productId, price, dollarPrice, quantity, productVersion, createdBy, DateTime.Now, createdBy, DateTime.Now, product,  merchantId);
         }
     }
 }
