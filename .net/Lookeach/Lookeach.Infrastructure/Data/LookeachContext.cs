@@ -1,19 +1,24 @@
 ﻿using Lookeach.Application.Interfaces;
+using Lookeach.Application.Interfaces.Services;
+using Lookeach.Core.Common.Base;
 using Lookeach.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Lookeach.Infrastructure.Data
 {
     public class LookeachContext : DbContext, ICleanContext
     {
+        private readonly IIdentityUser<Guid> _identityUser;
+
         public LookeachContext()
         {
 
         }
-        public LookeachContext(DbContextOptions<LookeachContext> options) : base(options)
+        public LookeachContext(DbContextOptions<LookeachContext> options, IIdentityUser<Guid> identityUser) : base(options)
         {
-
+            _identityUser = identityUser;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=Lookeach;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
@@ -58,6 +63,22 @@ namespace Lookeach.Infrastructure.Data
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            foreach (var entry in ChangeTracker.Entries<Audit<DateTime, Guid>>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _identityUser.UserId;
+                        entry.Entity.CreatedOn = DateTime.Now;
+                        entry.Entity.ModifiedBy = _identityUser.UserId;
+                        entry.Entity.ModifiedOn = DateTime.Now;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.ModifiedBy = _identityUser.UserId;
+                        entry.Entity.ModifiedOn = DateTime.Now;
+                        break;
+                }
+            }
             return base.SaveChangesAsync(cancellationToken);
         }
     }

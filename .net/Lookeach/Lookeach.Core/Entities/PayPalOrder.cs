@@ -8,11 +8,11 @@ namespace Lookeach.Core.Entities
         public string? CaptureId { get; private set; }
         public string Intent { get; set; }
         public ICollection<PayPalItem> PayPalItems { get; private set; } = new List<PayPalItem>();
-        public ICollection<PayPalAmount> PayPalAmounts { get; private set; } = new List<PayPalAmount>();
+        public PayPalAmount PayPalAmounts { get; private set; } 
         public string Status { get; private set; }
         public string PayeeEmailAddress { get; private set; }
         public string MerchantId { get; private set; }
-        public double ExchangeCurrency { get; private set; }
+        public decimal ExchangeCurrency { get; private set; }
         public Guid OrderId { get; private set; }
         public Order Order { get; set; }
 
@@ -20,7 +20,7 @@ namespace Lookeach.Core.Entities
         {
             
         }
-        protected PayPalOrder(Guid id, string token, string? captureId, string intent, string status, string payeeEmail, string merchantId, double exchangCurrency, Guid orderId, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
+        protected PayPalOrder(Guid id, string token, string? captureId, string intent, string status, string payeeEmail, string merchantId, decimal exchangCurrency, Guid orderId, Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
         {
             Id = id;
             if (string.IsNullOrEmpty(token))
@@ -46,7 +46,7 @@ namespace Lookeach.Core.Entities
             ModifiedOn = modifiedOn;
         }
 
-        public static PayPalOrder Create(Guid id, string token, string intent, string status, string payeeEmail, string merchantId, double exchangCurrency, Guid orderId, Guid createdBy, string? captureId = null!)
+        public static PayPalOrder Create(Guid id, string token, string intent, string status, string payeeEmail, string merchantId, decimal exchangCurrency, Guid orderId, Guid createdBy, string? captureId = null!)
         {
             return new PayPalOrder(id, token, captureId, intent, status, payeeEmail, merchantId, exchangCurrency, orderId, createdBy, DateTime.Now, createdBy, DateTime.Now);
         }

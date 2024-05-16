@@ -82,7 +82,7 @@ namespace Lookeach.Infrastructure.Services
             {
                 var product = products.FirstOrDefault(x => x.Id == item.ProductId)!;
                 userIds.Add(product.CreatedBy);
-                orderItems.Add(OrderItem.Create(orderId, item.ProductId, item.Price, item.Quantity, item.ProductVersion, claim.Id, product, product.CreatedBy));
+                orderItems.Add(OrderItem.Create(orderId, item.ProductId, item.Price, item.DollarPrice, item.Quantity, item.ProductVersion, claim.Id, product, product.CreatedBy));
             }
             users = await _userRepository.GetUsers(userIds.ToList(), "Role");
             int c = 1;
@@ -149,7 +149,7 @@ namespace Lookeach.Infrastructure.Services
 
         private async Task<decimal[]> ValidVoucher(List<Voucher> vouchers, Dictionary<Guid, ProductStrucTemp> valuePairs, List<User> users, decimal[] totalAmount, List<VoucherSourcing> voucherSourcings, Guid userId, List<Voucher> systemVouchers)
         {
-            decimal[] totalArray =totalAmount ;
+            decimal[] totalArray = totalAmount;
             decimal total = 0;
             decimal totalAmount1 = totalAmount[0];
             int voucherSystem = 0;

@@ -9,7 +9,7 @@
 
     public class PurchaseUnit
     {
-        public List<Item> items { get; set; }
+        // public List<Item> items { get; set; }
         public Amount amount { get; set; }
     }
 
@@ -25,13 +25,13 @@
     public class UnitAmount
     {
         public string currency_code { get; set; }
-        public double value { get; set; }
+        public decimal value { get; set; }
     }
 
     public class Amount
     {
         public string currency_code { get; set; }
-        public double value { get; set; }
+        public decimal value { get; set; }
         public Breakdown breakdown { get; set; }
 
     }
@@ -44,7 +44,7 @@
     public class ItemTotal
     {
         public string currency_code { get; set; }
-        public double value { get; set; }
+        public decimal value { get; set; }
     }
 
     public class ApplicationContext

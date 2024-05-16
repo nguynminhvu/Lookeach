@@ -448,6 +448,9 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("DollarAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -486,6 +489,9 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DollarPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("MerchantId")
                         .HasColumnType("uniqueidentifier");
@@ -540,8 +546,8 @@ namespace Lookeach.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("ItemTotalValue")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ItemTotalValue")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
@@ -552,12 +558,13 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<Guid>("PaypalOrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaypalOrderId");
+                    b.HasIndex("PaypalOrderId")
+                        .IsUnique();
 
                     b.ToTable("PayPalAmounts");
                 });
@@ -598,8 +605,8 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -1487,8 +1494,8 @@ namespace Lookeach.Infrastructure.Migrations
             modelBuilder.Entity("Lookeach.Core.Entities.PayPalAmount", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.PayPalOrder", "PaypalOrder")
-                        .WithMany("PayPalAmounts")
-                        .HasForeignKey("PaypalOrderId")
+                        .WithOne("PayPalAmounts")
+                        .HasForeignKey("Lookeach.Core.Entities.PayPalAmount", "PaypalOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1726,7 +1733,8 @@ namespace Lookeach.Infrastructure.Migrations
 
             modelBuilder.Entity("Lookeach.Core.Entities.PayPalOrder", b =>
                 {
-                    b.Navigation("PayPalAmounts");
+                    b.Navigation("PayPalAmounts")
+                        .IsRequired();
 
                     b.Navigation("PayPalItems");
                 });
