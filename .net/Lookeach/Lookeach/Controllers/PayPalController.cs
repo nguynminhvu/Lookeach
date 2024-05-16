@@ -35,11 +35,19 @@ namespace Lookeach.Controllers
             });
         }
 
-        [HttpPost("callback/paypal")]
+        [HttpGet("callback/paypal")]
         public async Task<IActionResult> HandleQueryPaypal()
         {
-            var query = Request.QueryString + "";
-            string token = (query.Split("&")[0]).Split("=")[1];
+            string token = "";
+            try
+            {
+                var query = Request.QueryString + "";
+                token = (query.Split("&")[0]).Split("=")[1];
+            }
+            catch
+            {
+                throw new Exception("Parameter");
+            }
 
             if (string.IsNullOrEmpty(token)) throw new Exception("Invalid transaction");
 
@@ -48,7 +56,7 @@ namespace Lookeach.Controllers
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = await _mediator.Send(new HandleQueryVNPayCommand(token))
+                Value = await _mediator.Send(new CompleteOrderPayPalCommand(token))
             });
         }
     }
