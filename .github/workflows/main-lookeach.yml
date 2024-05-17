@@ -31,7 +31,7 @@ jobs:
         run: |
           dotnet restore ./.net/Lookeach/Lookeach/Lookeach.csproj
           dotnet build ./.net/Lookeach/Lookeach/Lookeach.csproj --configuration Release
-          dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+          dotnet publish ./.net/Lookeach/Lookeach/Lookeach.csproj ./publish
           
       # Deploy to Azure Web apps
       - name: 'Run Azure webapp deploy action using publish profile credentials'
@@ -39,6 +39,6 @@ jobs:
         with: 
           app-name: lookeack-api-svc # Replace with your app name
           publish-profile: ${{ secrets.LOOKEACH_ACTION_SECRET  }} # Define secret variable in repository settings as per action documentation
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+          package: ./publish
 
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
