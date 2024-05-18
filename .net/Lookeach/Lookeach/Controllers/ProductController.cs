@@ -1,12 +1,12 @@
 ﻿using Lookeach.Application.Commands.Products;
 using Lookeach.Application.Queries.Products;
-using Lookeach.Core.Entities;
-using Lookeach.Core.ViewModels.Products;
+using Lookeach.Application.ViewModels.Products;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Lookeach.Controllers
 {
@@ -112,6 +112,11 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
+
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Merchant },
+          new string[] { ActionConstant.WRITE }
+          )]
         [HttpPost("product/create")]
         public async Task<IActionResult> CreateProduct([FromForm] ProductCreateModel productCreateModel)
         {
@@ -136,7 +141,10 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
-
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Merchant },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPut("product/update")]
         public async Task<IActionResult> UpdateProduct([FromForm] ProductUpdateModel productUpdateModel)
         {
@@ -161,6 +169,11 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
+
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Merchant },
+          new string[] { ActionConstant.DELETE }
+          )]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {

@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.Commands.Vouchers;
 using Lookeach.Application.Services;
-using Lookeach.Core.ViewModels.Vouchers;
+using Lookeach.Application.ViewModels.Vouchers;
 using MediatR;
 
 namespace Lookeach.Application.Handlers.Vouchers

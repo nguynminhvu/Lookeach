@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Orders;
+﻿using Lookeach.Application.ViewModels.Orders;
 
 namespace Lookeach.Application.Services
 {

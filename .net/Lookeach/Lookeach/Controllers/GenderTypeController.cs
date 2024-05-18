@@ -1,11 +1,12 @@
 ﻿using Lookeach.Application.Commands.GenderTypes;
 using Lookeach.Application.Queries.GenderTypes;
-using Lookeach.Core.ViewModels.GenderTypes;
+using Lookeach.Application.ViewModels.GenderTypes;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Lookeach.Controllers
 {
@@ -20,6 +21,10 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.WRITE }
+          )]
         [HttpPost]
         public async Task<IActionResult> CreateGenderType([FromBody] string name)
         {
@@ -46,6 +51,10 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPut]
         public async Task<IActionResult> UpdateGenderType([FromBody] GenderTypeUpdateModel genderTypeUpdateModel)
         {

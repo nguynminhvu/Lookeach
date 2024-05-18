@@ -1,10 +1,10 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Users;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Users;
 using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
@@ -28,7 +28,7 @@ namespace Lookeach.Infrastructure.Services
         private EmailSenderDTO _emailSenderDTO = new();
         private EmailDTO _emailDTO = new();
 
-        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, configuration, httpContextAccessor,connectionMultiplexer,distributedCache)
+        public AuthService(IUnitOfWork unitOfWork, IAesService aesService, IConfiguration configuration, IDistributedCache distributedCache, IConnectionMultiplexer connectionMultiplexer, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, configuration, httpContextAccessor, connectionMultiplexer, distributedCache)
         {
             _httpAccessor = httpContextAccessor;
             _connectionMutiple = connectionMultiplexer;
@@ -62,15 +62,22 @@ namespace Lookeach.Infrastructure.Services
             if (user != null) throw new Exception("Username already used");
             user = await _userRepository.GetUserByEmail(userCreateModel.Email);
             if (user != null) throw new Exception("Email already used");
-            var rs = await _userRepository.CreateUser(userCreateModel, roleId);
 
-            var tokenCode = _emailSenderDTO.Domain + _emailSenderDTO.Uri + "/" + Convert.ToBase64String(_aesService.Encrypt(rs.Id + ""));
+            var id = Guid.NewGuid();
+            var userCreate = User
+                .CreateUser(id, userCreateModel.Username, userCreateModel.Name, userCreateModel.Dob, userCreateModel.Address,
+                userCreateModel.Gender, userCreateModel.Email, userCreateModel.Phone, userCreateModel.Password, roleId, id, id);
+
+            await _userRepository.AddAsync(userCreate);
+
+            var tokenCode = _emailSenderDTO.Domain + _emailSenderDTO.Uri + "/" + Convert.ToBase64String(_aesService.Encrypt(userCreate.Id + ""));
             var contentHtml = "<html><body><h1>Please click the link below to confirm your email:</h1>"
                                                           + $"<p><a href=\"{tokenCode}\">Confirm Password</a></p>" +
                                                           $"<br/>" +
                                                           $"<img src=\"https://media.cnn.com/api/v1/images/stellar/prod/220310092648-benzema-tease.jpg?q=h_2000,w_3000,x_0,y_0\" ></body></html>";
-            await SendEmail(rs.Email, "Lookeach confirm email", contentHtml);
-            return rs;
+            await SendEmail(userCreate.Email, "Lookeach confirm email", contentHtml);
+            await _uow.SaveChangesAsync();
+            return userCreate;
         }
 
         public async Task<string> Login(LoginDTO loginDTO)

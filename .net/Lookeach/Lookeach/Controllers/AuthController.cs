@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.Commands.Auths;
 using Lookeach.Application.DTOs;
-using Lookeach.Core.ViewModels.Users;
+using Lookeach.Application.ViewModels.Users;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

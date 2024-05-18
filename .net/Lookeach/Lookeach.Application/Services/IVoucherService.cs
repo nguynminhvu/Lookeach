@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Vouchers;
+﻿using Lookeach.Application.ViewModels.Vouchers;
 
 namespace Lookeach.Application.Services
 {

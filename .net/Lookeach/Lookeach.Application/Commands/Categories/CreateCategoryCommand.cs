@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Categories;
+﻿using Lookeach.Application.ViewModels.Categories;
 using MediatR;
 
 namespace Lookeach.Application.Commands.Categories

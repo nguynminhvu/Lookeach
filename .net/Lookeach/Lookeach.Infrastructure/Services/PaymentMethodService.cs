@@ -1,9 +1,9 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.PaymentMethods;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.PaymentMethods;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -1,4 +1,4 @@
-﻿using Lookeach.Application.Paypals.Models;
+﻿using Lookeach.Application.Features.Paypals.Models;
 
 namespace Lookeach.Application.Interfaces.Services
 {

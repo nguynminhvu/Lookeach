@@ -1,10 +1,10 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Brands;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Brands;
 using Lookeach.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
@@ -23,7 +23,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IImageRepository _imageRepository;
         private readonly IConfiguration _configuration;
         private const string BRAND = "Brand";
-        public BrandService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache) : base(configuration, httpContextAccessor)
+        public BrandService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache) : base(unitOfWork,configuration, httpContextAccessor, connectionMultiplexer,distributedCache)
         {
             _configuration = configuration;
             _httpAccessor = httpContextAccessor;

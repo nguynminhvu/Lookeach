@@ -1,10 +1,10 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Vouchers;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Enums;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Vouchers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

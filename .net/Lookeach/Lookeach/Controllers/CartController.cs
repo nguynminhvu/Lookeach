@@ -1,10 +1,11 @@
 ﻿using Lookeach.Application.Commands.Carts;
 using Lookeach.Application.Queries.Carts;
-using Lookeach.Core.ViewModels.Carts;
+using Lookeach.Application.ViewModels.Carts;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lookeach.Controllers
@@ -24,6 +25,10 @@ namespace Lookeach.Controllers
         /// Check sum before call api
         /// </summary>
         /// <returns>CartViewModel</returns>
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Customer },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPatch]
         public async Task<IActionResult> UpdateCart([FromBody] CartUpdateModel cartUpdateModel)
         {
@@ -52,8 +57,11 @@ namespace Lookeach.Controllers
         /// 
         /// </summary>
         /// <returns>CartViewModel</returns>
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Customer },
+          new string[] { ActionConstant.READ }
+          )]
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetCart()
         {
             ResponseBase<CartViewModel> responseBase = new ResponseBase<CartViewModel>();

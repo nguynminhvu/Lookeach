@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.Commands.Sizes;
 using Lookeach.Application.Services;
-using Lookeach.Core.ViewModels.Sizes;
+using Lookeach.Application.ViewModels.Sizes;
 using MediatR;
 
 namespace Lookeach.Application.Handlers.Sizes

@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.Commands.Auths;
 using Lookeach.Application.Services;
-using Lookeach.Core.ViewModels.Users;
+using Lookeach.Application.ViewModels.Users;
 using MediatR;
 
 namespace Lookeach.Application.Handlers.Auths

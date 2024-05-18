@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.Commands.Brands;
 using Lookeach.Application.Services;
-using Lookeach.Core.ViewModels.Brands;
+using Lookeach.Application.ViewModels.Brands;
 using MediatR;
 
 namespace Lookeach.Application.Handlers.Brands

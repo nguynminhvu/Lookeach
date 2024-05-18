@@ -1,7 +1,7 @@
 ﻿using Lookeach.Application.DTOs;
 using Lookeach.Application.Exceptions;
+using Lookeach.Application.Features.Paypals.Models;
 using Lookeach.Application.Interfaces.Services;
-using Lookeach.Application.Paypals.Models;
 using Lookeach.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;

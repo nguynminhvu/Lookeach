@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Sizes;
+﻿using Lookeach.Application.ViewModels.Sizes;
 
 namespace Lookeach.Application.Services
 {

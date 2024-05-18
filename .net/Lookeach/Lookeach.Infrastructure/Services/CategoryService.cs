@@ -1,10 +1,10 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Categories;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Categories;
 using Lookeach.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;

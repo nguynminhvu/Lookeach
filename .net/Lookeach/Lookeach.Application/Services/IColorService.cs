@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Colors;
+﻿using Lookeach.Application.ViewModels.Colors;
 
 namespace Lookeach.Application.Services
 {

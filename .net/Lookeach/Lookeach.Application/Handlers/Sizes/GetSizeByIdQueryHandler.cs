@@ -1,12 +1,7 @@
 ﻿using Lookeach.Application.Queries.Sizes;
 using Lookeach.Application.Services;
-using Lookeach.Core.ViewModels.Sizes;
+using Lookeach.Application.ViewModels.Sizes;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lookeach.Application.Handlers.Sizes
 {

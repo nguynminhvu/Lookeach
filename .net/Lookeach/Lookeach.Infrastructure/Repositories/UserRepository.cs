@@ -1,6 +1,5 @@
 ﻿using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
-using Lookeach.Core.ViewModels.Users;
 using Lookeach.Infrastructure.Data;
 using Lookeach.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -16,17 +15,6 @@ namespace Lookeach.Infrastructure.Repositories
             _context = appDbContext;
         }
 
-        public async Task<User> CreateUser(UserCreateModel userCreateModel, Guid roleId)
-        {
-            var id = Guid.NewGuid();
-            var user = User
-                .CreateUser(id, userCreateModel.Username, userCreateModel.Name, userCreateModel.Dob, userCreateModel.Address,
-                userCreateModel.Gender, userCreateModel.Email, userCreateModel.Phone, userCreateModel.Password, roleId, id, id);
-
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
-        }
 
         public async Task<User> GetUserByEmail(string email)
             => (await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Email == email && x.IsActived))!;

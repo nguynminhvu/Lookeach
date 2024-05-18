@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.DTOs;
+using Lookeach.Application.ViewModels.Users;
 using Lookeach.Core.Entities;
-using Lookeach.Core.ViewModels.Users;
 
 namespace Lookeach.Application.Services
 {

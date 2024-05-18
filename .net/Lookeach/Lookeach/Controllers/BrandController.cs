@@ -1,7 +1,9 @@
 ﻿using Lookeach.Application.Commands.Brands;
 using Lookeach.Application.Queries.Brands;
-using Lookeach.Core.ViewModels.Brands;
-using Lookeach.Core.ViewModels.Categories;
+using Lookeach.Application.ViewModels.Brands;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -62,7 +64,10 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <param name="brandCreateModel"></param>
         /// <returns></returns>
-        [Authorize(Roles ="Merchant")]
+        [LookeachAuthorize(
+            new RoleName[] { RoleName.Admin },
+            new string[] { ActionConstant.WRITE }
+            )]
         [HttpPost("brand/create")]
         public async Task<IActionResult> CreateBrand([FromForm] BrandCreateModel brandCreateModel)
         {
@@ -92,6 +97,10 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <param name="brandUpdateModel"></param>
         /// <returns></returns>
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [Authorize(Roles = "Merchant")]
         [HttpPut("brand/update")]
         public async Task<IActionResult> UpdateBrand([FromForm] BrandUpdateModel brandUpdateModel)
@@ -116,6 +125,5 @@ namespace Lookeach.Controllers
             responseViewModel.Value = null!;
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
-
     }
 }

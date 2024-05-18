@@ -1,7 +1,5 @@
-﻿using Lookeach.Application.Commands.Orders;
-using Lookeach.Application.Commands.VNPays;
-using Lookeach.Application.Paypals.Commands;
-using Lookeach.Core.ViewModels.Orders;
+﻿using Lookeach.Application.Features.Paypals.Commands;
+using Lookeach.Application.ViewModels.Orders;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

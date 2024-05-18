@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Categories;
+﻿using Lookeach.Application.ViewModels.Categories;
 
 namespace Lookeach.Application.Services
 {
