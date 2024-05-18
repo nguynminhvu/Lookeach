@@ -17,7 +17,7 @@ namespace Lookeach.Extensions.Jwt
         {
             var endpoint = httpContext.GetEndpoint();
             var metadata = endpoint?.Metadata;
-            if (metadata!=null && metadata.FirstOrDefault(x => x.ToString()!.Contains("Authorize Roles"))==null!)
+            if (metadata!=null && metadata.FirstOrDefault(x => x.ToString()!.Contains("Authorize Policy"))==null!)
             {
                 await _next(httpContext);
                 return;

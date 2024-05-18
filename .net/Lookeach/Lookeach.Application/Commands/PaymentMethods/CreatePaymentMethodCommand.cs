@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.PaymentMethods;
+﻿using Lookeach.Application.ViewModels.PaymentMethods;
 using MediatR;
 using System;
 using System.Collections.Generic;

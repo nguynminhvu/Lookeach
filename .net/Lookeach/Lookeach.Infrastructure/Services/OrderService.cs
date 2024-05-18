@@ -1,11 +1,10 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Orders;
 using Lookeach.Core.Entities;
-using Lookeach.Core.Enums;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Orders;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

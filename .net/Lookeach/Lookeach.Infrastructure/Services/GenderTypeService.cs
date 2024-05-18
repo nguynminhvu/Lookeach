@@ -1,9 +1,9 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.GenderTypes;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.GenderTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;

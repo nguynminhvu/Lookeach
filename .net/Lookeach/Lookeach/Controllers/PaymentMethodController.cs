@@ -1,6 +1,9 @@
 ﻿using Lookeach.Application.Commands.PaymentMethods;
 using Lookeach.Application.Queries.PaymentMethods;
-using Lookeach.Core.ViewModels.PaymentMethods;
+using Lookeach.Application.ViewModels.PaymentMethods;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +21,10 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Merchant,RoleName.Customer },
+          new string[] { ActionConstant.READ }
+          )]
         [HttpGet("paymentMethod/{id}")]
         public async Task<IActionResult> GetPaymentMethod([FromRoute] Guid id)
         {
@@ -31,7 +38,10 @@ namespace Lookeach.Controllers
             return Ok(responseBase);
         }
 
-
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Customer,RoleName.Merchant },
+          new string[] { ActionConstant.READ }
+          )]
         [HttpGet("paymentMethods")]
         public async Task<IActionResult> GetPaymentMethods(string? name = null!)
         {
@@ -45,7 +55,10 @@ namespace Lookeach.Controllers
             return Ok(responseBase);
         }
 
-
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Merchant },
+          new string[] { ActionConstant.WRITE }
+          )]
         [HttpPost("paymentMethod")]
         public async Task<IActionResult> CreatePaymentMethod(string name)
         {
@@ -59,6 +72,10 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status201Created, responseBase);
         }
 
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Merchant },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPut("paymentMethod")]
         public async Task<IActionResult> UpdatePaymentMethod(PaymentMethodUpdateModel paymentMethodUpdateModel)
         {

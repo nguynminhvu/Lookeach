@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Products;
+﻿using Lookeach.Application.ViewModels.Products;
 
 namespace Lookeach.Application.Services
 {

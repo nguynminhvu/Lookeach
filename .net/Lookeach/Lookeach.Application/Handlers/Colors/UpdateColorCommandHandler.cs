@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.Commands.Colors;
 using Lookeach.Application.Services;
-using Lookeach.Core.ViewModels.Colors;
+using Lookeach.Application.ViewModels.Colors;
 using MediatR;
 
 namespace Lookeach.Application.Handlers.Colors

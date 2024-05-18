@@ -1,11 +1,12 @@
 ﻿using Lookeach.Application.Commands.Categories;
 using Lookeach.Application.Queries.Categories;
-using Lookeach.Core.ViewModels.Categories;
-using Lookeach.Core.ViewModels.Colors;
+using Lookeach.Application.ViewModels.Categories;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Lookeach.Controllers
 {
@@ -20,6 +21,10 @@ namespace Lookeach.Controllers
             _mediator = mediator;
         }
 
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.WRITE }
+          )]
         [HttpPost("category/create")]
         public async Task<IActionResult> CreateCategory([FromForm] CategoryCreateModel categoryCreateModel)
         {
@@ -44,6 +49,10 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
+        [LookeachAuthorize(
+          new RoleName[] {RoleName.Admin },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPut("category/update")]
         public async Task<IActionResult> UpdateCategory([FromForm] CategoryUpdateModel categoryUpdateModel)
         {

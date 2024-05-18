@@ -1,11 +1,12 @@
 ﻿using Lookeach.Application.Commands.Colors;
 using Lookeach.Application.Queries.Colors;
-using Lookeach.Core.ViewModels.Colors;
-using Lookeach.Core.ViewModels.GenderTypes;
+using Lookeach.Application.ViewModels.Colors;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Lookeach.Controllers
 {
@@ -48,7 +49,10 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
-
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.WRITE }
+          )]
         [HttpPost("color/create")]
         public async Task<IActionResult> CreateColor([FromBody] string name)
         {
@@ -63,7 +67,10 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status201Created, responseViewModel);
         }
 
-
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPut("color/update")]
         public async Task<IActionResult> UpdateColor([FromBody] ColorUpdateModel ColorUpdateModel)
         {

@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Brands;
+﻿using Lookeach.Application.ViewModels.Brands;
 using MediatR;
 
 namespace Lookeach.Application.Commands.Brands

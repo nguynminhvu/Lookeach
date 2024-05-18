@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Carts;
+﻿using Lookeach.Application.ViewModels.Carts;
 
 namespace Lookeach.Application.Services
 {

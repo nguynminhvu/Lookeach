@@ -1,6 +1,6 @@
 ﻿using Lookeach.Application.Commands.PaymentMethods;
 using Lookeach.Application.Services;
-using Lookeach.Core.ViewModels.PaymentMethods;
+using Lookeach.Application.ViewModels.PaymentMethods;
 using MediatR;
 
 namespace Lookeach.Application.Handlers.PaymentMethods

@@ -1,6 +1,5 @@
 ﻿using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories.Base;
-using Lookeach.Core.ViewModels.Colors;
 
 namespace Lookeach.Core.Repositories
 {

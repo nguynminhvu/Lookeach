@@ -1,5 +1,5 @@
-﻿using Lookeach.Core.Entities;
-using Lookeach.Core.ViewModels.Orders;
+﻿using Lookeach.Application.ViewModels.Orders;
+using Lookeach.Core.Entities;
 
 namespace Lookeach.Application.Services
 {

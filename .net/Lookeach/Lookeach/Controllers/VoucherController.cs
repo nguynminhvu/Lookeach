@@ -1,9 +1,9 @@
 ﻿using Lookeach.Application.Commands.Vouchers;
 using Lookeach.Application.Queries.Vouchers;
+using Lookeach.Application.ViewModels.Vouchers;
 using Lookeach.AuthOptions;
 using Lookeach.Constants;
 using Lookeach.Core.Enums;
-using Lookeach.Core.ViewModels.Vouchers;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -38,10 +38,6 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        [LookeachAuthorize(
-            new RoleName[] { RoleName.Customer },
-            new string[] { ActionConstant.READ }
-            )]
         [HttpGet("vouchers/{userid}/by-userid")]
         public async Task<IActionResult> GetVoucherByUserId([FromRoute] Guid userid)
         {
@@ -76,7 +72,7 @@ namespace Lookeach.Controllers
         /// <param name="voucherCreateModel"></param>
         /// <returns></returns>
         [LookeachAuthorize(
-        new RoleName[] { RoleName.Admin },
+        new RoleName[] { RoleName.Admin, RoleName.Merchant },
         new string[] { ActionConstant.WRITE }
         )]
         [HttpPost("voucher/create")]
@@ -97,6 +93,11 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <param name="voucherUpdateModel"></param>
         /// <returns></returns>
+        
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin, RoleName.Merchant },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPut("voucher/update")]
         public async Task<IActionResult> UpdateVoucher([FromBody] VoucherUpdateModel voucherUpdateModel)
         {

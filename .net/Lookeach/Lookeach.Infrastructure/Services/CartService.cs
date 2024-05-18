@@ -1,10 +1,10 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Carts;
+using Lookeach.Application.ViewModels.Products;
+using Lookeach.Application.ViewModels.Users;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Carts;
-using Lookeach.Core.ViewModels.Products;
-using Lookeach.Core.ViewModels.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;

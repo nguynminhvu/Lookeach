@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.ViewModels.Brands;
+using Lookeach.Application.ViewModels.Categories;
+using Lookeach.Application.ViewModels.Colors;
+using Lookeach.Application.ViewModels.GenderTypes;
+using Lookeach.Application.ViewModels.Images;
+using Lookeach.Application.ViewModels.Orders;
+using Lookeach.Application.ViewModels.PaymentMethods;
+using Lookeach.Application.ViewModels.Products;
+using Lookeach.Application.ViewModels.Roles;
+using Lookeach.Application.ViewModels.Sizes;
+using Lookeach.Application.ViewModels.Users;
+using Lookeach.Application.ViewModels.Vouchers;
 using Lookeach.Core.Entities;
-using Lookeach.Core.ViewModels.Brands;
-using Lookeach.Core.ViewModels.Categories;
-using Lookeach.Core.ViewModels.Colors;
-using Lookeach.Core.ViewModels.GenderTypes;
-using Lookeach.Core.ViewModels.Images;
-using Lookeach.Core.ViewModels.Orders;
-using Lookeach.Core.ViewModels.PaymentMethods;
-using Lookeach.Core.ViewModels.Products;
-using Lookeach.Core.ViewModels.Roles;
-using Lookeach.Core.ViewModels.Sizes;
-using Lookeach.Core.ViewModels.Users;
-using Lookeach.Core.ViewModels.Vouchers;
 
 namespace Lookeach.Application.AutoMappers
 {

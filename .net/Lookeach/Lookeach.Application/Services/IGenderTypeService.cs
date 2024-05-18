@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.GenderTypes;
+﻿using Lookeach.Application.ViewModels.GenderTypes;
 
 namespace Lookeach.Application.Services
 {

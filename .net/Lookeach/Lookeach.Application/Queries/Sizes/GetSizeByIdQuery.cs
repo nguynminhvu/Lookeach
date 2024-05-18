@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Sizes;
+﻿using Lookeach.Application.ViewModels.Sizes;
 using MediatR;
 
 namespace Lookeach.Application.Queries.Sizes

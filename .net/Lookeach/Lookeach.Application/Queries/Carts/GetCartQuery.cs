@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Carts;
+﻿using Lookeach.Application.ViewModels.Carts;
 using MediatR;
 
 namespace Lookeach.Application.Queries.Carts

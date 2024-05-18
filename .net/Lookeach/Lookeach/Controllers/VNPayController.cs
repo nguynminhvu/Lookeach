@@ -1,7 +1,7 @@
 ﻿using Lookeach.Application.Commands.VNPays;
 using Lookeach.Application.Queries.VNPays;
+using Lookeach.Application.ViewModels.Orders;
 using Lookeach.Core.Entities;
-using Lookeach.Core.ViewModels.Orders;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

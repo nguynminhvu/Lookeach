@@ -1,6 +1,9 @@
 ﻿using Lookeach.Application.Commands.Sizes;
 using Lookeach.Application.Queries.Sizes;
-using Lookeach.Core.ViewModels.Sizes;
+using Lookeach.Application.ViewModels.Sizes;
+using Lookeach.AuthOptions;
+using Lookeach.Constants;
+using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +52,10 @@ namespace Lookeach.Controllers
             return Ok(responseViewModel);
         }
 
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.WRITE }
+          )]
         [HttpPost("size/create")]
         public async Task<IActionResult> CreateSize([FromBody] string name)
         {
@@ -76,7 +83,10 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
-
+        [LookeachAuthorize(
+          new RoleName[] { RoleName.Admin },
+          new string[] { ActionConstant.OVERRIDE }
+          )]
         [HttpPut("size/update")]
         public async Task<IActionResult> UpdateSize([FromBody] SizeUpdateModel sizeUpdateModel)
         {

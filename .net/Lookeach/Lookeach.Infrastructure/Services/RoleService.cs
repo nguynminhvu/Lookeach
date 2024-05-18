@@ -1,9 +1,9 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Roles;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Roles;
 
 namespace Lookeach.Infrastructure.Services
 {

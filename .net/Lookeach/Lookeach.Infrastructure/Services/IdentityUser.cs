@@ -13,8 +13,12 @@ namespace Lookeach.Infrastructure.Services
             get
             {
                 var claim = GetClaimDTOByAccessTokenSynchronous();
-                if (claim == null!) throw new UnauthorizedAccessException("Login session expired");
-                return (T)Convert.ChangeType(claim.Id, typeof(T));
+                Guid userId = Guid.Empty;
+                if (claim != null!)
+                {
+                    userId = claim.Id;
+                }
+                return (T)Convert.ChangeType(userId, typeof(T));
             }
         }
     }

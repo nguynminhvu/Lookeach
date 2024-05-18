@@ -1,4 +1,4 @@
-﻿using Lookeach.Core.ViewModels.PaymentMethods;
+﻿using Lookeach.Application.ViewModels.PaymentMethods;
 using MediatR;
 
 namespace Lookeach.Application.Commands.PaymentMethods

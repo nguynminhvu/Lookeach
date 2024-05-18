@@ -1,9 +1,9 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Colors;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Colors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 

@@ -1,5 +1,4 @@
-﻿using Lookeach.Core.ViewModels.Orders;
-using MediatR;
+﻿using MediatR;
 
 namespace Lookeach.Application.Commands.VNPays
 {

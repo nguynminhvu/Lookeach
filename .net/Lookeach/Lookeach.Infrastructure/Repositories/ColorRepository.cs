@@ -1,6 +1,5 @@
 ﻿using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
-using Lookeach.Core.ViewModels.Colors;
 using Lookeach.Infrastructure.Data;
 using Lookeach.Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;

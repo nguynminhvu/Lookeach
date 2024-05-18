@@ -2,12 +2,12 @@
 using Lookeach.Application.DTOs;
 using Lookeach.Application.Exceptions;
 using Lookeach.Application.Services;
+using Lookeach.Application.ViewModels.Orders;
+using Lookeach.Application.ViewModels.VNPays;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Enums;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
-using Lookeach.Core.ViewModels.Orders;
-using Lookeach.Core.ViewModels.VNPays;
 using Lookeach.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;

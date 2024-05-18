@@ -159,9 +159,9 @@ namespace Lookeach.Infrastructure.Services
             }
             catch
             {
-                throw new UnauthorizedAccessException("Login session has expired");
+                return null!;
             }
-            if (token == null!) throw new UnauthorizedAccessException("Not found token, login please");
+            if (token == null!) return null!;
             try
             {
                 var keyExample = _jwtDTO.JwtSecret;
