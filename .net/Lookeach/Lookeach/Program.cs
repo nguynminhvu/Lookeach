@@ -10,7 +10,16 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder =>
+        {
+            builder.WithOrigins("*")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 builder.Services.AddControllers(x =>
 {
     x.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
@@ -34,6 +43,7 @@ builder.Services.InfrastructureInject(builder.Configuration);
 builder.Services.InjectDependency(builder.Configuration);
 var app = builder.Build();
 
+app.UseCors("AllowOrigin");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
