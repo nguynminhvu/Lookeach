@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.Features.Chats.Models;
 using Lookeach.Application.ViewModels.Brands;
 using Lookeach.Application.ViewModels.Categories;
 using Lookeach.Application.ViewModels.Colors;
@@ -53,7 +54,12 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<Role, RoleDTO>().ReverseMap();
             CreateMap<Resource, ResourceDTO>().ReverseMap();
             CreateMap<Permission, PermissionDTO>().ReverseMap();
-            CreateMap<Lookeach.Core.Entities.Action, ActionDTO>();
+            CreateMap<Lookeach.Core.Entities.Action, ActionDTO>().ReverseMap();
+            CreateMap<Chat, ChatViewModel>().ReverseMap();
+            CreateMap<ChatImage, ChatImageViewModel>().ReverseMap();
+            CreateMap<ChatUser, ChatUserViewModel>().ReverseMap();
+            CreateMap<ChatMessage,ChatMessageViewModel>().ReverseMap();
+            CreateMap<User, UserChatViewModel>().ReverseMap();
         }
     }
 }

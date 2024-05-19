@@ -280,6 +280,10 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Chats");
@@ -294,12 +298,17 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ChatMessageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
+
+                    b.HasIndex("ChatMessageId");
 
                     b.HasIndex("ImageId");
 
@@ -340,7 +349,28 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatMessage");
+                    b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.ChatUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatUsers");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Color", b =>
@@ -403,9 +433,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ChatMessageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -423,8 +450,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChatMessageId");
 
                     b.ToTable("Images");
                 });
@@ -524,6 +549,38 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.ParticipantChat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ParticipantChats");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.PayPalAmount", b =>
@@ -976,9 +1033,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ChatId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -1030,8 +1084,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
 
                     b.HasIndex("RoleId");
 
@@ -1424,6 +1476,10 @@ namespace Lookeach.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Lookeach.Core.Entities.ChatMessage", null)
+                        .WithMany("ChatImages")
+                        .HasForeignKey("ChatMessageId");
+
                     b.HasOne("Lookeach.Core.Entities.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
@@ -1454,11 +1510,23 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.Image", b =>
+            modelBuilder.Entity("Lookeach.Core.Entities.ChatUser", b =>
                 {
-                    b.HasOne("Lookeach.Core.Entities.ChatMessage", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ChatMessageId");
+                    b.HasOne("Lookeach.Core.Entities.Chat", "Chat")
+                        .WithMany("ChatUsers")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.User", "User")
+                        .WithMany("ChatUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Order", b =>
@@ -1612,10 +1680,6 @@ namespace Lookeach.Infrastructure.Migrations
 
             modelBuilder.Entity("Lookeach.Core.Entities.User", b =>
                 {
-                    b.HasOne("Lookeach.Core.Entities.Chat", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ChatId");
-
                     b.HasOne("Lookeach.Core.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
@@ -1716,14 +1780,14 @@ namespace Lookeach.Infrastructure.Migrations
 
             modelBuilder.Entity("Lookeach.Core.Entities.Chat", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("ChatUsers");
 
-                    b.Navigation("Users");
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.ChatMessage", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("ChatImages");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.Order", b =>
@@ -1759,6 +1823,11 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("Permissions");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Lookeach.Core.Entities.User", b =>
+                {
+                    b.Navigation("ChatUsers");
                 });
 #pragma warning restore 612, 618
         }

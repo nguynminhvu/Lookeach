@@ -1,5 +1,6 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.Features.Users.Models;
 using Lookeach.Application.Services;
 using Lookeach.Application.ViewModels.Users;
 using Lookeach.Core.Entities;
@@ -75,18 +76,15 @@ namespace Lookeach.Infrastructure.Services
                                                           + $"<p><a href=\"{tokenCode}\">Confirm Password</a></p>" +
                                                           $"<br/>" +
                                                           $"<img src=\"https://media.cnn.com/api/v1/images/stellar/prod/220310092648-benzema-tease.jpg?q=h_2000,w_3000,x_0,y_0\" ></body></html>";
-            await SendEmail(userCreate.Email, "Lookeach confirm email", contentHtml);
+          //  await SendEmail(userCreate.Email, "Lookeach confirm email", contentHtml);
             await _uow.SaveChangesAsync();
             return userCreate;
         }
 
         public async Task<string> Login(LoginDTO loginDTO)
         {
-            var user = await _userRepository.GetUserByEmailAndPassword(loginDTO.Username, Convert.ToBase64String(_aesService.Encrypt(loginDTO.Password)), "Role");
-            if (user == null!)
-            {
-                user = await _userRepository.GetUserByUsernameAndPassword(loginDTO.Username, Convert.ToBase64String(_aesService.Encrypt(loginDTO.Password)), "Role");
-            }
+            var user = await _userRepository.GetUserByUsernameAndPassword(loginDTO.Username, Convert.ToBase64String(_aesService.Encrypt(loginDTO.Password)), "Role");
+          
             if (user == null)
                 throw new Exception("Wrong username or password");
             var tk = await GenerateToken(user);

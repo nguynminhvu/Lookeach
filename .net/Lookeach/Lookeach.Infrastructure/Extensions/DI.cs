@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-using System.Reflection;
 
 namespace Lookeach.Infrastructure.Extensions
 {
@@ -42,6 +41,9 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IVNPayService, VNPayService>();
             services.AddScoped<IIdentityUser<Guid>, IdentityUser<Guid>>();
             services.AddScoped<ICleanContext>(x => x.GetService<LookeachContext>()!);
+            services.AddScoped<IValidateService, ValidateService>();
+            services.AddScoped<IFirebaseService, FirebaseService>();
+            services.AddScoped<IEmailService, EmailService>();
             try
             {
                 var redisDto = new RedisDTO();
