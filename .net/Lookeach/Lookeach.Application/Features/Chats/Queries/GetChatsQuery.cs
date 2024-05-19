@@ -41,6 +41,7 @@ namespace Lookeach.Application.Features.Chats.Queries
                 int size = request.pageSize.Value > 0 ? request.pageSize.Value : 10;
                 queryChat.Skip(index * size).Take(size);
             }
+            queryChat = queryChat.Include(x => x.Messages).ThenInclude(x=>x.User).AsNoTracking().Include(x => x.ChatUsers);
             return AutoMapperConfig.Mapper.Map<List<ChatViewModel>>(await queryChat.ToListAsync());
         }
     }

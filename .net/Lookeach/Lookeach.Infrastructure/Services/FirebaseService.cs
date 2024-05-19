@@ -9,7 +9,7 @@ namespace Lookeach.Infrastructure.Services
     public class FirebaseService : IFirebaseService
     {
         private readonly IConfiguration _configuration;
-        private readonly FirebaseDTO _firebaseDTO;
+        private readonly FirebaseDTO _firebaseDTO= new FirebaseDTO();
         public FirebaseService(IConfiguration configuration)
         {
             _configuration = configuration;

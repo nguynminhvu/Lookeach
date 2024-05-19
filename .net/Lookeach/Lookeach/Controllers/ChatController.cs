@@ -41,7 +41,7 @@ namespace Lookeach.Controllers
 
 
         [HttpPost("chat")]
-        public async Task<IActionResult> SendMessage([FromBody] ChatMessageSendModel chatMessageSendModel)
+        public async Task<IActionResult> SendMessage([FromForm] ChatMessageSendModel chatMessageSendModel)
         {
             return StatusCode(StatusCodes.Status201Created, new ResponseBase<ChatViewModel>
             {

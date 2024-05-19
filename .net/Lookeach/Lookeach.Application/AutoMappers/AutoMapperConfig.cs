@@ -59,6 +59,7 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<ChatImage, ChatImageViewModel>().ReverseMap();
             CreateMap<ChatUser, ChatUserViewModel>().ReverseMap();
             CreateMap<ChatMessage,ChatMessageViewModel>().ReverseMap();
+            CreateMap<User, UserChatViewModel>().ReverseMap();
         }
     }
 }

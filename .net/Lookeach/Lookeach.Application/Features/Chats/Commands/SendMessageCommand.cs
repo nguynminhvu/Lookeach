@@ -105,7 +105,9 @@ namespace Lookeach.Application.Features.Chats.Commands
                 };
                 await _context.ChatMessages.AddAsync(chatMessage);
                 await _context.SaveChangesAsync(new CancellationToken());
-                var rs = await _context.Chats.Include(x => x.Messages).AsNoTracking().Include(x => x.ChatUsers).AsNoTracking().FirstOrDefaultAsync(x => x.Id == chatId);
+                var rs = await _context.Chats.Include(x => x.Messages).ThenInclude(x => x.User)
+                    .AsNoTracking().Include(x => x.Messages).ThenInclude(x => x.ChatImages)
+                    .AsNoTracking().Include(x => x.ChatUsers).AsNoTracking().FirstOrDefaultAsync(x => x.Id == chatId);
                 if (rs != null && rs.Messages.Count > 0)
                 {
                     rs.Messages = rs.Messages.OrderByDescending(x => x.ModifiedOn).ToList();

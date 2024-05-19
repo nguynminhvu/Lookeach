@@ -83,11 +83,8 @@ namespace Lookeach.Infrastructure.Services
 
         public async Task<string> Login(LoginDTO loginDTO)
         {
-            var user = await _userRepository.GetUserByEmailAndPassword(loginDTO.Username, Convert.ToBase64String(_aesService.Encrypt(loginDTO.Password)), "Role");
-            if (user == null!)
-            {
-                user = await _userRepository.GetUserByUsernameAndPassword(loginDTO.Username, Convert.ToBase64String(_aesService.Encrypt(loginDTO.Password)), "Role");
-            }
+            var user = await _userRepository.GetUserByUsernameAndPassword(loginDTO.Username, Convert.ToBase64String(_aesService.Encrypt(loginDTO.Password)), "Role");
+          
             if (user == null)
                 throw new Exception("Wrong username or password");
             var tk = await GenerateToken(user);
