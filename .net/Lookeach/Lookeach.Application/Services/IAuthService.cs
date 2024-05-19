@@ -1,4 +1,5 @@
 ﻿using Lookeach.Application.DTOs;
+using Lookeach.Application.Features.Users.Models;
 using Lookeach.Application.ViewModels.Users;
 using Lookeach.Core.Entities;
 

@@ -17,6 +17,7 @@ namespace Lookeach.Core.Entities
         public bool IsActived { get; set; }
         public Guid RoleId { get; set; }
         public Role Role { get; set; }
+        public ICollection<ChatUser>? ChatUsers { get; set; }
         private User()
         {
             

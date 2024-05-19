@@ -60,6 +60,9 @@ namespace Lookeach.Infrastructure.Data
         public DbSet<PayPalOrder> PayPalOrders { get; set; }
         public DbSet<PayPalAmount> PayPalAmounts { get; set; }
         public DbSet<PayPalItem> PayPalItems { get; set; }
+        public DbSet<ChatUser> ChatUsers { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<ParticipantChat> ParticipantChats { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

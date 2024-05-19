@@ -7,7 +7,7 @@ namespace Lookeach.Core.Entities
         public Guid ChatId { get; set; }
         public Guid UserId { get; set; }
         public string Text { get; set; }
-        public ICollection<Image>? Images { get; set; }
+        public ICollection<ChatImage>? ChatImages { get; set; }
         public User User { get; set; }
         public Chat Chat { get; set; }
     }

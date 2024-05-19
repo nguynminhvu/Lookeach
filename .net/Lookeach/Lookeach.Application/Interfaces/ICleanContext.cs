@@ -36,7 +36,9 @@ namespace Lookeach.Application.Interfaces
         DbSet<PayPalOrder> PayPalOrders { get; set; }
         DbSet<PayPalAmount> PayPalAmounts { get; set; }
         DbSet<PayPalItem> PayPalItems { get; set; }
-
+        DbSet<ChatUser> ChatUsers { get; set; }
+        DbSet<ChatMessage> ChatMessages { get; set; }
+        DbSet<ParticipantChat> ParticipantChats { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

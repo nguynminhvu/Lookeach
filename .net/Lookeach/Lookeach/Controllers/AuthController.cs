@@ -1,5 +1,7 @@
 ﻿using Lookeach.Application.Commands.Auths;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.Features.Users.Commands;
+using Lookeach.Application.Features.Users.Models;
 using Lookeach.Application.ViewModels.Users;
 using Lookeach.ViewModels;
 using MediatR;
@@ -70,7 +72,7 @@ namespace Lookeach.Controllers
             ResponseBase<UserViewModel> responseViewModel = new ResponseBase<UserViewModel>();
             if (ModelState.IsValid)
             {
-                var rs = await _mediator.Send(new CreateUserCommand(userCreateModel, userCreateModel.RoleId));
+                var rs = await _mediator.Send(new CreateUserCommand(userCreateModel));
                 if (rs != null)
                 {
                     responseViewModel.Error = null!;
