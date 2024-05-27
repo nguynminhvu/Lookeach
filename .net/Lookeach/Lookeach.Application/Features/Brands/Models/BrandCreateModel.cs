@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Lookeach.Application.ViewModels.Brands
+namespace Lookeach.Application.Features.Brands.Models
 {
     public class BrandCreateModel
     {

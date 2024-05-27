@@ -1,5 +1,6 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.Features.Brands.Models;
 using Lookeach.Application.Services;
 using Lookeach.Application.ViewModels.Brands;
 using Lookeach.Core.Entities;
@@ -19,7 +20,7 @@ namespace Lookeach.Infrastructure.Services
         private readonly IBrandRepository _brandRepository;
         private readonly IBrandImageRepository _brandImageRepository;
         private readonly IHttpContextAccessor _httpAccessor;
-        private readonly FirebaseDTO _fireBaseDTO;
+        private readonly FirebaseDTO _fireBaseDTO = new FirebaseDTO();
         private readonly IImageRepository _imageRepository;
         private readonly IConfiguration _configuration;
         private const string BRAND = "Brand";
@@ -34,55 +35,7 @@ namespace Lookeach.Infrastructure.Services
             _imageRepository = _uow.ImageRepository;
         }
 
-        public async Task<BrandViewModel> AddBrand(BrandCreateModel brandCreateModel)
-        {
-            if (brandCreateModel.Images != null)
-            {
-                string[] permittedExtensions = { ".png", ".jpg", ".jpeg" };
-                await brandCreateModel.Images.ValidImage(permittedExtensions);
-            }
-            var id = Guid.NewGuid();
-            var brand = Brand.Create(id, brandCreateModel.Name);
-            await _brandRepository.AddAsync(brand);
-
-            var token = (_httpAccessor.HttpContext.Request.Headers["Authorization"].First() + "").Split(" ").Last();
-
-            if (string.IsNullOrEmpty(token)) throw new UnauthorizedAccessException("Your action not support, not found token");
-
-            var claim = await GetClaimDTOByAccessToken(token);
-
-            if (claim == null!) throw new UnauthorizedAccessException("Your action not support, not found token");
-
-            List<string> subLink = new List<string>();
-            try
-            {
-                if (brandCreateModel.Images != null && brandCreateModel.Images.Count > 0)
-                {
-                    foreach (var item in brandCreateModel.Images)
-                    {
-                        var url = await item.UploadToFirebase(BRAND, _fireBaseDTO);
-                        if (url == null!) throw new Exception("Can't update Image");
-                        subLink.Add(url);
-                        var image = Image.Create(url!, claim.Id, claim.Id);
-                        var brandImage = BrandImage.Create(brand.Id, image.Id);
-
-                        await _imageRepository.AddAsync(image);
-                        await _brandImageRepository.AddAsync(brandImage);
-                    };
-                }
-                await _uow.SaveChangesAsync();
-            }
-            catch
-            {
-                foreach (var item in subLink)
-                {
-                    await item.DeleteImage(BRAND, _fireBaseDTO);
-                }
-            }
-
-            return await GetBrand(brand.Id);
-        }
-
+      
         public async Task<BrandViewModel> GetBrand(Guid id)
           => AutoMapperConfig.Mapper.Map<BrandViewModel>(await _brandRepository.GetBrandByIdIncludeImage(id));
 

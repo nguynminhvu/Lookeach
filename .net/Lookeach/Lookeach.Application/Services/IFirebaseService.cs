@@ -1,13 +1,12 @@
-﻿using Lookeach.Application.DTOs;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Lookeach.Application.Services
 {
     public interface IFirebaseService
     {
         Task<string?> UploadToFirebase(IFormFile file, string label);
-
         Task DeleteImage(string name, string label);
+
 
     }
 }

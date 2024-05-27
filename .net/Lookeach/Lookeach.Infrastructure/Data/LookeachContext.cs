@@ -21,7 +21,7 @@ namespace Lookeach.Infrastructure.Data
             _identityUser = identityUser;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=Lookeach;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=lookeach-db-summer24.database.windows.net;Initial Catalog=Lookeach;Persist Security Info=True;User ID=admin-lookeach;Password=Summer2024!;Encrypt=False;Trust Server Certificate=True");
 
 
         private string GetConnectionString()
