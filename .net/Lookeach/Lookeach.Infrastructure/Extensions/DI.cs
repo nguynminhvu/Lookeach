@@ -44,6 +44,7 @@ namespace Lookeach.Infrastructure.Extensions
             services.AddScoped<IValidateService, ValidateService>();
             services.AddScoped<IFirebaseService, FirebaseService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IChatSignalRService, ChatSignalRService>();
             try
             {
                 var redisDto = new RedisDTO();
