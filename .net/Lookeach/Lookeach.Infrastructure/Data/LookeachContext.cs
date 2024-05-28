@@ -63,6 +63,7 @@ namespace Lookeach.Infrastructure.Data
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<ParticipantChat> ParticipantChats { get; set; }
+        public DbSet<SuperAdmin> SuperAdmins { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

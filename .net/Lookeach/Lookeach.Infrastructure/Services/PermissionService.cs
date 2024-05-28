@@ -71,7 +71,11 @@ namespace Lookeach.Infrastructure.Services
             var json = JsonConvert.SerializeObject(AutoMapperConfig.Mapper.Map<List<PermissionDTO>>(permission));
             await _cache.SetStringAsync(_redisConstantDTO.PermissionResource, json);
         }
-
+        public async Task InvalidPermissionCache()
+        {
+            await _cache.RemoveAsync(_redisConstantDTO.PermissionResource);
+        }
+      
         public Task<bool> ValidPermission(PermissionDTO permissionDTO, string resourceAccess)
         {
             throw new NotImplementedException();

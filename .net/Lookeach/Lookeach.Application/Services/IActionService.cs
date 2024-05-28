@@ -7,5 +7,6 @@ namespace Lookeach.Application.Services
         Task<List<ActionDTO>> GetActionDTOsCache();
         Task<ClaimDTO> GetClaims(string? token = null!);
         Task SaveActionsCache();
+        Task InvalidActionCache();
     }
 }
