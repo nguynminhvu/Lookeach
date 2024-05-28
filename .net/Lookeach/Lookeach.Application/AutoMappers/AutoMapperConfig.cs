@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.Features.Auths.Models.Reads;
 using Lookeach.Application.Features.Chats.Models;
 using Lookeach.Application.ViewModels.Brands;
 using Lookeach.Application.ViewModels.Categories;
@@ -9,7 +10,6 @@ using Lookeach.Application.ViewModels.Images;
 using Lookeach.Application.ViewModels.Orders;
 using Lookeach.Application.ViewModels.PaymentMethods;
 using Lookeach.Application.ViewModels.Products;
-using Lookeach.Application.ViewModels.Roles;
 using Lookeach.Application.ViewModels.Sizes;
 using Lookeach.Application.ViewModels.Users;
 using Lookeach.Application.ViewModels.Vouchers;
@@ -60,6 +60,9 @@ namespace Lookeach.Application.AutoMappers
             CreateMap<ChatUser, ChatUserViewModel>().ReverseMap();
             CreateMap<ChatMessage,ChatMessageViewModel>().ReverseMap();
             CreateMap<User, UserChatViewModel>().ReverseMap();
+            CreateMap<Core.Entities.Action, ActionViewModel>().ReverseMap();
+            CreateMap<Resource, ResourceViewModel>().ReverseMap();
+            CreateMap<Permission, PermissionViewModel>().ReverseMap();
         }
     }
 }
