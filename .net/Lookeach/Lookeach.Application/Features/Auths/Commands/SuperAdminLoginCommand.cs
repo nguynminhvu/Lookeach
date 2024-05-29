@@ -24,12 +24,9 @@ namespace Lookeach.Application.Features.Auths.Commands
 
         public async Task<string> Handle(SuperAdminLoginCommand request, CancellationToken cancellationToken)
         {
-            Console.WriteLine(_validationService.HashPassword("string"));
-            return "";
-            //var sAdmin = await _context.SuperAdmins.FirstOrDefaultAsync(x => x.Username == request.LoginDTO.Username && x.Password == _validationService.HashPassword(request.LoginDTO.Password));
-            //if (sAdmin == null) throw new UnauthorizedAccessException("Wrong username or password");
-
-            //return await _tokenService.GenerateToken(sAdmin);
+            var sAdmin = await _context.SuperAdmins.FirstOrDefaultAsync(x => x.Username == request.LoginDTO.Username && x.Password == _validationService.HashPassword(request.LoginDTO.Password));
+            if (sAdmin == null) throw new UnauthorizedAccessException("Wrong username or password");
+            return await _tokenService.GenerateToken(sAdmin);
         }
       
     }

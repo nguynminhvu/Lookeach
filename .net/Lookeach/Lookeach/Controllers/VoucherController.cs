@@ -72,7 +72,6 @@ namespace Lookeach.Controllers
         /// <param name="voucherCreateModel"></param>
         /// <returns></returns>
         [LookeachAuthorize(
-        new RoleName[] { RoleName.Admin, RoleName.Merchant },
         new string[] { ActionConstant.WRITE }
         )]
         [HttpPost("voucher/create")]
@@ -95,7 +94,6 @@ namespace Lookeach.Controllers
         /// <returns></returns>
         
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [HttpPut("voucher/update")]
@@ -112,7 +110,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-            new RoleName[] { RoleName.Admin },
             new string[] { ActionConstant.READ }
             )]
         [HttpGet("test-admin")]
@@ -122,7 +119,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-            new RoleName[] { RoleName.Customer },
             new string[] { ActionConstant.WRITE }
             )]
         [HttpGet("test-customer")]
@@ -133,7 +129,6 @@ namespace Lookeach.Controllers
 
 
         [LookeachAuthorize(
-            new RoleName[] { RoleName.Admin, RoleName.Customer },
             new string[] { ActionConstant.READ }
             )]
         [HttpGet("test-admin-customer")]

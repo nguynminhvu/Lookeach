@@ -17,27 +17,44 @@ namespace Lookeach.Application.Features.Auths.Commands
 
         public UpdatePermissionIntoRoleCommandHandler(ICleanContext cleanContext, IPermissionService permissionService)
         {
-            _permissionService= permissionService;
+            _permissionService = permissionService;
             _context = cleanContext;
         }
 
         public async Task<bool> Handle(UpdatePermissionIntoRoleCommand request, CancellationToken cancellationToken)
         {
-            if (request.AddPermissionModel.ActionIds.Any() is false) throw new ArgumentNullException("Action is required");
+            if (request.AddPermissionModel.ResourceRecords.Any() is false) throw new ArgumentNullException("Action is required");
 
-            var actionSystem = await _context.Actions.Where(x => request.AddPermissionModel.ActionIds.Contains(x.Id)).ToListAsync();
+            Dictionary<Guid, List<Guid>> actionSetIds = new Dictionary<Guid, List<Guid>>();
+            foreach (var item in request.AddPermissionModel.ResourceRecords)
+            {
+                List<Guid> actionTemps = new List<Guid>();
+                foreach (var item1 in item.ActionIds)
+                {
+                    actionTemps.Add(item1);
+                }
+                actionSetIds.Add(item.ResourceId, actionTemps);
+            }
 
-            actionSystem = actionSystem.OrderBy(x => x.Index).ToList();
+            var actionSystem = await _context.Actions.ToListAsync();
 
-            var permissions = await _context.Permissions.Where(x => x.RoleId == request.AddPermissionModel.RoleId && x.ResourceId == request.AddPermissionModel.ResourceId).FirstOrDefaultAsync();
+            var permissions = await _context.Permissions.Where(x => x.RoleId == request.AddPermissionModel.RoleId)
+                .ToListAsync();
 
-            if (permissions == null) throw new Exception("No permission");
+            if (permissions.Any() is false) throw new Exception("No permission");
 
-            permissions.PermissionValue = 0;
+            foreach (var item in permissions)
+            {
+                item.PermissionValue = 0;
+                var listAction = actionSetIds[item.ResourceId];
+                if (listAction.Any())
+                {
+                    var actionNow = actionSystem.Where(x => listAction.Contains(x.Id)).OrderBy(x=>x.Index).ToList();
+                    item.PermissionValue = actionNow.Sum(x => x.Value);
+                }
+            }
 
-            permissions.PermissionValue = actionSystem.Sum(x => x.Value);
-
-            _context.Permissions.Update(permissions);
+            _context.Permissions.UpdateRange(permissions);
 
             var rs = await _context.SaveChangesAsync(new CancellationToken());
             await _permissionService.InvalidPermissionCache();

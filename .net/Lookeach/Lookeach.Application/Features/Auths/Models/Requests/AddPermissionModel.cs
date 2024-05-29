@@ -3,7 +3,6 @@
     public class AddPermissionModel
     {
         public Guid RoleId { get; set; }
-        public Guid ResourceId { get; set; }
-        public List<Guid> ActionIds { get; set; } = new List<Guid>();
+        public List<ResourceRecord> ResourceRecords { get; set; }
     }
 }

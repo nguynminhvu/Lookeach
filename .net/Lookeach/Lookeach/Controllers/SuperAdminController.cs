@@ -3,9 +3,6 @@ using Lookeach.Application.Features.Auths.Commands;
 using Lookeach.Application.Features.Auths.Models.Reads;
 using Lookeach.Application.Features.Auths.Models.Requests;
 using Lookeach.Application.Features.Auths.Queries;
-using Lookeach.AuthOptions;
-using Lookeach.Constants;
-using Lookeach.Core.Enums;
 using Lookeach.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -115,6 +112,18 @@ namespace Lookeach.Controllers
                 Error = null!,
                 IsSuccess = true,
                 Value = (await _mediator.Send(new CreateRoleCommand(CreateRoleModel))) ? "true" : "false"
+            });
+        }
+
+        [HttpPost("create/permission")]
+        public async Task<IActionResult> CreatePermission([FromBody] AddPermissionModel AddPermissionModel)
+        {
+            return Ok(new ResponseBase<string>
+            {
+                IsFailure = false,
+                Error = null!,
+                IsSuccess = true,
+                Value = (await _mediator.Send(new AddPermissionIntoRoleCommand(AddPermissionModel))) ? "true" : "false"
             });
         }
 

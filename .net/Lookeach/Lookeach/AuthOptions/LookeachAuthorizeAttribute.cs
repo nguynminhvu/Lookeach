@@ -5,18 +5,19 @@ namespace Lookeach.AuthOptions
 {
     public class LookeachAuthorizeAttribute : AuthorizeAttribute
     {
-        public const string RolesGroup = "Roles";
+      //  public const string RolesGroup = "Roles";
         public const string ActionsGroup = "Actions";
 
-        public RoleName[] RoleNames { get; set; }
+   //     public RoleName[] RoleNames { get; set; }
         public string[] Actions { get; set; }
 
-        public LookeachAuthorizeAttribute(RoleName[] roleNames, string[] actions)
+        // no need RoleName[] roleNames right now
+        public LookeachAuthorizeAttribute( string[] actions)
         {
-            RoleNames = roleNames;
+       //     RoleNames = roleNames;
             Actions = actions;
 
-            Policy += $"{RolesGroup}${string.Join("|", RoleNames)};";
+         //   Policy += $"{RolesGroup}${string.Join("|", RoleNames)};";
             Policy += $"{ActionsGroup}${string.Join("|", Actions)};";
         }
     }

@@ -47,7 +47,7 @@ namespace Lookeach.AuthOptions
                 {
                     IAuthorizationRequirement requirement = policySplit[0] switch
                     {
-                        LookeachAuthorizeAttribute.RolesGroup => new RoleRequirement(policySplit[1]),
+                       // LookeachAuthorizeAttribute.RolesGroup => new RoleRequirement(policySplit[1]),
                         LookeachAuthorizeAttribute.ActionsGroup => new ActionRequirement(policySplit[1]),
                         _ => null!
                     };

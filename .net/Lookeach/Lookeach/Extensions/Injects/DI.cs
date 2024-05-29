@@ -10,7 +10,7 @@ namespace Lookeach.Extensions.Injects
         {
             services.AddTransient<IAuthorizationPolicyProvider, LookeachPolicy>();
             services.AddTransient<IAuthorizationHandler, ActionRequirementHandler>();
-            services.AddTransient<IAuthorizationHandler, RoleRequirementHandler>();
+          //  services.AddTransient<IAuthorizationHandler, RoleRequirementHandler>();
         }
 
         public static void UseABAC(this IApplicationBuilder application)
