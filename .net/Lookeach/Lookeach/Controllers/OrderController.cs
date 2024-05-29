@@ -22,7 +22,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant, RoleName.Customer },
           new string[] { ActionConstant.READ }
           )]
         [HttpGet("order/{id}")]
@@ -39,7 +38,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant, RoleName.Customer },
           new string[] { ActionConstant.READ }
           )]
         [HttpGet("orders/{userId}/userId")]
@@ -56,7 +54,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant, RoleName.Customer },
           new string[] { ActionConstant.READ }
           )]
         [HttpGet("orders")]
@@ -73,7 +70,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Customer },
           new string[] { ActionConstant.WRITE }
           )]
         [HttpPost("order/create")]
@@ -90,7 +86,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [HttpPut("order/update")]

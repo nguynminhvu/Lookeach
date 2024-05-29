@@ -22,7 +22,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant,RoleName.Customer },
           new string[] { ActionConstant.READ }
           )]
         [HttpGet("paymentMethod/{id}")]
@@ -39,7 +38,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Customer,RoleName.Merchant },
           new string[] { ActionConstant.READ }
           )]
         [HttpGet("paymentMethods")]
@@ -56,7 +54,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant },
           new string[] { ActionConstant.WRITE }
           )]
         [HttpPost("paymentMethod")]
@@ -73,7 +70,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [HttpPut("paymentMethod")]

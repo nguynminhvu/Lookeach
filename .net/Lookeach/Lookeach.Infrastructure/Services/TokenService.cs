@@ -288,5 +288,25 @@ namespace Lookeach.Infrastructure.Services
             }
             return null!;
         }
+
+        public async Task<string> GenerateToken(SuperAdmin user)
+        {
+            var key = Encoding.UTF8.GetBytes(_jwtDTO.JwtSecret);
+            var tokenDescribe = new SecurityTokenDescriptor
+            {
+                Subject = new System.Security.Claims.ClaimsIdentity(new[] {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id + "")
+                }),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
+                Audience = _jwtDTO.Audience,
+                Issuer = _jwtDTO.Issuer,
+                Expires = DateTime.Now.AddMinutes(_jwtDTO.ExpireMinute),
+            };
+
+            var tokenHandle = new JwtSecurityTokenHandler();
+            var token = tokenHandle.CreateToken(tokenDescribe);
+            await Task.CompletedTask;
+            return tokenHandle.WriteToken(token);
+        }
     }
 }

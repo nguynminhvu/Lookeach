@@ -1,5 +1,5 @@
 ﻿using Lookeach.Application.DTOs;
-using Lookeach.Application.ViewModels.Roles;
+using Lookeach.Application.Features.Auths.Models.Reads;
 
 namespace Lookeach.Application.Services
 {

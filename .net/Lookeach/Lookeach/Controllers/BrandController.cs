@@ -67,7 +67,6 @@ namespace Lookeach.Controllers
         /// <param name="brandCreateModel"></param>
         /// <returns></returns>
         [LookeachAuthorize(
-            new RoleName[] { RoleName.Admin },
             new string[] { ActionConstant.WRITE }
             )]
         [HttpPost("brand/create")]
@@ -100,7 +99,6 @@ namespace Lookeach.Controllers
         /// <param name="brandUpdateModel"></param>
         /// <returns></returns>
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [Authorize(Roles = "Merchant")]

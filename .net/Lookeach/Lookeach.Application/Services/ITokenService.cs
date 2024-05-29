@@ -6,6 +6,7 @@ namespace Lookeach.Application.Services
     public interface ITokenService
     {
         Task<string> GenerateToken(User user);
+        Task<string> GenerateToken(SuperAdmin user);
         string GenerateRefreshToken();
         Task<bool> CheckRefreshTokenExpire(string token);
         Task SaveAccessToken(string token, Guid userId);

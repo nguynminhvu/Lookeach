@@ -53,7 +53,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin },
           new string[] { ActionConstant.WRITE }
           )]
         [HttpPost("size/create")]
@@ -84,7 +83,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [HttpPut("size/update")]

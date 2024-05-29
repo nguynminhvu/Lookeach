@@ -26,7 +26,6 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <returns>CartViewModel</returns>
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Customer },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [HttpPatch]
@@ -58,7 +57,6 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <returns>CartViewModel</returns>
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Customer },
           new string[] { ActionConstant.READ }
           )]
         [HttpGet]

@@ -50,7 +50,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin },
           new string[] { ActionConstant.WRITE }
           )]
         [HttpPost("color/create")]
@@ -68,7 +67,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [HttpPut("color/update")]

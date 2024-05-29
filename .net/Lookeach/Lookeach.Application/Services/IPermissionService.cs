@@ -8,5 +8,6 @@ namespace Lookeach.Application.Services
         Task<List<PermissionDTO>> GetPermissionsCache();
         Task SavePermissionCache();
         Task<bool> ValidPermission(PermissionDTO permissionDTO, string resourceAccess);
+        Task InvalidPermissionCache();
     }
 }

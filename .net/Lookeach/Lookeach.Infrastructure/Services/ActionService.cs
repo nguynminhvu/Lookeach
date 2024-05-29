@@ -57,7 +57,10 @@ namespace Lookeach.Infrastructure.Services
             }
             return await GetClaimDTOByAccessToken();
         }
-
+        public async Task InvalidActionCache()
+        {
+            await _cache.RemoveAsync(_redisConstantDTO.ActionsResource);
+        }
         public async Task SaveActionsCache()
         {
             var actions = await _actionRepository.GetAll().ToListAsync();

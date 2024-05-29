@@ -39,6 +39,8 @@ namespace Lookeach.Application.Interfaces
         DbSet<ChatUser> ChatUsers { get; set; }
         DbSet<ChatMessage> ChatMessages { get; set; }
         DbSet<ParticipantChat> ParticipantChats { get; set; }
+        DbSet<SuperAdmin> SuperAdmins { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

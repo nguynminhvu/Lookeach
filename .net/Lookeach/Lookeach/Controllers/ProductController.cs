@@ -114,7 +114,6 @@ namespace Lookeach.Controllers
 
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant },
           new string[] { ActionConstant.WRITE }
           )]
         [HttpPost("product/create")]
@@ -142,7 +141,6 @@ namespace Lookeach.Controllers
         }
 
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant },
           new string[] { ActionConstant.OVERRIDE }
           )]
         [HttpPut("product/update")]
@@ -169,9 +167,7 @@ namespace Lookeach.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, responseViewModel);
         }
 
-
         [LookeachAuthorize(
-          new RoleName[] { RoleName.Admin, RoleName.Merchant },
           new string[] { ActionConstant.DELETE }
           )]
         [HttpDelete("{id}")]
