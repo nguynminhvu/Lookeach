@@ -20,7 +20,7 @@ namespace Lookeach.Core.Entities
         public ICollection<ChatUser>? ChatUsers { get; set; }
         private User()
         {
-            
+
         }
         protected User(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId, Guid createBy, Guid modifiedBy, DateTime createOn, DateTime modifiedOn)
         {
