@@ -20,4 +20,9 @@
     <ProjectReference Include="..\Lookeach.Core\Lookeach.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Merchants\Models\" />
+    <Folder Include="Features\Vouchers\Models\" />
+  </ItemGroup>
+
 </Project>

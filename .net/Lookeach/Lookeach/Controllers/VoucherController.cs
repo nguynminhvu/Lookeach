@@ -1,4 +1,5 @@
 ﻿using Lookeach.Application.Commands.Vouchers;
+using Lookeach.Application.Features.Vouchers.Commands;
 using Lookeach.Application.Queries.Vouchers;
 using Lookeach.Application.ViewModels.Vouchers;
 using Lookeach.AuthOptions;
@@ -74,15 +75,35 @@ namespace Lookeach.Controllers
         [LookeachAuthorize(
         new string[] { ActionConstant.WRITE }
         )]
-        [HttpPost("voucher/create")]
-        public async Task<IActionResult> CreateVoucher([FromBody] VoucherCreateModel voucherCreateModel)
+        [HttpPost("voucher/create-system")]
+        public async Task<IActionResult> SystemCreateVoucher([FromBody] VoucherCreateModel voucherCreateModel)
         {
             ResponseBase<VoucherViewModel> responseBase = new ResponseBase<VoucherViewModel>
             {
                 Error = null!,
                 IsFailure = false,
                 IsSuccess = true,
-                Value = await _mediator.Send(new CreateVoucherCommand(voucherCreateModel))
+                Value = await _mediator.Send(new SystemCreateVoucherCommand(voucherCreateModel))
+            };
+            return StatusCode(StatusCodes.Status201Created, responseBase);
+        }
+        /// <summary>
+        /// Date format yyyy-MM-dd HH:mm
+        /// </summary>
+        /// <param name="voucherCreateModel"></param>
+        /// <returns></returns>
+        [LookeachAuthorize(
+        new string[] { ActionConstant.WRITE }
+        )]
+        [HttpPost("voucher/create-merchant")]
+        public async Task<IActionResult> MerchantCreateVoucher([FromBody] VoucherCreateModel voucherCreateModel)
+        {
+            ResponseBase<VoucherViewModel> responseBase = new ResponseBase<VoucherViewModel>
+            {
+                Error = null!,
+                IsFailure = false,
+                IsSuccess = true,
+                Value = await _mediator.Send(new MerchantCreateVoucherCommand(voucherCreateModel))
             };
             return StatusCode(StatusCodes.Status201Created, responseBase);
         }
@@ -92,7 +113,7 @@ namespace Lookeach.Controllers
         /// </summary>
         /// <param name="voucherUpdateModel"></param>
         /// <returns></returns>
-        
+
         [LookeachAuthorize(
           new string[] { ActionConstant.OVERRIDE }
           )]

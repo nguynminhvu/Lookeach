@@ -15,14 +15,13 @@ namespace Lookeach.Core.Entities
         public bool EmailConfirm { get; set; }
         public string Password { get; set; }
         public bool IsActived { get; set; }
-        public Guid RoleId { get; set; }
-        public Role Role { get; set; }
+        public ICollection<Role>? Roles { get; set; }
         public ICollection<ChatUser>? ChatUsers { get; set; }
         private User()
         {
 
         }
-        protected User(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId, Guid createBy, Guid modifiedBy, DateTime createOn, DateTime modifiedOn)
+        protected User(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid createBy, Guid modifiedBy, DateTime createOn, DateTime modifiedOn)
         {
             Username = username;
             Id = id;
@@ -39,14 +38,13 @@ namespace Lookeach.Core.Entities
             }
             Email = email;
             Password = password;
-            RoleId = roleId;
             ModifiedBy = modifiedBy;
             ModifiedOn = modifiedOn;
             CreatedBy = createBy;
             CreatedOn = createOn;
         }
 
-        public static User CreateUser(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid roleId, Guid createdBy, Guid modifiedBy)
-            => new User(id, username, name, dob, address, gender, email, phone, password, roleId, createdBy, modifiedBy, DateTime.Now, DateTime.Now);
+        public static User CreateUser(Guid id, string username, string name, DateTime dob, string? address, string gender, string email, string? phone, string password, Guid createdBy, Guid modifiedBy)
+            => new User(id, username, name, dob, address, gender, email, phone, password, createdBy, modifiedBy, DateTime.Now, DateTime.Now);
     }
 }

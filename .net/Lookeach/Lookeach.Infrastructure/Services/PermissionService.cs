@@ -35,7 +35,7 @@ namespace Lookeach.Infrastructure.Services
             _permissionRepository = _uow.PermissionRepository;
         }
 
-        public async Task<List<PermissionDTO>> GetPermissionsCache(Guid roleId)
+        public async Task<List<PermissionDTO>> GetPermissionsCache(List<Guid> roleIds)
         {
             if (_connectionMutiple.GetServer(_redisDTO.Address, _redisDTO.Port).IsConnected)
             {
@@ -45,11 +45,11 @@ namespace Lookeach.Infrastructure.Services
                     var permissions = JsonConvert.DeserializeObject<List<PermissionDTO>>(permissionString);
                     if (permissions != null!)
                     {
-                        return permissions.Where(x => x.RoleId == roleId).ToList();
+                        return permissions.Where(x => roleIds.Contains(x.RoleId)).ToList();
                     }
                 }
             }
-            return AutoMapperConfig.Mapper.Map<List<PermissionDTO>>(await _permissionRepository.GetMany(x => x.RoleId == roleId, "Role,Resource").ToListAsync());
+            return AutoMapperConfig.Mapper.Map<List<PermissionDTO>>(await _permissionRepository.GetMany(x => roleIds.Contains(x.RoleId), "Role,Resource").ToListAsync());
         }
 
         public async Task<List<PermissionDTO>> GetPermissionsCache()

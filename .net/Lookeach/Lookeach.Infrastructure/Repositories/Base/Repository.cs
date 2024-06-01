@@ -15,6 +15,7 @@ namespace Lookeach.Infrastructure.Repositories.Base
             _context = appDbContext;
             _entity = _context.Set<T>();
         }
+
         public async Task AddAsync(T item)
         {
             await _entity.AddAsync(item);

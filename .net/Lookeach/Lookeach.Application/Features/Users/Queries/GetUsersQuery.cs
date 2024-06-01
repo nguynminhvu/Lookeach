@@ -40,7 +40,7 @@ namespace Lookeach.Application.Features.Users.Queries
                 int size = request.PageSize.Value > 0 ? request.PageSize.Value : 10;
                 query = query.Skip(index * size).Take(size);
             }
-            query = query.Include(x => x.Role);
+            query = query.Include(x => x.Roles);
 
             return AutoMapperConfig.Mapper.Map<List<UserViewModel>>(await query.ToListAsync());
         }

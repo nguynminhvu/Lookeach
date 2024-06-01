@@ -20,7 +20,7 @@ namespace Lookeach.Core.Entities
         {
 
         }
-        private Voucher(Guid id, string code, decimal priceCondition, decimal maxPriceOff, DateTime startTime, DateTime endTime, int slotPerson, int slotAvailable, int currentSlot, bool isActive, bool isSystem,Guid createdBy, DateTime createdOn, Guid modifiedBy, DateTime modifiedOn)
+        private Voucher(Guid id, string code, decimal priceCondition, decimal maxPriceOff, DateTime startTime, DateTime endTime, int slotPerson, int slotAvailable, int currentSlot, bool isActive, bool isSystem)
         {
             Id = id;
             Code = code;
@@ -33,15 +33,11 @@ namespace Lookeach.Core.Entities
             CurrentSlot = currentSlot;
             IsActived = isActive;
             IsSystem = isSystem;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            CreatedOn = createdOn;
-            ModifiedOn = modifiedOn;
         }
 
-        public static Voucher Create(string code, decimal priceCondition, decimal maxPriceOff, DateTime startTime, DateTime endTime, int slotPerson, int slotAvailable, bool isActive,bool isSystem, Guid createdBy)
+        public static Voucher Create(string code, decimal priceCondition, decimal maxPriceOff, DateTime startTime, DateTime endTime, int slotPerson, int slotAvailable, bool isActive,bool isSystem)
         {
-            return new Voucher(Guid.NewGuid(), code, priceCondition, maxPriceOff, startTime, endTime, slotPerson, slotAvailable, 0, isActive, isSystem, createdBy, DateTime.Now, createdBy, DateTime.Now);
+            return new Voucher(Guid.NewGuid(), code, priceCondition, maxPriceOff, startTime, endTime, slotPerson, slotAvailable, 0, isActive, isSystem);
         }
 
         public void UpdateVoucher(decimal priceCondition, decimal maxPriceOff, DateTime startTime, DateTime endTime, int slotPerson, int slotAvailable, Guid modified)

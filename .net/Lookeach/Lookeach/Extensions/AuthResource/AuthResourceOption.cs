@@ -31,6 +31,7 @@ namespace Lookeach.Extensions.AuthResource
             {
                 await actionService.SaveActionsCache();
             }
+
             await _requestDelegate(context);
         }
     }

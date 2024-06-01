@@ -14,6 +14,6 @@ namespace Lookeach.Application.ViewModels.Users
         public string Phone { get; set; }
         public string Thumbnail { get; set; }
         public bool IsActived { get; set; }
-        public RoleViewModel Role { get; set; }
+        public List<RoleViewModel> Roles { get; set; }
     }
 }

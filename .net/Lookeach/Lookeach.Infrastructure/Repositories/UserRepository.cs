@@ -17,7 +17,7 @@ namespace Lookeach.Infrastructure.Repositories
 
 
         public async Task<User> GetUserByEmail(string email)
-            => (await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Email == email && x.IsActived))!;
+            => (await _context.Users.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Email == email && x.IsActived))!;
 
         public async Task<User> GetUserByEmailAndPassword(string email, string password, string? include = null!)
         {
@@ -34,10 +34,10 @@ namespace Lookeach.Infrastructure.Repositories
         }
 
         public async Task<User> GetUserById(Guid id)
-             => (await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == id && x.IsActived))!;
+             => (await _context.Users.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id == id && x.IsActived))!;
 
         public async Task<User> GetUserByUsername(string username)
-            => (await _context.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Username == username && x.IsActived))!;
+            => (await _context.Users.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Username == username && x.IsActived))!;
 
         public async Task<User> GetUserByUsernameAndPassword(string username, string password, string? include = null!)
         {
