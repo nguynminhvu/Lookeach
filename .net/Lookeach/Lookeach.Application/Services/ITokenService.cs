@@ -5,6 +5,9 @@ namespace Lookeach.Application.Services
 {
     public interface ITokenService
     {
+        Task<List<Role>> GetRoleByUserIdCache(Guid id);
+        Task InvalidUserRoleCache(Guid id);
+        Task SaveUserRoleCache(Guid id);
         Task<string> GenerateToken(User user);
         Task<string> GenerateToken(SuperAdmin user);
         string GenerateRefreshToken();

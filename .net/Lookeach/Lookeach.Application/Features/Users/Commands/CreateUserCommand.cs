@@ -5,6 +5,7 @@ using Lookeach.Application.Interfaces;
 using Lookeach.Application.Services;
 using Lookeach.Application.ViewModels.Users;
 using Lookeach.Core.Entities;
+using Lookeach.Core.Enums;
 using Lookeach.Core.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace Lookeach.Application.Features.Users.Commands
 
         public CreateUserCommandHandler(ICleanContext cleanContext, IEmailService emailService, IAesService aesService)
         {
-            _aesService= aesService;
+            _aesService = aesService;
             _emailService = emailService;
             _context = cleanContext;
         }
@@ -36,10 +37,15 @@ namespace Lookeach.Application.Features.Users.Commands
             var id = Guid.NewGuid();
             var userCreate = User
                 .CreateUser(id, request.UserCreateModel.Username, request.UserCreateModel.Name, request.UserCreateModel.Dob, request.UserCreateModel.Address,
-                request.UserCreateModel.Gender, request.UserCreateModel.Email, request.UserCreateModel.Phone, Convert.ToBase64String(_aesService.Encrypt(request.UserCreateModel.Password)) , request.UserCreateModel.RoleId, id, id);
+                request.UserCreateModel.Gender, request.UserCreateModel.Email, request.UserCreateModel.Phone, Convert.ToBase64String(_aesService.Encrypt(request.UserCreateModel.Password)), id, id);
+            var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == RoleName.Customer.ToString());
+            if (role == null) throw new Exception("No role in system");
+            List<Role> roles = new List<Role>();
+            roles.Add(role);
+            userCreate.Roles = roles;
             await _context.Users.AddAsync(userCreate);
-
-          //  await _emailService.SendEmailConfirm(request.UserCreateModel.Email, "Lookeach confirm email", userCreate.Id);
+            // **Uncomment when run in production
+            // await _emailService.SendEmailConfirm(request.UserCreateModel.Email, "Lookeach confirm email", userCreate.Id);
             await _context.SaveChangesAsync(new CancellationToken());
             return AutoMapperConfig.Mapper.Map<UserViewModel>(userCreate);
         }

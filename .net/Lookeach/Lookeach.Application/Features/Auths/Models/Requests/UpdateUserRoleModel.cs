@@ -3,6 +3,6 @@
     public class UpdateUserRoleModel
     {
         public Guid UserId { get; set; }
-        public Guid RoleId { get; set; }
+        public List<Guid>? RoleIds { get; set; } 
     }
 }

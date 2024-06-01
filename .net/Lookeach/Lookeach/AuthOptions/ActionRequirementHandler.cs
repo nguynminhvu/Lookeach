@@ -33,7 +33,7 @@ namespace Lookeach.AuthOptions
             bool isPassed = false;
             try
             {
-                if (!context.User.Identity!.IsAuthenticated || requirement  == null || string.IsNullOrEmpty(requirement.Actions) || context.HasSucceeded)
+                if (!context.User.Identity!.IsAuthenticated || requirement == null || string.IsNullOrEmpty(requirement.Actions) || context.HasSucceeded)
                 {
                     context.Fail();
                     return;
@@ -42,14 +42,16 @@ namespace Lookeach.AuthOptions
                 {
                     var _actionService = scope.ServiceProvider.GetRequiredService<IActionService>();
                     var _permissionService = scope.ServiceProvider.GetRequiredService<IPermissionService>();
+                    var _tokenService = scope.ServiceProvider.GetRequiredService<ITokenService>();
 
-                    if (_actionService == null! || _permissionService == null!)
+                    if (_actionService == null! || _permissionService == null! || _tokenService==null!)
                     {
                         context.Fail();
                         await ToErrorResult("Service error", 500);
                         return;
                     }
                     var claim = await _actionService.GetClaims();
+
                     if (claim == null!)
                     {
                         context.Fail();
@@ -57,7 +59,16 @@ namespace Lookeach.AuthOptions
                         return;
                     }
 
-                    var permissions = await _permissionService.GetPermissionsCache(claim.RoleId);
+                    var rolesN = await _tokenService.GetRoleByUserIdCache(claim.Id);
+
+                    if (rolesN==null! || rolesN.Count==0)
+                    {
+                        context.Fail();
+                        await ToErrorResult("Forbidden", 403);
+                        return;
+                    }
+
+                    var permissions = await _permissionService.GetPermissionsCache(rolesN.Select(x => x.Id).ToList());
                     if (permissions?.Any() != true)
                     {
                         context.Fail();

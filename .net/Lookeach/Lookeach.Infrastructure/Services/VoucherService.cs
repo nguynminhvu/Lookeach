@@ -1,8 +1,6 @@
 ﻿using Lookeach.Application.AutoMappers;
 using Lookeach.Application.Services;
 using Lookeach.Application.ViewModels.Vouchers;
-using Lookeach.Core.Entities;
-using Lookeach.Core.Enums;
 using Lookeach.Core.Repositories;
 using Lookeach.Core.UnitOfWorks;
 using Microsoft.AspNetCore.Http;
@@ -27,16 +25,6 @@ namespace Lookeach.Infrastructure.Services
             _voucherRepository = _uow.VoucherRepository;
         }
 
-        public async Task<VoucherViewModel> CreateVoucher(VoucherCreateModel voucherCreateModel)
-        {
-            var claim = await GetClaimDTOByAccessToken();
-            if (claim == null!) throw new UnauthorizedAccessException("Login session expired");
-            bool isSystem = claim.Role == RoleName.Admin.ToString();
-            var voucher = Voucher.Create(GenCodeVoucher(10), voucherCreateModel.PriceCondition, voucherCreateModel.MaxPriceOff, voucherCreateModel.StartTime, voucherCreateModel.EndTime, voucherCreateModel.SlotEachPerson, voucherCreateModel.SlotAvailable, true, isSystem, claim.Id);
-            await _voucherRepository.AddAsync(voucher);
-            await _uow.SaveChangesAsync();
-            return await GetVoucherById(voucher.Id);
-        }
 
         public async Task<bool> DeleteVoucher(Guid id)
         {

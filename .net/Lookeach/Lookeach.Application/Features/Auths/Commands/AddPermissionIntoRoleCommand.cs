@@ -10,15 +10,18 @@ namespace Lookeach.Application.Features.Auths.Commands
     public record AddPermissionIntoRoleCommand(AddPermissionModel AddPermissionModel) : IRequest<bool>
     {
     }
+
     public class AddPermissionIntoRoleCommandHandler : IRequestHandler<AddPermissionIntoRoleCommand, bool>
     {
         private readonly IPermissionService _permissionService;
         private readonly ICleanContext _context;
+        private readonly ITokenService _tokenService;
 
-        public AddPermissionIntoRoleCommandHandler(ICleanContext cleanContext, IPermissionService permissionService)
+        public AddPermissionIntoRoleCommandHandler(ICleanContext cleanContext, IPermissionService permissionService, ITokenService tokenService)
         {
             _permissionService = permissionService;
             _context = cleanContext;
+            _tokenService = tokenService;
         }
 
         public async Task<bool> Handle(AddPermissionIntoRoleCommand request, CancellationToken cancellationToken)
@@ -63,6 +66,7 @@ namespace Lookeach.Application.Features.Auths.Commands
             }
             await _context.Permissions.AddRangeAsync(permissionList);
             var rs = await _context.SaveChangesAsync(new CancellationToken());
+
             await _permissionService.InvalidPermissionCache();
             return rs > 0;
         }

@@ -1108,9 +1108,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Thumbnail")
                         .HasColumnType("nvarchar(max)");
 
@@ -1119,8 +1116,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -1377,6 +1372,21 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasIndex("SizesId");
 
                     b.ToTable("ProductSourcingSize");
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("CategoryGenderType", b =>
@@ -1713,17 +1723,6 @@ namespace Lookeach.Infrastructure.Migrations
                     b.Navigation("PaymentMethod");
                 });
 
-            modelBuilder.Entity("Lookeach.Core.Entities.User", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Lookeach.Core.Entities.VoucherSourcing", b =>
                 {
                     b.HasOne("Lookeach.Core.Entities.User", "User")
@@ -1803,6 +1802,21 @@ namespace Lookeach.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Lookeach.Core.Entities.Brand", b =>
                 {
                     b.Navigation("BrandImages");
@@ -1856,8 +1870,6 @@ namespace Lookeach.Infrastructure.Migrations
             modelBuilder.Entity("Lookeach.Core.Entities.Role", b =>
                 {
                     b.Navigation("Permissions");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.User", b =>

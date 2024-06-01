@@ -1,4 +1,5 @@
-﻿using Lookeach.Application.DTOs;
+﻿using Lookeach.Application.AutoMappers;
+using Lookeach.Application.DTOs;
 using Lookeach.Application.Services;
 using Lookeach.Core.Entities;
 using Lookeach.Core.Repositories;
@@ -7,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -27,7 +31,7 @@ namespace Lookeach.Infrastructure.Services
         private JwtDTO _jwtDTO = new();
         private RefreshTokenDTO _refreshTokenDTO = new();
         private RedisDTO _redisDTO = new();
-
+        private RedisConstantDTO _redisContantDTO = new();
         public TokenService()
         {
 
@@ -39,6 +43,7 @@ namespace Lookeach.Infrastructure.Services
             _configuration.GetSection(nameof(JwtDTO)).Bind(_jwtDTO);
             _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
             _configuration.GetSection(nameof(RefreshTokenDTO)).Bind(_refreshTokenDTO);
+            _configuration.GetSection(nameof(RedisConstantDTO)).Bind(_redisContantDTO);
         }
         public TokenService(IConfiguration configuration, IHttpContextAccessor httpContext, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache)
         {
@@ -49,6 +54,7 @@ namespace Lookeach.Infrastructure.Services
             _configuration.GetSection(nameof(JwtDTO)).Bind(_jwtDTO);
             _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
             _configuration.GetSection(nameof(RefreshTokenDTO)).Bind(_refreshTokenDTO);
+            _configuration.GetSection(nameof(RedisConstantDTO)).Bind(_redisContantDTO);
         }
         public TokenService(IUnitOfWork unitOfWork, IConfiguration configuration, IHttpContextAccessor httpContext, IConnectionMultiplexer connectionMultiplexer, IDistributedCache distributedCache)
         {
@@ -60,6 +66,7 @@ namespace Lookeach.Infrastructure.Services
             _configuration.GetSection(nameof(JwtDTO)).Bind(_jwtDTO);
             _configuration.GetSection(nameof(RedisDTO)).Bind(_redisDTO);
             _configuration.GetSection(nameof(RefreshTokenDTO)).Bind(_refreshTokenDTO);
+            _configuration.GetSection(nameof(RedisConstantDTO)).Bind(_redisContantDTO);
             _userRepository = _uow.UserRepository;
             _accessTokenRepository = _uow.AccessTokenRepository;
         }
@@ -78,6 +85,7 @@ namespace Lookeach.Infrastructure.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public async Task<bool> CheckRefreshTokenExpire(string token)
         {
             var rt = await _accessTokenRepository.GetAccessTokenByRefreshToken(token);
@@ -122,13 +130,9 @@ namespace Lookeach.Infrastructure.Services
                 var jwtToken = (JwtSecurityToken)securityToken;
                 var id = jwtToken.Claims.First(x => x.Type == "nameid")!.Value;
                 var email = jwtToken.Claims.First(x => x.Type == "email")!.Value;
-                var role = jwtToken.Claims.First(x => x.Type == "role")!.Value;
-                var roleId = jwtToken.Claims.First(x => x.Type == "roleid")!.Value;
 
                 if (Guid.TryParse(id, out Guid newId) is false ||
-                    string.IsNullOrEmpty(email) ||
-                    string.IsNullOrEmpty(role) ||
-                    Guid.TryParse(roleId, out Guid newRoleId) is false
+                    string.IsNullOrEmpty(email)
                     )
                 {
                     return null!;
@@ -137,9 +141,7 @@ namespace Lookeach.Infrastructure.Services
                 return new ClaimDTO
                 {
                     Id = newId,
-                    Email = email,
-                    Role = role,
-                    RoleId = newRoleId
+                    Email = email
                 };
             }
             catch (Exception ex)
@@ -180,23 +182,17 @@ namespace Lookeach.Infrastructure.Services
                 var jwtToken = (JwtSecurityToken)securityToken;
                 var id = jwtToken.Claims.First(x => x.Type == "nameid")!.Value;
                 var email = jwtToken.Claims.First(x => x.Type == "email")!.Value;
-                var role = jwtToken.Claims.First(x => x.Type == "role")!.Value;
-                var roleId = jwtToken.Claims.First(x => x.Type == "roleid")!.Value;
-
                 if (Guid.TryParse(id, out Guid newId) is false ||
-                    string.IsNullOrEmpty(email) ||
-                    string.IsNullOrEmpty(role) ||
-                    Guid.TryParse(roleId, out Guid newRoleId) is false
+                    string.IsNullOrEmpty(email)
                     )
                 {
                     return null!;
                 }
+
                 return new ClaimDTO
                 {
                     Id = newId,
-                    Email = email,
-                    Role = role,
-                    RoleId = newRoleId
+                    Email = email
                 };
             }
             catch (Exception ex)
@@ -222,16 +218,13 @@ namespace Lookeach.Infrastructure.Services
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.NameIdentifier, user.Id + ""),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role.Name),
-                    new Claim("roleid", user.RoleId + "")
+                    new Claim(ClaimTypes.Email, user.Email)
                 }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
                 Audience = _jwtDTO.Audience,
                 Issuer = _jwtDTO.Issuer,
                 Expires = DateTime.Now.AddMinutes(_jwtDTO.ExpireMinute),
             };
-
             var tokenHandle = new JwtSecurityTokenHandler();
             var token = tokenHandle.CreateToken(tokenDescribe);
             await Task.CompletedTask;
@@ -307,6 +300,52 @@ namespace Lookeach.Infrastructure.Services
             var token = tokenHandle.CreateToken(tokenDescribe);
             await Task.CompletedTask;
             return tokenHandle.WriteToken(token);
+        }
+
+        public async Task SaveUserRoleCache(Guid id)
+        {
+            var user = await _userRepository.GetUserById(id);
+            if (user == null!) throw new Exception("User not found");
+            await _distributedCache.SetStringAsync(_redisContantDTO.UserRoleResource + user.Id, JsonConvert.SerializeObject(user.Roles, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            }));
+        }
+
+        public async Task InvalidUserRoleCache(Guid id)
+        {
+            var user = await _userRepository.GetUserById(id);
+            if (user == null!) throw new Exception("User not found");
+            await _distributedCache.RemoveAsync(_redisContantDTO.UserRoleResource + user.Id);
+        }
+
+        public async Task<List<Core.Entities.Role>> GetRoleByUserIdCache(Guid id)
+        {
+            List<Core.Entities.Role> roles = new List<Core.Entities.Role>();
+            try
+            {
+                if (_connectionMutiple.GetServer(_redisDTO.Address, _redisDTO.Port).IsConnected)
+                {
+                    string userRoles = await _distributedCache.GetStringAsync(_redisContantDTO.UserRoleResource + id) ;
+                    if (userRoles==null!)
+                    {
+                        var userRole = await _uow.UserRepository.FirstOrDefaultAsync(x => x.Id == id, "Roles");
+                        await SaveUserRoleCache(id);
+                        return AutoMapperConfig.Mapper.Map<List<Core.Entities.Role>>(userRole.Roles);
+                    }
+                    return (JsonConvert.DeserializeObject<List<Core.Entities.Role>>(userRoles))!;
+                }
+                var user = await _uow.UserRepository.FirstOrDefaultAsync(x => x.Id == id, "Roles");
+                return AutoMapperConfig.Mapper.Map<List<Core.Entities.Role>>(user.Roles);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

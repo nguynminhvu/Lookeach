@@ -4,7 +4,7 @@ namespace Lookeach.Application.Services
 {
     public interface IPermissionService
     {
-        Task<List<PermissionDTO>> GetPermissionsCache(Guid roleId);
+        Task<List<PermissionDTO>> GetPermissionsCache(List<Guid> roleIds);
         Task<List<PermissionDTO>> GetPermissionsCache();
         Task SavePermissionCache();
         Task<bool> ValidPermission(PermissionDTO permissionDTO, string resourceAccess);

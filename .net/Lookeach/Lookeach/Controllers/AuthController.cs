@@ -1,5 +1,6 @@
 ﻿using Lookeach.Application.Commands.Auths;
 using Lookeach.Application.DTOs;
+using Lookeach.Application.Features.Merchants.Commands;
 using Lookeach.Application.Features.Users.Commands;
 using Lookeach.Application.Features.Users.Models;
 using Lookeach.Application.ViewModels.Users;
@@ -62,12 +63,12 @@ namespace Lookeach.Controllers
         }
 
         /// <summary>
-        /// Create user (user role and merchant role) 
+        /// Create customer
         /// </summary>
         /// <param name="userCreateModel"></param>
         /// <returns></returns>
-        [HttpPost("register")]
-        public async Task<IActionResult> CreateUser([FromBody] UserCreateModel userCreateModel)
+        [HttpPost("register-customer")]
+        public async Task<IActionResult> CreateCustomer([FromBody] UserCreateModel userCreateModel)
         {
             ResponseBase<UserViewModel> responseViewModel = new ResponseBase<UserViewModel>();
             if (ModelState.IsValid)
@@ -97,6 +98,42 @@ namespace Lookeach.Controllers
             return BadRequest(responseViewModel);
         }
 
+
+        /// <summary>
+        /// Create merchant
+        /// </summary>
+        /// <param name="userCreateModel"></param>
+        /// <returns></returns>
+        [HttpPost("register-merchant")]
+        public async Task<IActionResult> CreateMerchant([FromBody] UserCreateModel userCreateModel)
+        {
+            ResponseBase<UserViewModel> responseViewModel = new ResponseBase<UserViewModel>();
+            if (ModelState.IsValid)
+            {
+                var rs = await _mediator.Send(new CreateMerchantCommand(userCreateModel));
+                if (rs != null)
+                {
+                    responseViewModel.Error = null!;
+                    responseViewModel.Value = rs;
+                    return StatusCode(StatusCodes.Status201Created, responseViewModel);
+                }
+                responseViewModel.Error = new ErrorViewModel
+                {
+                    Code = 400,
+                    Message = "Can't create merchant, try again"
+                };
+                responseViewModel.Value = null!;
+                return BadRequest(responseViewModel);
+            }
+            var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+            responseViewModel.Error = new ErrorViewModel
+            {
+                Code = 400,
+                Message = string.Join("; ", errors)
+            };
+            responseViewModel.Value = null!;
+            return BadRequest(responseViewModel);
+        }
 
         /// <summary>
         /// Destroy session login

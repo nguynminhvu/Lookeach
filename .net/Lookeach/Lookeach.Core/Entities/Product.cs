@@ -104,7 +104,7 @@ namespace Lookeach.Core.Entities
 
         public void UpdateInventory(int quantity, Guid modifiedBy)
         {
-            Sold = Sold + (Quantity - quantity);
+         //   Sold = Sold + (Quantity - quantity);
             Quantity = quantity;
             ModifiedOn = DateTime.Now;
             ModifiedBy = modifiedBy;

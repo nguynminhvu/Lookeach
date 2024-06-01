@@ -59,6 +59,7 @@ namespace Lookeach.Core.Entities
 
         public void UpdateStatus(string status, Guid modified)
         {
+          
             Status = status;
             ModifiedBy = modified;
             ModifiedOn = DateTime.Now;
