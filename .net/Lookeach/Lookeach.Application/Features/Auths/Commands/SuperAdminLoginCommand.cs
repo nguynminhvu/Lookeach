@@ -17,7 +17,7 @@ namespace Lookeach.Application.Features.Auths.Commands
 
         public SuperAdminLoginCommandHandler(ICleanContext cleanContext, ITokenService tokenService, IValidateService validateService)
         {
-            _validationService=validateService;
+            _validationService = validateService;
             _tokenService = tokenService;
             _context = cleanContext;
         }
@@ -28,7 +28,5 @@ namespace Lookeach.Application.Features.Auths.Commands
             if (sAdmin == null) throw new UnauthorizedAccessException("Wrong username or password");
             return await _tokenService.GenerateToken(sAdmin);
         }
-      
     }
-
 }

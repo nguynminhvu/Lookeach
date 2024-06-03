@@ -20,7 +20,7 @@ namespace Lookeach.Application.Features.Auths.Queries
         }
         public async Task<List<PermissionViewModel>> Handle(GetAllPermissionQuery request, CancellationToken cancellationToken)
         {
-            var permissions = await _context.Permissions.ToListAsync();
+            var permissions = await _context.Permissions.Include(x=>x.Resource).Include(x=>x.Role).ToListAsync();
             if (permissions.Any() is false) throw new Exception("No permission in system");
             return AutoMapperConfig.Mapper.Map<List<PermissionViewModel>>(permissions);
         }

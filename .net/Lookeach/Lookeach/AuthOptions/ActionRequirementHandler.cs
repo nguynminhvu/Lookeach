@@ -196,7 +196,7 @@ namespace Lookeach.AuthOptions
         {
             char[] chars = str.ToCharArray();
             int length = str.Length;
-            for (int i = 0; i <= length / 2; i++)
+            for (int i = 0; i < length / 2; i++)
             {
                 char temp = chars[i];
                 chars[i] = chars[length - 1 - i];
