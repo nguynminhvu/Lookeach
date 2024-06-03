@@ -103,6 +103,18 @@ namespace Lookeach.Controllers
             });
         }
 
+        [HttpPut("permissions")]
+        public async Task<IActionResult> UpdatePermissionRoleActionValue([FromBody] UpdatePermissionActionValue updatePermissionActionValue)
+        {
+            return Ok(new ResponseBase<string>
+            {
+                IsFailure = false,
+                Error = null!,
+                IsSuccess = true,
+                Value = (await _mediator.Send(new UpdatePermissionIntoRoleActionValueCommand(updatePermissionActionValue))) ? "true" : "false"
+            });
+        }
+
         [HttpPost("create/role")]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleModel CreateRoleModel)
         {

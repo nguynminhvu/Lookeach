@@ -17,6 +17,7 @@ namespace Lookeach.Application.Features.Auths.Queries
         {
             _context = cleanContext;
         }
+
         public async Task<List<ActionViewModel>> Handle(GetAllActionQuery request, CancellationToken cancellationToken)
         {
             var actions = await _context.Actions.ToListAsync();
