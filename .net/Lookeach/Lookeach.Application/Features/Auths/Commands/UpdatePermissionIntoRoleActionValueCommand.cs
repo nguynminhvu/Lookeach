@@ -1,5 +1,6 @@
 ﻿using Lookeach.Application.Features.Auths.Models.Requests;
 using Lookeach.Application.Interfaces;
+using Lookeach.Application.Services;
 using Lookeach.Core.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ namespace Lookeach.Application.Features.Auths.Commands
 
     public class UpdatePermissionIntoRoleActionValueCommandHandler : IRequestHandler<UpdatePermissionIntoRoleActionValueCommand, bool>
     {
+        private readonly IPermissionService _permissionService;
         private readonly ICleanContext _context;
 
-        public UpdatePermissionIntoRoleActionValueCommandHandler(ICleanContext cleanContext)
+        public UpdatePermissionIntoRoleActionValueCommandHandler(ICleanContext cleanContext, IPermissionService permissionService)
         {
+            _permissionService= permissionService;
             _context = cleanContext;
         }
 
@@ -33,7 +36,9 @@ namespace Lookeach.Application.Features.Auths.Commands
                 }
             }
             _context.Permissions.UpdateRange(permissionList);
+            // TODO: Invalid cache
             var rs = await _context.SaveChangesAsync(new CancellationToken());
+            await _permissionService.InvalidPermissionCache();
             return rs > 0;
         }
     }

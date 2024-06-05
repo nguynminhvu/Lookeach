@@ -126,16 +126,27 @@ namespace Lookeach.Controllers
                 Value = (await _mediator.Send(new CreateRoleCommand(CreateRoleModel))) ? "true" : "false"
             });
         }
-
-        [HttpPost("create/permission")]
-        public async Task<IActionResult> CreatePermission([FromBody] AddPermissionModel AddPermissionModel)
+        [HttpPost("create/role/value")]
+        public async Task<IActionResult> CreateRolePermissionValue([FromBody] CreateRolePermissionValueModel createRolePermissionValueModel)
         {
             return Ok(new ResponseBase<string>
             {
                 IsFailure = false,
                 Error = null!,
                 IsSuccess = true,
-                Value = (await _mediator.Send(new AddPermissionIntoRoleCommand(AddPermissionModel))) ? "true" : "false"
+                Value = (await _mediator.Send(new CreateRoleWithPermissionValueCommand(createRolePermissionValueModel))) ? "true" : "false"
+            });
+        }
+
+        [HttpPost("create/permission")]
+        public async Task<IActionResult> CreatePermission([FromBody] UpdatePermissionActionValue updatePermissionActionValue)
+        {
+            return Ok(new ResponseBase<string>
+            {
+                IsFailure = false,
+                Error = null!,
+                IsSuccess = true,
+                Value = (await _mediator.Send(new AddPermissionIntoRoleCommand(updatePermissionActionValue))) ? "true" : "false"
             });
         }
 

@@ -4,6 +4,7 @@
     {
         public string Name { get; set; }
         public List<ResourceRecord> ResourceRecords { get; set; }
+        public List<Guid>? UserIds { get; set; }
     }
 
     public record ResourceRecord(Guid ResourceId, List<Guid> ActionIds);
