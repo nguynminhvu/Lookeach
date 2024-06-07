@@ -19,6 +19,11 @@ namespace Lookeach.Extensions.AuthAttribute
             _authService = authService;
         }
 
+        /// <summary>
+        /// Case token valid and user re-use token
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             var auth = context.ActionDescriptor.EndpointMetadata.Any(x => x.GetType() == typeof(AuthorizeAttribute));

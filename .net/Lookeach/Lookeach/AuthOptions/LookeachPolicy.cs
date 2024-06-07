@@ -1,5 +1,4 @@
 ﻿using Lookeach.AuthModels;
-using Lookeach.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
@@ -49,7 +48,7 @@ namespace Lookeach.AuthOptions
                     {
                        // LookeachAuthorizeAttribute.RolesGroup => new RoleRequirement(policySplit[1]),
                         LookeachAuthorizeAttribute.ActionsGroup => new ActionRequirement(policySplit[1]),
-                        _ => null!
+                        _ => null!  
                     };
 
                     if (requirement == null!) return FallbackPolicyProvider.GetPolicyAsync(policyName);
