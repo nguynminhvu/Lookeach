@@ -7,7 +7,6 @@ namespace Lookeach.Core.Entities
         public Guid UserId { get; private set; }
         public string Token { get; private set; }
         public string RefreshToken { get; private set; }
-        public User User { get; set; }
 
         protected AccessToken(Guid userId, string token, string refreshToken, DateTime createdOn, DateTime modifiedOn, Guid modifiedBy, Guid createdBy)
         {

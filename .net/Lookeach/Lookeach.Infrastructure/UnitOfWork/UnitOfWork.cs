@@ -41,6 +41,7 @@ namespace Lookeach.Infrastructure.UnitOfWork
             TransactionMasterRepository = new TransactionMasterRepository(_context);
             VNPayTransactionRefundRepository = new VNPayTransactionRefundRepository(_context);
             VNPayTransactionRepository = new VNPayTransactionRepository(_context);
+            SuperAdminRepository = new SuperAdminRepository(_context);  
         }
 
         public IAccessTokenRepository AccessTokenRepository { get; private set; }
@@ -100,6 +101,8 @@ namespace Lookeach.Infrastructure.UnitOfWork
         public IVNPayTransactionRefundRepository VNPayTransactionRefundRepository { get; private set; }
 
         public IVNPayTransactionRepository VNPayTransactionRepository { get; private set; }
+
+        public ISuperAdminRepository SuperAdminRepository { get; private set; }
 
         public async Task<int> SaveChangesAsync()
           => await _context.SaveChangesAsync();

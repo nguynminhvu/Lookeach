@@ -181,7 +181,7 @@ namespace Lookeach.AuthOptions
             if (decimalNumber == 0)
                 return "0";
 
-            StringBuilder binary = new StringBuilder();
+            StringBuilder binary = new StringBuilder();                     
 
             while (decimalNumber > 0)
             {

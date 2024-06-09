@@ -1,4 +1,5 @@
-﻿using Lookeach.Core.Common.Base;
+﻿using Lookeach.Application.ViewModels.Users;
+using Lookeach.Core.Common.Base;
 
 namespace Lookeach.Application.Features.Auths.Models.Reads
 {

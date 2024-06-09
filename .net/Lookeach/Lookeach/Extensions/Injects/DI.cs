@@ -13,6 +13,10 @@ namespace Lookeach.Extensions.Injects
           //  services.AddTransient<IAuthorizationHandler, RoleRequirementHandler>();
         }
 
+        /// <summary>
+        /// Seed data redis
+        /// </summary>
+        /// <param name="application"></param>
         public static void UseABAC(this IApplicationBuilder application)
         {
             application.UseMiddleware<AuthResourceOption>();
