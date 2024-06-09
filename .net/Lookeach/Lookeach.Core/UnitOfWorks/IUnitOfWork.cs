@@ -33,6 +33,7 @@ namespace Lookeach.Core.UnitOfWorks
         ITransactionMasterRepository TransactionMasterRepository { get; }
         IVNPayTransactionRefundRepository VNPayTransactionRefundRepository { get; }
         IVNPayTransactionRepository VNPayTransactionRepository { get; }
+        ISuperAdminRepository SuperAdminRepository { get; }
         Task<int> SaveChangesAsync();
 
     }

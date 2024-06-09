@@ -315,7 +315,19 @@ namespace Lookeach.Infrastructure.Services
                 }
             }));
         }
-
+        public async Task SaveUserRoleAdminCache(Guid id)
+        {
+            var user = await _uow.SuperAdminRepository.FirstOrDefaultAsync(x => x.Id == id, "Roles");
+            if (user == null!) throw new Exception("User not found");
+            await _distributedCache.SetStringAsync(_redisContantDTO.UserRoleResource + user.Id, JsonConvert.SerializeObject(user.Roles, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            }));
+        }
         public async Task InvalidUserRoleCache(Guid id)
         {
             var user = await _userRepository.GetUserById(id);
@@ -330,8 +342,8 @@ namespace Lookeach.Infrastructure.Services
             {
                 if (_connectionMutiple.GetServer(_redisDTO.Address, _redisDTO.Port).IsConnected)
                 {
-                    string userRoles = await _distributedCache.GetStringAsync(_redisContantDTO.UserRoleResource + id) ;
-                    if (userRoles==null!)
+                    string userRoles = await _distributedCache.GetStringAsync(_redisContantDTO.UserRoleResource + id);
+                    if (userRoles == null!)
                     {
                         var userRole = await _uow.UserRepository.FirstOrDefaultAsync(x => x.Id == id, "Roles");
                         await SaveUserRoleCache(id);

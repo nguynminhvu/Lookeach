@@ -18,5 +18,6 @@ namespace Lookeach.Application.Services
         Task<ClaimDTO> GetClaimDTOByAccessToken(string token);
         Task<string> RenewAccessToken(string refreshToken);
         ClaimDTO GetClaimDTOByAccessTokenSynchronous(string? token = null!);
+        Task SaveUserRoleAdminCache(Guid id);
     }
 }

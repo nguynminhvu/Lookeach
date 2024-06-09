@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lookeach.Application.Features.Auths.Queries
 {
-    public record GetAllRoleQuery(string? Name=null!):IRequest<List<RoleViewModel>>
+    public record GetAllRoleQuery(string? Name = null!) : IRequest<List<RoleViewModel>>
     {
     }
     public class GetAllRoleQueryHandler : IRequestHandler<GetAllRoleQuery, List<RoleViewModel>>
@@ -16,7 +16,7 @@ namespace Lookeach.Application.Features.Auths.Queries
 
         public GetAllRoleQueryHandler(ICleanContext cleanContext)
         {
-            _context = cleanContext;   
+            _context = cleanContext;
         }
         public async Task<List<RoleViewModel>> Handle(GetAllRoleQuery request, CancellationToken cancellationToken)
         {

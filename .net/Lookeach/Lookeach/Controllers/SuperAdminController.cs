@@ -41,6 +41,7 @@ namespace Lookeach.Controllers
                 IsSuccess = true,
                 Value = await _mediator.Send(new GetAllPermissionQuery())
             });
+            throw new UnauthorizedAccessException();
         }
 
         [HttpGet("actions")]

@@ -128,8 +128,6 @@ namespace Lookeach.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("AccessTokens");
                 });
 
@@ -1374,6 +1372,21 @@ namespace Lookeach.Infrastructure.Migrations
                     b.ToTable("ProductSourcingSize");
                 });
 
+            modelBuilder.Entity("RoleSuperAdmin", b =>
+                {
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SuperAdminsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolesId", "SuperAdminsId");
+
+                    b.HasIndex("SuperAdminsId");
+
+                    b.ToTable("RoleSuperAdmin");
+                });
+
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.Property<Guid>("RolesId")
@@ -1462,17 +1475,6 @@ namespace Lookeach.Infrastructure.Migrations
                         .HasForeignKey("ProductSourcingsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Lookeach.Core.Entities.AccessToken", b =>
-                {
-                    b.HasOne("Lookeach.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Lookeach.Core.Entities.BrandImage", b =>
@@ -1798,6 +1800,21 @@ namespace Lookeach.Infrastructure.Migrations
                     b.HasOne("Lookeach.Core.Entities.Size", null)
                         .WithMany()
                         .HasForeignKey("SizesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RoleSuperAdmin", b =>
+                {
+                    b.HasOne("Lookeach.Core.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lookeach.Core.Entities.SuperAdmin", null)
+                        .WithMany()
+                        .HasForeignKey("SuperAdminsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
