@@ -4,7 +4,6 @@ using Lookeach.Core.Common.Base;
 using Lookeach.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 
 namespace Lookeach.Infrastructure.Data
 {
@@ -21,7 +20,7 @@ namespace Lookeach.Infrastructure.Data
             _identityUser = identityUser;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=Lookeach;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=cosplane.asia;Initial Catalog=Lookeach;User ID=lookeach;Password=LookEach!@#123...;Encrypt=False;Trust Server Certificate=True");
 
 
         private string GetConnectionString()
